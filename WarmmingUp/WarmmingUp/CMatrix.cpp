@@ -143,38 +143,41 @@ DATATYPE CMatrix<DATATYPE>::Cal4by4Determinant() const
 	DATATYPE mat[INITROW][INITCOL]{};
 	DATATYPE result{};
 	for (int i = 0; i < m_col; ++i) {
-		switch (i) {
-		case 0:
-			for (int j = 0; j < INITROW; ++j) {
-				for (int k = 0; k < INITCOL; ++k)
-					mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k + 1];
-			}
-			break;
-		case 1:
-			for (int j = 0; j < INITROW; ++j) {
-				for (int k = 0; k < INITCOL; ++k) {
-					if (k == 0) mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k];
-					else mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k + 1];
+		if (m_mat[MATRIX_IDX::OP1][0][i] != 0) {
+			switch (i) {
+			case 0:
+				for (int j = 0; j < INITROW; ++j) {
+					for (int k = 0; k < INITCOL; ++k)
+						mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k + 1];
 				}
-			}
-			break;
-		case 2:
-			for (int j = 0; j < INITROW; ++j) {
-				for (int k = 0; k < INITCOL; ++k) {
-					if (k == INITCOL - 1) mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k];
-					else mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k + 1];
+				break;
+			case 1:
+				for (int j = 0; j < INITROW; ++j) {
+					for (int k = 0; k < INITCOL; ++k) {
+						if (k == 0) mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k];
+						else mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k + 1];
+					}
 				}
+				break;
+			case 2:
+				for (int j = 0; j < INITROW; ++j) {
+					for (int k = 0; k < INITCOL; ++k) {
+						if (k == INITCOL - 1) mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k];
+						else mat[j][k] = m_mat[MATRIX_IDX::OP1][j + 1][k + 1];
+					}
+				}
+				break;
+			case 3:
+				for (int j = 1; j < INITROW; ++j) {
+					for (int k = 0; k < INITCOL; ++k)
+						mat[j][k] = m_mat[MATRIX_IDX::OP1][j][k];
+				}
+				break;
 			}
-			break;
-		case 3:
-			for (int j = 1; j < INITROW; ++j) {
-				for (int k = 0; k < INITCOL; ++k)
-					mat[j][k] = m_mat[MATRIX_IDX::OP1][j][k];
-			}
-			break;
+			if (i % 2 == 0) result += Cal3by3Determinant(mat) *  m_mat[MATRIX_IDX::OP1][0][i];
+			else result += (Cal3by3Determinant(mat)  *  m_mat[MATRIX_IDX::OP1][0][i]) * -1;
+			cout << result << endl;
 		}
-		if (i % 2 == 0) result += Cal3by3Determinant(mat);
-		else result += Cal3by3Determinant(mat) * -1;
 	}
 	return result;
 }
