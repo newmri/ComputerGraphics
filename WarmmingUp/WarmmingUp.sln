@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1.Matrix", "WarmmingUp\Warm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3.Vector", "3.Vector\3.Vector.vcxproj", "{E55B9966-B967-41A9-97AE-1BDFA1DCD555}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4.RectCollision", "4.RectCollision\4.RectCollision.vcxproj", "{A253D949-E9FC-4FF7-B887-F4C1D037412B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{E55B9966-B967-41A9-97AE-1BDFA1DCD555}.Release|x64.Build.0 = Release|x64
 		{E55B9966-B967-41A9-97AE-1BDFA1DCD555}.Release|x86.ActiveCfg = Release|Win32
 		{E55B9966-B967-41A9-97AE-1BDFA1DCD555}.Release|x86.Build.0 = Release|Win32
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Debug|x64.ActiveCfg = Debug|x64
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Debug|x64.Build.0 = Debug|x64
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Debug|x86.ActiveCfg = Debug|Win32
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Debug|x86.Build.0 = Debug|Win32
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Release|x64.ActiveCfg = Release|x64
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Release|x64.Build.0 = Release|x64
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Release|x86.ActiveCfg = Release|Win32
+		{A253D949-E9FC-4FF7-B887-F4C1D037412B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
