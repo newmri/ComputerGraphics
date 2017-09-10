@@ -5,6 +5,10 @@ using namespace std;
 
 typedef int DATA_TYPE;
 
+const DATA_TYPE SPEED = 60;
+
+enum MOVE { LEFT = -1, RIGHT = 1, UP = 2, DOWN = -2 };
+
 template<typename DATATYPE>
 struct Pos
 {
@@ -40,10 +44,27 @@ public:
 	}
 
 public:
+	void Move(MOVE dir)
+	{
+		switch (dir) {
+		case MOVE::LEFT:
+		case MOVE::RIGHT:
+			m_pos.left += dir * m_speed;
+			m_pos.right += dir * m_speed;
+			break;
+		case MOVE::UP:
+		case MOVE::DOWN:
+			m_pos.top += dir * (m_speed / 2);
+			m_pos.bottom += dir * (m_speed / 2);
+			break;
+
+		}
+	}
 	bool CheckCollision(const CRect& other)
 	{
-
-
+		if ((m_pos.top < other.GetPos().bottom && m_pos.bottom > other.GetPos().top)
+			&& (m_pos.left < other.GetPos().right && m_pos.right > other.GetPos().left)) return true;
+		else return false;
 	}
 
 public:
@@ -51,8 +72,12 @@ public:
 	DATATYPE GetY() const { return m_rect[1]; }
 
 public:
-	void SetPos(const Pos<DATATYPE> pos) { /*m_pos = pos;*/ }
+	void SetPos(const Pos<DATATYPE> pos) { m_pos = pos; }
+
+public:
+	CRect() { m_speed = SPEED; }
 
 private:
 	Pos<DATATYPE> m_pos;
+	DATATYPE m_speed;
 };
