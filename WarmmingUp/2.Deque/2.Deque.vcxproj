@@ -20,11 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{4D9056DB-DE99-4635-AD04-B98051979949}</ProjectGuid>
+    <ProjectGuid>{253F7E0C-368D-4CB0-A05D-1BD15C7A97F4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My2LinkedList</RootNamespace>
+    <RootNamespace>My2Deque</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
-    <ProjectName>2.Deque</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
