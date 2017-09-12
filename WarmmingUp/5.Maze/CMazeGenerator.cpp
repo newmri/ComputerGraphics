@@ -12,7 +12,7 @@ void CMazeGenerator::Init()
 
 	m_x = 1, m_y = 1;
 	m_sp = 0;
-	m_minPath = 1000;
+	m_minPath = 100000;
 	m_exsitExit = false;
 
 	// Create wall on even number
@@ -26,7 +26,6 @@ void CMazeGenerator::Init()
 	m_maze[0][1] = OBJECT::PATH;
 	this->MakeLeftWall();
 	this->MakeWall();
-
 	while (!FindRoute(m_xStart, m_yStart)) Init();
 	SetShortedPath();
 }
@@ -84,7 +83,6 @@ void CMazeGenerator::MakeWall()
 	m_maze[m_xExit][m_yExit] = OBJECT::PATH;
 	m_maze[m_xExit][m_yExit - 1] = OBJECT::PATH;
 
-
 	if (m_width % 2 == 0) {
 		m_maze[m_xExit][m_yExit] = OBJECT::PATH;
 		m_maze[m_xExit - 1][m_yExit -1] = OBJECT::PATH;
@@ -101,6 +99,7 @@ bool CMazeGenerator::FindRoute(const int xCurr, const int yCurr)
 	m_yVisit[m_sp] = yCurr;
 	m_sp++;
 	if (xCurr == m_xExit && yCurr == m_yExit) { // Got to exit
+		
 		if (m_sp < m_minPath) {
 			for (int i = 0; i < m_sp; ++i) {
 				m_xShortPath[i] = m_xVisit[i];
@@ -108,14 +107,21 @@ bool CMazeGenerator::FindRoute(const int xCurr, const int yCurr)
 				m_minPath = m_sp;
 			}
 		}
+		
 		m_exsitExit = true;
 	}
-	if (m_maze[xCurr][yCurr + 1] == OBJECT::PATH) FindRoute(xCurr, yCurr + 1); // East
-	if (m_maze[xCurr + 1][yCurr] == OBJECT::PATH) FindRoute(xCurr + 1, yCurr); // South
-	if (m_maze[xCurr][yCurr - 1] == OBJECT::PATH) FindRoute(xCurr, yCurr - 1); // West
-	if (m_maze[xCurr - 1][yCurr] == OBJECT::PATH) FindRoute(xCurr - 1, yCurr); // North
+	if (!m_exsitExit) {
+		if (m_maze[xCurr][yCurr + 1] == OBJECT::PATH) FindRoute(xCurr, yCurr + 1); // East
+		if (!m_exsitExit)
+		if (m_maze[xCurr + 1][yCurr] == OBJECT::PATH) FindRoute(xCurr + 1, yCurr); // South
+		if (!m_exsitExit)
+		if (m_maze[xCurr][yCurr - 1] == OBJECT::PATH) FindRoute(xCurr, yCurr - 1); // West
+		if (!m_exsitExit)
+		if (m_maze[xCurr - 1][yCurr] == OBJECT::PATH) FindRoute(xCurr - 1, yCurr); // North
+	}
 	m_sp--; // Pop
 
+	//cout << "X cur: " << xCurr << "Y cur: " << yCurr << endl;
 	m_maze[xCurr][yCurr] = OBJECT::PATH;
 
 	return m_exsitExit;
