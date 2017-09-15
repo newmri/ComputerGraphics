@@ -1,0 +1,3 @@
+#pragma once
+
+enum SHAPE { LINE, TRIANGLE, RECTANGLE, PENTAGON, END };
