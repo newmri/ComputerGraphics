@@ -29,15 +29,27 @@ const int SPEED = 4;
 
 const int SPEED_UP = 1, SPEED_DOWN = -1;
 
-struct Pos
+struct RectPos
 {
 	DATA_TYPE left, top, right, bottom;
-	Pos()
+	RectPos()
 	{
 		left = 0, top = 0, right = 0, bottom = 0;
 	}
 };
 
+struct Pos
+{
+	DATA_TYPE x, y;
+	Pos()
+	{
+		x = 0, y = 0;
+	}
+	Pos(DATA_TYPE ax, DATA_TYPE ay)
+	{
+		x = ax, y = ay;
+	}
+};
 
 struct Rgb
 {
@@ -50,5 +62,5 @@ struct Rgb
 };
 
 #define FACTORYMANAGER CFactory::GetInstance()
-
+#define EFFECTMANAGER EffectManager::GetInstance()
 #endif
