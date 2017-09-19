@@ -14,6 +14,9 @@ public:
 	virtual void ChangeSpeed(const int speed);
 
 public:
+	void ChangeShape();
+
+public:
 	virtual void Move();
 
 public:
@@ -22,6 +25,7 @@ public:
 private:
 	Pos m_pos;
 	DATA_TYPE m_width, m_height;
+	bool m_changeShape;
 };
 
 #endif

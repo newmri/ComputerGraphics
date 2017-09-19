@@ -21,7 +21,7 @@ void main(int argc, char* argv[])
 	int mainMenu{}, subMenu{};
 
 	Init();
-	glutCreateWindow("4.RectAnimation");
+	glutCreateWindow("5.BouncingRect");
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
 

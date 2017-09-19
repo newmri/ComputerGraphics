@@ -14,6 +14,9 @@ public:
 	virtual void ChangeSpeed(const int speed) = 0;
 
 public:
+	SHAPE GetType() { return m_shape; }
+
+public:
 	virtual void Move() = 0;
 
 public:
