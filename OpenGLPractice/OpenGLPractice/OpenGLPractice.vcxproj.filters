@@ -39,5 +39,14 @@
     <ClCompile Include="RGBRect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LightingSolarSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShinySphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrintText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
