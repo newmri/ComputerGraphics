@@ -1,1 +1,8 @@
-﻿
+﻿  main.cpp
+  CRect.cpp
+  CFactory.cpp
+  CEffect.cpp
+  CCircle.cpp
+  Generating Code...
+  8.PursuitTarget.vcxproj -> S:\KPU\4-2\Computer Graphics\OpenGLPracticeWithPPT\Debug\8.PursuitTarget.exe
+  8.PursuitTarget.vcxproj -> S:\KPU\4-2\Computer Graphics\OpenGLPracticeWithPPT\Debug\8.PursuitTarget.pdb (Partial PDB)

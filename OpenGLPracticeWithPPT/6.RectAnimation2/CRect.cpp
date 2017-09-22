@@ -7,6 +7,8 @@ void CRect::SetPos(DATA_TYPE x, DATA_TYPE y)
 	m_pos.top = y;
 	m_pos.bottom = m_pos.top + m_height;
 
+	m_firstPos = m_pos;
+
 }
 
 void CRect::ChangeColor()
@@ -39,7 +41,26 @@ void CRect::ChangeSpeed(const int speed)
 
 void CRect::Move()
 {
-	if (m_moveCnt == MAX_MOVE) return;
+
+	if (m_moveCnt == MAX_MOVE - 1) {
+		if ((m_dx > 0 && m_pos.left < m_firstPos.left) ||
+			(m_dx < 0 && m_pos.left > m_firstPos.left)) {
+			m_pos.left += m_dx * m_speed;
+			m_pos.right = m_pos.left + m_width;
+		}
+
+		else {
+			if ((m_dy > 0 && m_pos.top < m_firstPos.top) ||
+				(m_dy < 0 && m_pos.top > m_firstPos.top)) {
+				m_pos.top += m_dy * m_speed;
+				m_pos.bottom = m_pos.top + m_height;
+			}
+			else m_moveCnt++;
+
+		}
+		glClear(GL_COLOR_BUFFER_BIT);
+		return;
+	}
 
 	if (m_moveHorizontal) {
 		m_pos.left += m_dx * m_speed;

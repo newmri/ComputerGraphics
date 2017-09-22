@@ -84,6 +84,7 @@ public:
 	}
 private:
 	Pos m_pos;
+	Pos m_firstPos;
 	DATA_TYPE m_width, m_height;
 	Rgb m_rgb;
 	int m_dx, m_dy;

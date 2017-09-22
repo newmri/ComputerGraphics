@@ -5,26 +5,26 @@ GLvoid Init(GLvoid);
 GLvoid DrawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Mouse(int button, int state, int x, int y);
-GLvoid Motion(int x, int y);
 GLvoid Animate(int n);
 GLvoid SpecialKeyBoard(int key, int x, int y);
-const int MAX_RECT_NUM = 10;
+GLvoid MenuFunc(int button);
+
+const int MAX_SPIRAL_NUM = 5;
 const unsigned int ANIMATION_TIME = 1000 / 30;
-int g_leftButton = 0;
 
 vector<unique_ptr<CShape>> vec;
-CCircle g_target;
+
+SHAPE g_shape = SHAPE::SPIRAL;
 
 void main(int argc, char* argv[])
 {
-	g_target.SetPos(Pos(1000, 1000));
+	int mainMenu{}, subMenu{};
+
 	Init();
-	glutCreateWindow("8.PursuitTarget");
+	glutCreateWindow("9.Spiral");
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
-
 	glutMouseFunc(Mouse);
-	glutMotionFunc(Motion);
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 	glutSpecialFunc(SpecialKeyBoard);
 	glutMainLoop();
@@ -42,9 +42,7 @@ GLvoid Init(GLvoid)
 
 GLvoid DrawScene(GLvoid)
 {
-
 	for (auto& d : vec) d->Draw();
-	if (g_target.GetPos().x != 1000) g_target.Draw();
 
 	glFlush(); // Draw
 }
@@ -58,37 +56,22 @@ GLvoid Reshape(int w, int h)
 void Mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		g_leftButton = GLUT_LEFT_BUTTON;
-		g_target.SetPos(Pos(x, y));
-		glClear(GL_COLOR_BUFFER_BIT);
-	}
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-		g_leftButton = GLUT_RIGHT_BUTTON;
-		vec.push_back(FACTORYMANAGER->CreateObj(SHAPE::RECTANGLE, x, y));
-	}
-	DrawScene();
-	
-}
-
-GLvoid Motion(int x, int y)
-{
-	if (g_leftButton == GLUT_LEFT_BUTTON) {
-		g_target.SetPos(Pos(x, y));
-		glClear(GL_COLOR_BUFFER_BIT);
+		if (vec.size() == 5) {
+			vector<unique_ptr<CShape>>::iterator itor = vec.begin();
+			itor = vec.erase(itor);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+		vec.push_back(FACTORYMANAGER->CreateObj(g_shape, x, y));
+		glutPostRedisplay(); // Re draw
 	}
 }
 
 GLvoid Animate(int n)
 {
-	g_target.ChangeColor();
+
 	vector<unique_ptr<CShape>>::iterator itor = vec.begin();
 	while (itor != vec.end()) {
-		if (g_target.GetPos().x != 1000) {
-			CRect* p = dynamic_cast<CRect*>(itor->get());
-			p->SetTarget(g_target.GetPos(), g_target.GetRad());
-		}
 		(*itor)->ChangeColor();
-		(*itor)->Move();
 		++itor;
 	}
 	glutPostRedisplay(); // Re draw
@@ -112,6 +95,15 @@ GLvoid SpecialKeyBoard(int key, int x, int y)
 			++itor;
 		}
 		
+	}
+
+}
+
+GLvoid MenuFunc(int button)
+{
+	switch (button) {
+	case SHAPE::SPIRAL: g_shape = SHAPE::SPIRAL; break;
+	default: break;
 	}
 
 }
