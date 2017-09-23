@@ -325,7 +325,7 @@ void COpenGL::LoadMaterial()
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 		glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 		glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, m_Texture.Width, m_Texture.Height, 0, GL_RGB, GL_UNSIGNED_BYTE, m_Texture.Data);
+		//glTexImage2D(GL_TEXTURE_2D, 0, 3, m_Texture.Width, m_Texture.Height, 0, GL_RGB, GL_UNSIGNED_BYTE, m_Texture.Data);
 		glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	glEndList();

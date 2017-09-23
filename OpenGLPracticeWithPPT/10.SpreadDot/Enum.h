@@ -1,0 +1,6 @@
+#pragma once
+
+
+enum OBJTYPE { UNKNOWN, CIRCLE, BORDER };
+enum MOVETYPE { MOVABLE, UNMOVABLE };
+enum MOVEDIRECTION { L, R, U, D, LU, RU, LD, RD, END };
