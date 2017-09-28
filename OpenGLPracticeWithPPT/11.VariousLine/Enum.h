@@ -1,0 +1,5 @@
+#pragma once
+
+enum OBJTYPE { UNKNOWN, RECTANGLE, WAVE };
+enum WAVETYPE { COS, SIN };
+enum MOVETYPE { MOVABLE, UNMOVABLE };

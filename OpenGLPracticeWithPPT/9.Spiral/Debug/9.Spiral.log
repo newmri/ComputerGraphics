@@ -1,3 +1,4 @@
 ﻿  main.cpp
+cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
   9.Spiral.vcxproj -> S:\KPU\4-2\Computer Graphics\OpenGLPracticeWithPPT\Debug\9.Spiral.exe
   9.Spiral.vcxproj -> S:\KPU\4-2\Computer Graphics\OpenGLPracticeWithPPT\Debug\9.Spiral.pdb (Partial PDB)

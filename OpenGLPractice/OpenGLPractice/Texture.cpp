@@ -126,7 +126,6 @@ bool CTexture::Load(const char* pathname)
 	}
 
     fclose(fp);
-
     return true;
 }
 
