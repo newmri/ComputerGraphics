@@ -15,7 +15,11 @@ public:
 public:
 	virtual void Move();
 
+public:
+	void ResetWaveEnd() { m_waveEnd = PIE / 2; }
+
 private:
 	WAVETYPE m_waveType;
 	DATA_TYPE m_seta;
+	DATA_TYPE m_waveEnd;
 };

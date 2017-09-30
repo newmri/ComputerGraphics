@@ -33,12 +33,13 @@ const float PIE = 3.141592;
 
 struct Pos
 {
-	DATA_TYPE x, y;
+	DATA_TYPE x, y, z;
 	Pos()
 	{
-		x = 0.0f, y = 0.0f;
+		x = 0.0f, y = 0.0f, z = 0.0f;
 	}
 
+	Pos(DATA_TYPE x, DATA_TYPE y, DATA_TYPE z) : x(x), y(y), z(z){};
 	Pos(DATA_TYPE x, DATA_TYPE y) : x(x), y(y) {};
 };
 
@@ -54,6 +55,8 @@ struct Color
 	Color(float R, float G, float B) : R(R), G(G), B(B) {};
 
 };
+
+
 
 #define FACTORYMANAGER CFactory::GetInstance()
 
