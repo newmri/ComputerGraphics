@@ -1,0 +1,14 @@
+﻿  CCircle.cpp
+s:\kpu\4-2\computer graphics\openglpracticewithppt\12.movewithpath\cobject.h(71): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Compiling...
+  main.cpp
+s:\kpu\4-2\computer graphics\openglpracticewithppt\12.movewithpath\cobject.h(71): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  CWave.cpp
+  CTriangle.cpp
+  CRect.cpp
+  CFactory.cpp
+  12.MoveWithPath.vcxproj -> S:\KPU\4-2\Computer Graphics\OpenGLPracticeWithPPT\Debug\12.MoveWithPath.exe
+  12.MoveWithPath.vcxproj -> S:\KPU\4-2\Computer Graphics\OpenGLPracticeWithPPT\Debug\12.MoveWithPath.pdb (Partial PDB)
