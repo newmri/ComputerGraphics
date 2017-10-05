@@ -109,6 +109,29 @@ public:
 		m_pos.x = 0;
 		m_pos.y = 0;
 	}
+
+	void SetLineInfo(Pos* pos, int idx)
+	{
+		m_linePos = pos;
+		m_maxLineIdx = idx;
+	}
+
+	void MoveWithLine()
+	{
+		if (m_i < ZIAZAG_SLICE) ++m_i;
+		else {
+			m_i = 0;
+			if (m_lineIdx < m_maxLineIdx - 2) m_lineIdx++;
+			else m_lineIdx = 0;
+		}
+		float a = (m_linePos[m_lineIdx + 1].y - m_linePos[m_lineIdx].y)
+			/ (m_linePos[m_lineIdx + 1].x - m_linePos[m_lineIdx].x);
+		float b = m_linePos[m_lineIdx].y - a * m_linePos[m_lineIdx].x;
+
+		float step = (m_linePos[m_lineIdx + 1].x - m_linePos[m_lineIdx].x) / ZIAZAG_SLICE;
+		m_pos.x = m_linePos[m_lineIdx].x + step * m_i;
+		m_pos.y = (a * (m_linePos[m_lineIdx].x + step * m_i)) + b;
+	}
 protected:
 	OBJTYPE m_objType;
 	MOVETYPE m_moveType;
@@ -123,7 +146,8 @@ protected:
 	DWORD m_bounceTime;
 	float m_theta, m_waveEnd;
 	OBJTYPE m_pathType;
-
+	int m_lineIdx, m_maxLineIdx;
+	Pos* m_linePos;
 	DATA_TYPE m_speed;
 };
 

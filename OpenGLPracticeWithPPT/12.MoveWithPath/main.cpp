@@ -9,6 +9,10 @@ GLvoid RenderTornado();
 GLvoid RenderZigZag();
 GLvoid Keyboard(unsigned char key, int x, int y);
 GLvoid MenuFunc(int button);
+GLvoid Mouse(int button, int state, int x, int y);
+GLvoid RenderLine();
+GLvoid ConvertDeviceToOpenGL(int x, int y, Pos* pos);
+GLvoid InitLineMove();
 
 const unsigned int ANIMATION_TIME = 1000 / 30;
 
@@ -17,7 +21,7 @@ const unsigned int RECT_NUM = 10;
 float g_angle = 0.0f;
 
 const unsigned int Tornado_NUM = 360 * 7;
-
+const unsigned int MAX_LINE = 5;
 float TornadoEnd = Tornado_NUM;
 
 vector<unique_ptr<CObject>> v;
@@ -26,7 +30,9 @@ CWave g_cos, g_sin;
 OBJTYPE g_shape = OBJTYPE::RECTANGLE;
 OBJTYPE g_pathShape = OBJTYPE::CIRCLE;
 
-
+Pos g_pos[MAX_LINE];
+int g_lineIdx = 0;
+bool g_lineMove = false;
 
 void main(int argc, char* argv[])
 {
@@ -36,6 +42,7 @@ void main(int argc, char* argv[])
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
+	glutMouseFunc(Mouse);
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 
 	int mainMenu{}, subMenu{};
@@ -88,6 +95,7 @@ GLvoid DrawScene(GLvoid)
 	case OBJTYPE::SINWAVE: g_sin.Render(); break;
 	case OBJTYPE::TORNADO: RenderTornado(); break;
 	case OBJTYPE::ZIGZAG: RenderZigZag(); break;
+	case OBJTYPE::LINE: RenderLine(); break;
 	}
 
 	glPushMatrix();
@@ -95,6 +103,7 @@ GLvoid DrawScene(GLvoid)
 		glTranslatef(0.0f, -0.75f, 0.0f);
 		glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 	}
+
 	v[g_shape]->Render();
 	glPopMatrix();
 
@@ -111,6 +120,11 @@ GLvoid Reshape(int w, int h)
 
 GLvoid Animate(int n)
 {
+	if (g_pathShape == OBJTYPE::LINE && !g_lineMove) {
+		DrawScene();
+		glutTimerFunc(ANIMATION_TIME, Animate, true);
+		return;
+	}
 	v[g_shape]->Update();
 	DrawScene();
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
@@ -164,6 +178,21 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		g_pathShape = OBJTYPE::ZIGZAG;
 		for (int i = 1; i < 3; ++i) v[i]->SetPath(OBJTYPE::ZIGZAG);
 		break;
+	case '4':
+		g_pathShape = OBJTYPE::LINE;
+		InitLineMove();
+		for (int i = 1; i < 3; ++i) v[i]->SetPath(OBJTYPE::LINE);
+		break;
+	case '5':
+		g_pathShape = OBJTYPE::CIRCLE;
+		for (int i = 1; i < 3; ++i) v[i]->SetPath(OBJTYPE::CIRCLE);
+		break;
+	case 'm':
+		if (g_pathShape == OBJTYPE::LINE) {
+			g_lineMove = true;
+			for (int i = 1; i < 3; ++i) v[i]->SetLineInfo(g_pos, g_lineIdx);
+		}
+		break;
 	default:break;
 	}
 
@@ -189,4 +218,41 @@ GLvoid RenderZigZag()
 		y = -y;
 	}
 	glEnd();
+}
+
+GLvoid Mouse(int button, int state, int x, int y)
+{
+
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN &&
+		g_pathShape == OBJTYPE::LINE && g_lineIdx < MAX_LINE) {
+		ConvertDeviceToOpenGL(x, y, &g_pos[g_lineIdx++]);
+	}
+
+	DrawScene();
+}
+
+GLvoid RenderLine()
+{
+	glBegin(GL_LINE_STRIP);
+	for (int i = 0; i < g_lineIdx; ++i) glVertex2f(g_pos[i].x, g_pos[i].y);
+	
+	glEnd();
+
+}
+
+GLvoid ConvertDeviceToOpenGL(int x, int y, Pos* pos)
+{
+	float w = WINDOW_WIDTH;
+	float h = WINDOW_HEIGHT;
+
+	pos->x = (x - w / 2.0f) * (1.0f / (w / 2.0f));
+	pos->y = -(y - h / 2.0f) * (1.0f / (h / 2.0f));
+
+}
+
+GLvoid InitLineMove()
+{
+	g_lineIdx = 0;
+	g_lineMove = false;
+	for (int i = 0; i < MAX_LINE; ++i) { g_pos[i].x = 0; g_pos[i].y = 0; }
 }

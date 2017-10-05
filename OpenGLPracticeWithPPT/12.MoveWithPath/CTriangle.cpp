@@ -9,6 +9,7 @@ void CTriangle::Move()
 	case OBJTYPE::SINWAVE: this->MoveWithSinWave(); break;
 	case OBJTYPE::ZIGZAG: this->MoveWithZigZag(); break;
 	case OBJTYPE::TORNADO: this->MoveWithTornado(); break;
+	case OBJTYPE::LINE: this->MoveWithLine(); break;
 	}
 }
 
