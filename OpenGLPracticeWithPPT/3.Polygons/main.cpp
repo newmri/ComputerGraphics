@@ -44,7 +44,6 @@ GLvoid Init(GLvoid)
 
 GLvoid DrawScene(GLvoid)
 {
-	
 	glBegin(GL_LINES);
 		DrawCrossStrips();
 	glEnd();
