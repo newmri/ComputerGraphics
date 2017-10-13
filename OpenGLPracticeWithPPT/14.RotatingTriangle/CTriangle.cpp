@@ -44,6 +44,7 @@ void CTriangle::Render()
 
 {
 	glPushMatrix();
+	
 	glColor3f(1.0, 0.0, 0.0);
 	glTranslatef(m_pos.x, m_pos.y, 0.0f);
 	glBegin(GL_LINE_LOOP);

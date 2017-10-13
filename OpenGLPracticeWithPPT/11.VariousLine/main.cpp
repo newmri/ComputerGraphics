@@ -26,11 +26,12 @@ float springEnd = SPRING_NUM;
 float rectIdx = RECT_NUM;
 bool g_doAnimation = false;
 
+int winId;
 void main(int argc, char* argv[])
 {
 
 	Init();
-	glutCreateWindow("11.VariousLine");
+	winId = glutCreateWindow("11.VariousLine");
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
@@ -193,6 +194,11 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		g_wRotation.x = 0.0f;
 		g_wRotation.y = 0.0f;
 		g_wRotation.z = 0.0f; break;
+	case 'q':
+	case 'Q':
+		glutDestroyWindow(winId);
+		exit(0);
+		break;
 
 	}
 
