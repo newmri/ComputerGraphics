@@ -148,11 +148,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CMouseManager.cpp" />
+    <ClCompile Include="CRect.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMouseManager.h" />
     <ClInclude Include="CObject.h" />
+    <ClInclude Include="CRect.h" />
     <ClInclude Include="Define.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

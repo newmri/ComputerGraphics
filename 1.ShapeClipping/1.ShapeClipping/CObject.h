@@ -1,5 +1,16 @@
 #pragma once
 
+struct Vector3
+{
+	float x, y, z;
+
+	Vector3()
+	{
+		x = 0.0f, y = 0.0f, z = 0.0f;
+	}
+
+};
+
 struct Vector2
 {
 	float x, y;
@@ -17,13 +28,15 @@ class CObject
 public:
 	virtual void Init() = 0;
 	virtual void Update() = 0;
+	virtual void Render() = 0;
 
 public:
-	void SetPos(const Vector2 pos) { m_pos = pos; }
+	void SetPos(const Vector3 pos) { m_pos = pos; }
 
 public:
-	const Vector2& GetPos() { return m_pos; }
+	const Vector3& GetPos() { return m_pos; }
 
 protected:
-	Vector2 m_pos;
+	Vector3 m_pos;
+	float m_size;
 };

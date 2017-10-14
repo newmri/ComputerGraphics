@@ -5,13 +5,14 @@ GLvoid DrawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Animate(int n);
 GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info);
-GLvoid ConvertDeviceToOpenGL(int x, int y, Vector2& pos);
-GLvoid Mouse(int x, int y);
 BITMAPINFO* m_bitinfo;
 GLubyte* m_bitmap;
 
 
 const unsigned int ANIMATION_TIME = 1000 / 30;
+
+CRect g_rect;
+vector<Vector2> g_v;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -20,10 +21,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
-	m_bitmap = LoadDlBitmap("a.bmp", &m_bitinfo);
+	m_bitmap = LoadDlBitmap("KnifeTopRight.bmp", &m_bitinfo);
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set background in blue
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
-	glutPassiveMotionFunc(Mouse);
+	MOUSEMANAGER->Init();
 	glutMainLoop();
 
 	delete m_bitmap;
@@ -48,6 +49,8 @@ GLvoid DrawScene(GLvoid)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	g_rect.Render();
 
 	GLfloat xsize, ysize;
 	GLfloat xoffset, yoffset;
@@ -140,22 +143,7 @@ GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info)
 
 GLvoid Animate(int n)
 {
-	
 	DrawScene();
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 }
 
-GLvoid ConvertDeviceToOpenGL(int x, int y, Vector2& pos)
-{
-	float w = WINDOWS_WIDTH;
-	float h = WINDOWS_HEIGHT;
-
-	pos.x = (x - w / 2.0f) * (1.0f / (w / 2.0f));
-	pos.y = -(y - h / 2.0f) * (1.0f / (h / 2.0f));
-
-}
-
-GLvoid Mouse(int x, int y)
-{
-	ConvertDeviceToOpenGL(x, y, MOUSEMANAGER->GetPos());
-}
