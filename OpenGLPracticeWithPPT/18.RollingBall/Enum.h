@@ -1,0 +1,4 @@
+#pragma once
+
+enum RENDERTYPE { SOLID, WIRE  };
+enum MOVETYPE { MOVABLE, UNMOVABLE };
