@@ -1,0 +1,4 @@
+#pragma once
+
+enum BODYRTYPE { BOTTOM, BODY, ARM  };
+enum MOVETYPE { MOVABLE, UNMOVABLE };

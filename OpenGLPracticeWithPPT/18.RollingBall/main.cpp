@@ -26,7 +26,7 @@ void main(int argc, char* argv[])
 
 	Init();
 
-	winId = glutCreateWindow("18.RollingBall");
+	winId = glutCreateWindow("19.Crane");
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
 	

@@ -4,7 +4,7 @@ CMouseManager* CMouseManager::m_instance = nullptr;
 
 void CMouseManager::Init()
 {
-	glutMotionFunc(this->MouseClickMove);
+//	glutMotionFunc(this->MouseClickMove);
 	glutPassiveMotionFunc(this->MouseMove);
 }
 
