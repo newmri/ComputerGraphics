@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <vector>
-
+#include <memory>
 #include "CObject.h"
 #include "CRect.h"
 #include "CMouseManager.h"
@@ -16,5 +16,6 @@ const float WINDOWS_WIDTH = 800.0f;
 const float WINDOWS_HEIGHT = 600.0f;
 
 const float RECT_SIZE = 0.3f;
+
 
 #define MOUSEMANAGER CMouseManager::GetInstance()

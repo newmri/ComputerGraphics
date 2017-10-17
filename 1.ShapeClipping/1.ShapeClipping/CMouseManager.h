@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 
 class CMouseManager
 {
@@ -31,5 +32,8 @@ public:
 
 private:
 	static CMouseManager* m_instance;
+	static std::vector<Vector2> m_posV;
+
+private:
 	Vector2 m_pos;
 };

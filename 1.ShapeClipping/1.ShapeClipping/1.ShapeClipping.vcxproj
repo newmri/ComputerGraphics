@@ -156,6 +156,7 @@
     <ClInclude Include="CObject.h" />
     <ClInclude Include="CRect.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Enum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

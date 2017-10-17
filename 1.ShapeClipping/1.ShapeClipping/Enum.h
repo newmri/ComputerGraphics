@@ -1,0 +1,1 @@
+enum POSITION { LT, T, RT, L, M, R, LB, B, RB, END };

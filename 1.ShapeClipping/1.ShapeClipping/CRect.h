@@ -2,6 +2,7 @@
 
 #include "CObject.h"
 
+
 class CRect : public CObject
 {
 
@@ -12,5 +13,8 @@ public:
 
 public:
 	CRect() { this->Init(); }
-
+	CRect(const POSITION position) { m_position = position; this->Init(); }
+private:
+	POSITION m_position;
+	Flags m_flag;
 };

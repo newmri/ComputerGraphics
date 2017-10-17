@@ -11,8 +11,7 @@ GLubyte* m_bitmap;
 
 const unsigned int ANIMATION_TIME = 1000 / 30;
 
-CRect g_rect;
-vector<Vector2> g_v;
+vector<unique_ptr<CRect>> g_v;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -22,6 +21,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
 	m_bitmap = LoadDlBitmap("KnifeTopRight.bmp", &m_bitinfo);
+
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set background in blue
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 	MOUSEMANAGER->Init();
@@ -40,7 +40,10 @@ GLvoid Init(GLvoid)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(WINDOWS_WIDTH, WINDOWS_HEIGHT);
-
+	for (int i = 0; i < POSITION::END; ++i) {
+		unique_ptr<CRect> rect(new CRect(static_cast<POSITION>(i)));
+		g_v.push_back(move(rect));
+	}
 }
 
 GLvoid DrawScene(GLvoid)
@@ -49,8 +52,8 @@ GLvoid DrawScene(GLvoid)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	g_rect.Render();
+	
+	for (auto& d : g_v) d->Render();
 
 	GLfloat xsize, ysize;
 	GLfloat xoffset, yoffset;

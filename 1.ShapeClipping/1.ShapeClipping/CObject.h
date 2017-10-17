@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Enum.h"
+
 struct Vector3
 {
 	float x, y, z;
@@ -20,6 +22,14 @@ struct Vector2
 		x = 0.0f, y = 0.0f;
 	}
 
+};
+
+struct Flags
+{
+	unsigned int top : 1;
+	unsigned int bottom : 1;
+	unsigned int right : 1;
+	unsigned int left : 1;
 };
 
 class CObject
