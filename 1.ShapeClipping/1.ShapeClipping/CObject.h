@@ -24,12 +24,15 @@ struct Vector2
 
 };
 
-struct Flags
+
+
+struct Color
 {
-	unsigned int top : 1;
-	unsigned int bottom : 1;
-	unsigned int right : 1;
-	unsigned int left : 1;
+	float r, g, b, a;
+	Color()
+	{
+		r = 1.0f, g = 0.0f, b = 0.0f, a = 1.0f;
+	}
 };
 
 class CObject
@@ -45,8 +48,13 @@ public:
 
 public:
 	const Vector3& GetPos() { return m_pos; }
+	const float& GetLeftPos() { return m_pos.x - (m_size / 2.0f); }
+	const float& GetRightPos() { return m_pos.x + (m_size / 2.0f); }
+	const float& GetTopPos() { return m_pos.y + (m_size / 2.0f); }
+	const float& GetBottomPos() { return m_pos.y - (m_size / 2.0f); }
 
 protected:
 	Vector3 m_pos;
+	Color m_color;
 	float m_size;
 };

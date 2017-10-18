@@ -4,6 +4,7 @@ GLvoid Init(GLvoid);
 GLvoid DrawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Animate(int n);
+GLvoid DoClliping();
 GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info);
 BITMAPINFO* m_bitinfo;
 GLubyte* m_bitmap;
@@ -70,11 +71,11 @@ GLvoid DrawScene(GLvoid)
 			ysize = WINDOWS_HEIGHT;
 			xsize = m_bitinfo->bmiHeader.biWidth * ysize / m_bitinfo->bmiHeader.biHeight;
 		}
-		
+		float y = -(ysize - WINDOWS_HEIGHT / 2.0f) * (1.0f / (WINDOWS_HEIGHT / 2.0f));
 		xscale = xsize / m_bitinfo->bmiHeader.biWidth;
 		yscale = ysize / m_bitinfo->bmiHeader.biHeight;
 
-		glRasterPos2f(MOUSEMANAGER->GetPos().x, MOUSEMANAGER->GetPos().y);
+		glRasterPos2f(MOUSEMANAGER->GetPos().x, MOUSEMANAGER->GetPos().y - ((y * yscale) + 0.1f));
 		glPixelZoom(xscale, yscale);
 		glDrawPixels(m_bitinfo->bmiHeader.biWidth, m_bitinfo->bmiHeader.biHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bitmap);
 	}
@@ -146,7 +147,51 @@ GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info)
 
 GLvoid Animate(int n)
 {
+	if (MOUSEMANAGER->HaveSomethingToClip()) DoClliping();
 	DrawScene();
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 }
 
+GLvoid DoClliping()
+{
+	Flags flag[2]{ false, };
+	for (int i = 0; i < 2; ++i) {
+		for (int j = 0; j < END; ++j) {
+
+			if (MOUSEMANAGER->GetPosList()[i].x >= g_v[j]->GetLeftPos() &&
+				MOUSEMANAGER->GetPosList()[i].x <= g_v[j]->GetRightPos() &&
+				MOUSEMANAGER->GetPosList()[i].y <= g_v[j]->GetTopPos() &&
+				MOUSEMANAGER->GetPosList()[i].y >= g_v[j]->GetBottomPos()) {
+				switch (j) {
+				case LT: flag[i].left = true; flag[i].top = true; break;
+				case T: flag[i].top = true; break;
+				case RT: flag[i].right = true; flag[i].top = true; break;
+				case L: flag[i].left = true; break;
+				case R: flag[i].right = true; break;
+				case LB: flag[i].left = true; flag[i].bottom = true; break;
+				case B: flag[i].bottom = true; break;
+				case RB: flag[i].right = true; flag[i].bottom = true; break;
+				}
+			}
+
+		}
+	}
+
+	
+	cout << flag[0].left << endl;
+	cout << flag[0].right << endl;
+	cout << flag[0].top << endl;
+	cout << flag[0].bottom << endl;
+	
+	cout << flag[1].left << endl;
+	cout << flag[1].right << endl;
+	cout << flag[1].top << endl;
+	cout << flag[1].bottom << endl;
+	if (flag[0] & flag[1])
+	{
+		cout << "delete" << endl;
+		MOUSEMANAGER->GetPosList().clear();
+	}
+
+	else MOUSEMANAGER->GetPosList().clear();
+}

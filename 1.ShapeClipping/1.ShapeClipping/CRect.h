@@ -16,5 +16,4 @@ public:
 	CRect(const POSITION position) { m_position = position; this->Init(); }
 private:
 	POSITION m_position;
-	Flags m_flag;
 };

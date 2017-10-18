@@ -7,58 +7,35 @@ void CRect::Init()
 
 	switch (m_position) {
 	case LT:
-		m_flag.left = true;
-		m_flag.right = false;
-		m_flag.top = true;
-		m_flag.bottom = false;
+		m_pos.x = -m_size;
+		m_pos.y += m_size;
 		break;
 	case T:
-		m_flag.left = false;
-		m_flag.right = false;
-		m_flag.top = true;
-		m_flag.bottom = false;
+		m_pos.y += m_size;
 		break;
 	case RT:
-		m_flag.left = false;
-		m_flag.right = true;
-		m_flag.top = true;
-		m_flag.bottom = false;
+		m_pos.x = m_size;
+		m_pos.y += m_size;
 		break;
 	case L:
-		m_flag.left = true;
-		m_flag.right = false;
-		m_flag.top = false;
-		m_flag.bottom = false;
+		m_pos.x = -m_size;
 		break;
 	case M:
-		m_flag.left = false;
-		m_flag.right = false;
-		m_flag.top = false;
-		m_flag.bottom = false;
+		m_color.g = 1.0f;
 		break;
 	case R:
-		m_flag.left = false;
-		m_flag.right = true;
-		m_flag.top = false;
-		m_flag.bottom = false;
+		m_pos.x = m_size;
 		break;
 	case LB:
-		m_flag.left = true;
-		m_flag.right = false;
-		m_flag.top = false;
-		m_flag.bottom = true;
+		m_pos.x = -m_size;
+		m_pos.y -= m_size;
 		break;
 	case B:
-		m_flag.left = false;
-		m_flag.right = false;
-		m_flag.top = false;
-		m_flag.bottom = true;
+		m_pos.y -= m_size;
 		break;
 	case RB:
-		m_flag.left = false;
-		m_flag.right = true;
-		m_flag.top = false;
-		m_flag.bottom = true;
+		m_pos.x = m_size;
+		m_pos.y -= m_size;
 		break;
 	}
 }
@@ -71,7 +48,7 @@ void CRect::Update()
 void CRect::Render()
 {
 	glPushMatrix();
-		glColor3f(1.0f, 0.0f, 0.0f);
+		glColor4f(m_color.r, m_color.g, m_color.b, m_color.a);
 		glTranslatef(m_pos.x, m_pos.y, m_pos.z);
 		glutSolidCube(m_size);
 	glPopMatrix();

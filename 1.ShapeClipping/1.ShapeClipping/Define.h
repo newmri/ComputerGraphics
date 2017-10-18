@@ -19,3 +19,4 @@ const float RECT_SIZE = 0.3f;
 
 
 #define MOUSEMANAGER CMouseManager::GetInstance()
+#define END_OF_LINE MOUSEMANAGER->GetPosList().size() - 1

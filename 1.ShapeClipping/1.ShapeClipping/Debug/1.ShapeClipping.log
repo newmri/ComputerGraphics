@@ -1,12 +1,19 @@
-﻿  main.cpp
-s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\main.cpp(59): warning C4101: 'yoffset': unreferenced local variable
-s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\main.cpp(59): warning C4101: 'xoffset': unreferenced local variable
-s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\main.cpp(100): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+﻿  CMouseManager.cpp
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): error C2065: 'cout': undeclared identifier
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): warning C4804: '<<': unsafe use of type 'bool' in operation
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): error C2065: 'endl': undeclared identifier
   Generating Code...
   Compiling...
   CRect.cpp
-  CMouseManager.cpp
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): error C2065: 'cout': undeclared identifier
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): warning C4804: '<<': unsafe use of type 'bool' in operation
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): error C2065: 'endl': undeclared identifier
   Generating Code...
-  1.ShapeClipping.vcxproj -> S:\KPU\4-2\Computer Graphics\1.ShapeClipping\Debug\1.ShapeClipping.exe
-  1.ShapeClipping.vcxproj -> S:\KPU\4-2\Computer Graphics\1.ShapeClipping\Debug\1.ShapeClipping.pdb (Partial PDB)
+  Compiling...
+  main.cpp
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): error C2065: 'cout': undeclared identifier
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): warning C4804: '<<': unsafe use of type 'bool' in operation
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\cmousemanager.h(15): error C2065: 'endl': undeclared identifier
+s:\kpu\4-2\computer graphics\1.shapeclipping\1.shapeclipping\main.cpp(101): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+  Generating Code...
