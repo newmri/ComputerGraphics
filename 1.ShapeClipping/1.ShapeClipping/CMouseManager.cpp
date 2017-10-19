@@ -47,7 +47,49 @@ const bool CMouseManager::HaveSomethingToClip()
 	return (!m_isLeftOn && m_posV.size() != 0);
 }
 
+const bool CMouseManager::IsInArea(const float left, const float right, const float top, const float bottom)
+{
+
+	for (auto d : m_posV)
+		if (d.x >= left && d.x <= right && d.y <= top && d.y >= bottom) return true;
+
+	return false;
+
+}
+
+
 void CMouseManager::Update()
 {
 	
+}
+
+bool Flags::operator&(const Flags& other)
+{
+
+	if ((top == 0 && bottom == 0 && left == 0 && right == 0) &&
+		(other.top == 0 && other.bottom == 0 && other.left == 0 && other.right == 0)) return true; // Line is in mid
+
+	if ((top == 0 && bottom == 0 && left == 0 && right == 0) &&
+		(other.top != 0 || other.bottom != 0 || other.left != 0 || other.right != 0)) return true; // Half Line
+
+	if ((top != 0 || bottom != 0 || left != 0 || right != 0) &&
+		(other.top == 0 && other.bottom == 0 && other.left == 0 && other.right == 0)) return true; // Half Line
+
+	if ((top != 0 || bottom != 0 || left != 0 || right != 0) &&
+		(other.top != 0 || other.bottom != 0 || other.left != 0 || other.right != 0)) {
+
+		Flags flag;
+		flag.top = top & other.top;
+		flag.bottom = bottom & other.bottom;
+		flag.left = left & other.left;
+		flag.right = right & other.right;
+
+
+		if (flag.top == 0 || flag.bottom == 0 ||
+			flag.left == 0 || flag.right == 0) return false;
+
+	}
+
+	return true;
+
 }

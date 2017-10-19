@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <math.h>
+
 #include "CObject.h"
 #include "CRect.h"
 #include "CMouseManager.h"

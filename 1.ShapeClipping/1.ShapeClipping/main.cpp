@@ -5,6 +5,11 @@ GLvoid DrawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Animate(int n);
 GLvoid DoClliping();
+GLvoid CutLine();
+GLvoid VerticalDraw();
+
+double GetDistance(const Vector2& v1, const Vector2& v2);
+
 GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info);
 BITMAPINFO* m_bitinfo;
 GLubyte* m_bitmap;
@@ -13,6 +18,9 @@ GLubyte* m_bitmap;
 const unsigned int ANIMATION_TIME = 1000 / 30;
 
 vector<unique_ptr<CRect>> g_v;
+
+Vector2 g_line[2];
+Vector2 lastLine;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -79,6 +87,31 @@ GLvoid DrawScene(GLvoid)
 		glPixelZoom(xscale, yscale);
 		glDrawPixels(m_bitinfo->bmiHeader.biWidth, m_bitinfo->bmiHeader.biHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bitmap);
 	}
+
+	// Draw Line
+	glBegin(GL_LINES);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex2f(g_line[0].x, g_line[0].y);
+	glVertex2f(g_line[1].x, g_line[1].y);
+	glEnd();
+
+	// Draw Cut Shape
+	glBegin(GL_POLYGON);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(g_line[0].x, g_line[0].y);
+	glVertex2f(g_line[1].x, g_line[1].y);
+
+	if (g_line[0].x == g_v[M]->GetLeftPos() || g_line[1].x == g_v[M]->GetLeftPos()) lastLine.x = g_v[M]->GetLeftPos();
+	else if (g_line[0].x == g_v[M]->GetRightPos() || g_line[1].x == g_v[M]->GetRightPos()) lastLine.x = g_v[M]->GetRightPos();
+
+	if (g_line[0].y == g_v[M]->GetTopPos() || g_line[1].y == g_v[M]->GetTopPos()) lastLine.y = g_v[M]->GetTopPos();
+	else if (g_line[0].y == g_v[M]->GetBottomPos() || g_line[1].y == g_v[M]->GetBottomPos()) lastLine.y = g_v[M]->GetBottomPos();
+
+	VerticalDraw();
+		
+	glVertex2f(lastLine.x, lastLine.y);
+	glEnd();
+
 	glPopMatrix();
 	glutSwapBuffers(); // Draw
 }
@@ -155,43 +188,90 @@ GLvoid Animate(int n)
 GLvoid DoClliping()
 {
 	Flags flag[2]{ false, };
-	for (int i = 0; i < 2; ++i) {
-		for (int j = 0; j < END; ++j) {
 
-			if (MOUSEMANAGER->GetPosList()[i].x >= g_v[j]->GetLeftPos() &&
-				MOUSEMANAGER->GetPosList()[i].x <= g_v[j]->GetRightPos() &&
-				MOUSEMANAGER->GetPosList()[i].y <= g_v[j]->GetTopPos() &&
-				MOUSEMANAGER->GetPosList()[i].y >= g_v[j]->GetBottomPos()) {
-				switch (j) {
-				case LT: flag[i].left = true; flag[i].top = true; break;
-				case T: flag[i].top = true; break;
-				case RT: flag[i].right = true; flag[i].top = true; break;
-				case L: flag[i].left = true; break;
-				case R: flag[i].right = true; break;
-				case LB: flag[i].left = true; flag[i].bottom = true; break;
-				case B: flag[i].bottom = true; break;
-				case RB: flag[i].right = true; flag[i].bottom = true; break;
-				}
+	for (int j = 0; j < END; ++j) {
+
+		if (MOUSEMANAGER->GetPosList()[0].x >= g_v[j]->GetLeftPos() &&
+			MOUSEMANAGER->GetPosList()[0].x <= g_v[j]->GetRightPos() &&
+			MOUSEMANAGER->GetPosList()[0].y <= g_v[j]->GetTopPos() &&
+			MOUSEMANAGER->GetPosList()[0].y >= g_v[j]->GetBottomPos()) {
+			switch (j) {
+			case LT: flag[0].left = true; flag[0].top = true; break;
+			case T: flag[0].top = true; break;
+			case RT: flag[0].right = true; flag[0].top = true; break;
+			case L: flag[0].left = true; break;
+			case R: flag[0].right = true; break;
+			case LB: flag[0].left = true; flag[0].bottom = true; break;
+			case B: flag[0].bottom = true; break;
+			case RB: flag[0].right = true; flag[0].bottom = true; break;
 			}
-
 		}
+
+		if (MOUSEMANAGER->GetPosList()[END_OF_LINE].x >= g_v[j]->GetLeftPos() &&
+			MOUSEMANAGER->GetPosList()[END_OF_LINE].x <= g_v[j]->GetRightPos() &&
+			MOUSEMANAGER->GetPosList()[END_OF_LINE].y <= g_v[j]->GetTopPos() &&
+			MOUSEMANAGER->GetPosList()[END_OF_LINE].y >= g_v[j]->GetBottomPos()) {
+			switch (j) {
+			case LT: flag[1].left = true; flag[1].top = true; break;
+			case T: flag[1].top = true; break;
+			case RT: flag[1].right = true; flag[1].top = true; break;
+			case L: flag[1].left = true; break;
+			case R: flag[1].right = true; break;
+			case LB: flag[1].left = true; flag[1].bottom = true; break;
+			case B: flag[1].bottom = true; break;
+			case RB: flag[1].right = true; flag[1].bottom = true; break;
+			}
+		}
+
 	}
 
-	
-	cout << flag[0].left << endl;
-	cout << flag[0].right << endl;
-	cout << flag[0].top << endl;
-	cout << flag[0].bottom << endl;
-	
-	cout << flag[1].left << endl;
-	cout << flag[1].right << endl;
-	cout << flag[1].top << endl;
-	cout << flag[1].bottom << endl;
-	if (flag[0] & flag[1])
-	{
-		cout << "delete" << endl;
+
+	if (!(flag[0] & flag[1])){
+		if (MOUSEMANAGER->IsInArea(g_v[M]->GetLeftPos(), g_v[M]->GetRightPos(),
+			g_v[M]->GetTopPos(), g_v[M]->GetBottomPos())) CutLine();
+
 		MOUSEMANAGER->GetPosList().clear();
 	}
 
 	else MOUSEMANAGER->GetPosList().clear();
+}
+
+GLvoid CutLine()
+{
+	g_line[0] = MOUSEMANAGER->GetPosList()[0];
+	g_line[1] = MOUSEMANAGER->GetPosList()[END_OF_LINE];
+
+	for (int i = 0; i < 2; ++i) {
+		// Vertical Boundary Check
+		if (g_line[i].x < g_v[M]->GetLeftPos()) g_line[i].x = g_v[M]->GetLeftPos();
+		if (g_line[i].x > g_v[M]->GetRightPos()) g_line[i].x = g_v[M]->GetRightPos();
+
+		// Horizontal Boundary Check
+		if (g_line[i].y > g_v[M]->GetTopPos()) g_line[i].y = g_v[M]->GetTopPos();
+		if (g_line[i].y < g_v[M]->GetBottomPos()) g_line[i].y = g_v[M]->GetBottomPos();
+	}
+}
+
+double GetDistance(const Vector2& v1, const Vector2& v2)
+{
+	return sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
+
+}
+
+GLvoid VerticalDraw()
+{
+	if ((g_line[0].y == g_v[M]->GetTopPos() || g_line[1].y == g_v[M]->GetTopPos()) &&
+		(g_line[0].y == g_v[M]->GetBottomPos() || g_line[1].y == g_v[M]->GetBottomPos())) {
+		Vector2 v1, v2;
+		v1.x = g_v[M]->GetLeftPos();
+		v1.y = g_v[M]->GetTopPos();
+		v2.x = g_v[M]->GetRightPos();
+		v2.y = g_v[M]->GetTopPos();
+
+		if (GetDistance(g_line[0], v1) > GetDistance(g_line[0], v2)) lastLine.x = g_v[M]->GetRightPos();
+		else lastLine.x = g_v[M]->GetLeftPos();
+
+		glVertex2f(lastLine.x, g_v[M]->GetBottomPos());
+
+	}
 }
