@@ -1,1 +1,1 @@
-enum POSITION { LT, T, RT, L, M, R, LB, B, RB, END };
+enum POSITION { M, LT, T, RT, L, R, LB, B, RB, BASKET, END };

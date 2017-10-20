@@ -99,7 +99,6 @@ GLvoid Animate(int n)
 	
 	if (g_ballPos.x < -((FLOOR_SIZE * 5.0f) + PIE)) g_ballMove[X] = false;
 	if (g_ballPos.z > (FLOOR_SIZE * 2.0f) + PIE) g_ballMove[Z] = false;
-	cout << g_ballPos.z << endl;
 	DrawScene();
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 }
@@ -133,26 +132,27 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 
 	case 'l':
 	case 'L':
-		g_ballAngle = 0.0f;
 		g_ballRotate.x = 1.0f;
 		g_ballRotate.y = 0.0f;
 		g_ballRotate.z = 0.0f;
 		g_ballMove[Z] = true;
+		g_ballMove[X] = false;
+		g_ballMove[Y] = false;
 		break;
 	case 'm':
 	case 'M':
-		g_ballAngle = 0.0f;
 		g_ballRotate.x = 0.0f;
 		g_ballRotate.y = 1.0f;
 		g_ballRotate.z = 0.0f;
 		break;
 	case 'n':
 	case 'N':
-		g_ballAngle = 0.0f;
 		g_ballRotate.x = 0.0f;
-		g_ballRotate.y = 0.0f;
+		//g_ballRotate.y = 0.0f;
 		g_ballRotate.z = 1.0f;
 		g_ballMove[X] = true;
+		g_ballMove[Y] = false;
+		g_ballMove[Z] = false;
 		break;
 	default: break;
 	}

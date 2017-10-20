@@ -80,8 +80,11 @@ GLvoid DrawScene(GLvoid)
 			
 			glColor3f(1.0f, 1.0f, 0.0f);
 			glTranslatef(0.0f, BOTTOM_SIZE - (BODY_SIZE / 2.0f), 0.0f);
-			if (g_isOnRotation[BODY]) 
+			if (g_isOnRotation[BODY]) {
+				glTranslatef(0.0f, -(BOTTOM_SIZE / 2.0f), 0.0f);
 				glRotatef(g_angle[BODY], g_rotation[BODY].x, g_rotation[BODY].y, g_rotation[BODY].z);
+				glTranslatef(0.0f, BOTTOM_SIZE / 2.0f, 0.0f);
+			}
 			// Draw body
 			glutSolidCube(BODY_SIZE);
 
@@ -89,8 +92,11 @@ GLvoid DrawScene(GLvoid)
 			glColor3f(0.0f, 5.0f, 0.0f);
 			glScalef(1.0f, 2.0f, 1.0f);
 			glTranslatef(0.0f, BODY_SIZE - (ARM_SIZE), 0.0f);
-			if (g_isOnRotation[ARM])
+			if (g_isOnRotation[ARM]) {
+				glTranslatef(0.0f, -(BODY_SIZE / 2.0f), 0.0f);
 				glRotatef(g_angle[ARM], g_rotation[ARM].x, g_rotation[ARM].y, g_rotation[ARM].z);
+				glTranslatef(0.0f, (BODY_SIZE / 2.0f), 0.0f);
+			}
 			// Draw arm
 			glutSolidCube(ARM_SIZE);
 			glPopMatrix();
@@ -124,7 +130,7 @@ GLvoid Animate(int n)
 		if (g_isOnRotation[i]) {
 			g_angle[i] += g_bodyAndArmRotation;
 			if (g_angle[i] < -90.0f || g_angle[i] > 90.0f) g_bodyAndArmRotation = -g_bodyAndArmRotation;
-			cout << g_angle[i] << endl;
+	
 		}
 	}
 	g_cranePos.x += g_craneSpeed;

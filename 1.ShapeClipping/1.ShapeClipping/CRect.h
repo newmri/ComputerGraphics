@@ -1,7 +1,6 @@
 #pragma once
 
-#include "CObject.h"
-
+#include "CPolygon.h"
 
 class CRect : public CObject
 {
@@ -12,8 +11,16 @@ public:
 	virtual void Render();
 
 public:
-	CRect() { this->Init(); }
-	CRect(const POSITION position) { m_position = position; this->Init(); }
+	const POSITION GetPosition() { return m_position; }
+public:
+	void SetWhitePolygon(CPolygon polygon) { m_haveToDrawWhite = true; m_whitePolygon = polygon; }
+public:
+	CRect() {};
+	CRect(const POSITION position, const float size) { m_position = position; m_size = size; this->Init(); }
 private:
 	POSITION m_position;
+	bool m_haveToDrawWhite;
+	CPolygon m_whitePolygon;
+	float m_waterHDevide;
+	float m_waterInc;
 };

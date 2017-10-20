@@ -148,12 +148,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CMouseManager.cpp" />
+    <ClCompile Include="CPolygon.cpp" />
     <ClCompile Include="CRect.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMouseManager.h" />
     <ClInclude Include="CObject.h" />
+    <ClInclude Include="CPolygon.h" />
     <ClInclude Include="CRect.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enum.h" />

@@ -66,12 +66,19 @@ void CCameraManager::SetMove(const unsigned char key)
 
 void CCameraManager::Rotate()
 {
+	GLfloat tempMatrix[16];
+
 	if (m_rotate.x == 1.0f || m_rotate.y == 1.0f || m_rotate.z == 1.0f) {
 		if (m_angle < 360.0f || m_angle < -360.0f) m_angle += m_angleIn;
 		else m_angle = 0.0f;
 
+		glGetFloatv(GL_MODELVIEW_MATRIX, tempMatrix);
+		glLoadIdentity();
 		glRotatef(m_angle, m_rotate.x, m_rotate.y, m_rotate.z);
+		glMultMatrixf(tempMatrix);
 	}
+
+
 }
 
 void CCameraManager::Move()

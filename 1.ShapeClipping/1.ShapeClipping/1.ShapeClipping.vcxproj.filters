@@ -24,6 +24,9 @@
     <ClCompile Include="CRect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPolygon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPolygon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

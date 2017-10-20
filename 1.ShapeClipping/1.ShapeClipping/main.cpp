@@ -1,13 +1,17 @@
 #include "Define.h"
 
 GLvoid Init(GLvoid);
+GLvoid InitObject(GLvoid);
+GLvoid ClearObject(GLvoid);
+GLvoid ResetObject(GLvoid);
 GLvoid DrawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Animate(int n);
 GLvoid DoClliping();
 GLvoid CutLine();
-GLvoid VerticalDraw();
-
+GLvoid Key(unsigned char key, int x, int y);
+bool VerticalCheck();
+bool HorizontalCheck();
 double GetDistance(const Vector2& v1, const Vector2& v2);
 
 GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info);
@@ -21,9 +25,16 @@ vector<unique_ptr<CRect>> g_v;
 
 Vector2 g_line[2];
 Vector2 lastLine;
+Vector2 g_thirdLine;
+CPolygon g_polygon;
+CPolygon g_whitePolygon;
+
+
+bool g_haveToRenderWhite;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
+
 	Init();
 	glutCreateWindow("ShapeClipping");
 
@@ -34,6 +45,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set background in blue
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 	MOUSEMANAGER->Init();
+	glutKeyboardFunc(Key);
 	glutMainLoop();
 
 	delete m_bitmap;
@@ -46,24 +58,24 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
 GLvoid Init(GLvoid)
 {
+
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(WINDOWS_WIDTH, WINDOWS_HEIGHT);
-	for (int i = 0; i < POSITION::END; ++i) {
-		unique_ptr<CRect> rect(new CRect(static_cast<POSITION>(i)));
-		g_v.push_back(move(rect));
-	}
+
+	InitObject();
+
 }
 
 GLvoid DrawScene(GLvoid)
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
-	for (auto& d : g_v) d->Render();
 
+	for (auto& d : g_v) d->Render();
+	g_polygon.Render();
+	g_whitePolygon.RenderWhitePolygon();
 	GLfloat xsize, ysize;
 	GLfloat xoffset, yoffset;
 	GLfloat xscale, yscale;
@@ -88,30 +100,14 @@ GLvoid DrawScene(GLvoid)
 		glDrawPixels(m_bitinfo->bmiHeader.biWidth, m_bitinfo->bmiHeader.biHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bitmap);
 	}
 
-	// Draw Line
+	
+	/*
 	glBegin(GL_LINES);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glVertex2f(g_line[0].x, g_line[0].y);
 	glVertex2f(g_line[1].x, g_line[1].y);
 	glEnd();
-
-	// Draw Cut Shape
-	glBegin(GL_POLYGON);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex2f(g_line[0].x, g_line[0].y);
-	glVertex2f(g_line[1].x, g_line[1].y);
-
-	if (g_line[0].x == g_v[M]->GetLeftPos() || g_line[1].x == g_v[M]->GetLeftPos()) lastLine.x = g_v[M]->GetLeftPos();
-	else if (g_line[0].x == g_v[M]->GetRightPos() || g_line[1].x == g_v[M]->GetRightPos()) lastLine.x = g_v[M]->GetRightPos();
-
-	if (g_line[0].y == g_v[M]->GetTopPos() || g_line[1].y == g_v[M]->GetTopPos()) lastLine.y = g_v[M]->GetTopPos();
-	else if (g_line[0].y == g_v[M]->GetBottomPos() || g_line[1].y == g_v[M]->GetBottomPos()) lastLine.y = g_v[M]->GetBottomPos();
-
-	VerticalDraw();
-		
-	glVertex2f(lastLine.x, lastLine.y);
-	glEnd();
-
+	*/
 	glPopMatrix();
 	glutSwapBuffers(); // Draw
 }
@@ -181,6 +177,18 @@ GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info)
 GLvoid Animate(int n)
 {
 	if (MOUSEMANAGER->HaveSomethingToClip()) DoClliping();
+	g_polygon.Update();
+	g_whitePolygon.Update();
+	for (auto& d : g_v) d->Update();
+	if (g_v[M]->GetLeftPos() < -1.0f || g_v[M]->GetRightPos() > 1.0f){
+		g_whitePolygon.ChangeDirection();
+		for (auto& d : g_v) {
+			if(d->GetPosition() != BASKET) d->ChangeDirection();
+		}
+	}
+
+	if (g_v[BASKET]->GetLeftPos() < -1.0f || g_v[BASKET]->GetRightPos() > 1.0f) g_v[BASKET]->ChangeDirection();
+
 	DrawScene();
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 }
@@ -229,7 +237,6 @@ GLvoid DoClliping()
 	if (!(flag[0] & flag[1])){
 		if (MOUSEMANAGER->IsInArea(g_v[M]->GetLeftPos(), g_v[M]->GetRightPos(),
 			g_v[M]->GetTopPos(), g_v[M]->GetBottomPos())) CutLine();
-
 		MOUSEMANAGER->GetPosList().clear();
 	}
 
@@ -250,6 +257,22 @@ GLvoid CutLine()
 		if (g_line[i].y > g_v[M]->GetTopPos()) g_line[i].y = g_v[M]->GetTopPos();
 		if (g_line[i].y < g_v[M]->GetBottomPos()) g_line[i].y = g_v[M]->GetBottomPos();
 	}
+
+	if (g_line[0].x == g_v[M]->GetLeftPos() || g_line[1].x == g_v[M]->GetLeftPos()) lastLine.x = g_v[M]->GetLeftPos();
+	else if (g_line[0].x == g_v[M]->GetRightPos() || g_line[1].x == g_v[M]->GetRightPos()) lastLine.x = g_v[M]->GetRightPos();
+
+	if (g_line[0].y == g_v[M]->GetTopPos() || g_line[1].y == g_v[M]->GetTopPos()) lastLine.y = g_v[M]->GetTopPos();
+	else if (g_line[0].y == g_v[M]->GetBottomPos() || g_line[1].y == g_v[M]->GetBottomPos()) lastLine.y = g_v[M]->GetBottomPos();
+
+	g_polygon.SetV1(g_line[0]);
+	g_polygon.SetV2(g_line[1]);
+	if (VerticalCheck() && HorizontalCheck()) g_polygon.ReSetV3();
+	g_polygon.SetV4(lastLine);
+
+	g_whitePolygon = g_polygon;
+	g_whitePolygon.SetWhite(g_v[M]->GetDirection());
+
+	g_polygon.SetDrop();
 }
 
 double GetDistance(const Vector2& v1, const Vector2& v2)
@@ -258,7 +281,7 @@ double GetDistance(const Vector2& v1, const Vector2& v2)
 
 }
 
-GLvoid VerticalDraw()
+bool VerticalCheck()
 {
 	if ((g_line[0].y == g_v[M]->GetTopPos() || g_line[1].y == g_v[M]->GetTopPos()) &&
 		(g_line[0].y == g_v[M]->GetBottomPos() || g_line[1].y == g_v[M]->GetBottomPos())) {
@@ -271,7 +294,73 @@ GLvoid VerticalDraw()
 		if (GetDistance(g_line[0], v1) > GetDistance(g_line[0], v2)) lastLine.x = g_v[M]->GetRightPos();
 		else lastLine.x = g_v[M]->GetLeftPos();
 
-		glVertex2f(lastLine.x, g_v[M]->GetBottomPos());
+		g_thirdLine.x = lastLine.x;
+		g_thirdLine.y = g_v[M]->GetBottomPos();
+		g_polygon.SetV3(g_thirdLine);
+		return false;
+	}
+
+	return true;
+}
+
+bool HorizontalCheck()
+{
+	if ((g_line[0].x == g_v[M]->GetLeftPos() || g_line[1].x == g_v[M]->GetLeftPos()) &&
+		(g_line[0].x == g_v[M]->GetRightPos() || g_line[1].x == g_v[M]->GetRightPos())) {
+		Vector2 v1, v2;
+		v1.x = g_v[M]->GetLeftPos();
+		v1.y = g_v[M]->GetTopPos();
+		v2.x = g_v[M]->GetLeftPos();
+		v2.y = g_v[M]->GetBottomPos();
+
+		if (GetDistance(g_line[0], v1) < GetDistance(g_line[0], v2)) lastLine.y = g_v[M]->GetTopPos();
+		else lastLine.y = g_v[M]->GetBottomPos();
+
+		g_thirdLine.x = g_v[M]->GetRightPos();
+		g_thirdLine.y = lastLine.y;
+		g_polygon.SetV3(g_thirdLine);
+		return false;
 
 	}
+
+	return true;
+}
+
+GLvoid InitObject(GLvoid)
+{
+	random_device rd;
+	mt19937 rng(rd());
+
+	uniform_real_distribution<> dis(0.2f, 0.33f);
+	float size = dis(rng);
+	for (int i = 0; i < POSITION::END; ++i) {
+		unique_ptr<CRect> rect(new CRect(static_cast<POSITION>(i), size));
+		g_v.push_back(move(rect));
+	}
+}
+
+GLvoid Key(unsigned char key, int x, int y)
+{
+	switch (key) {
+	case 'q':
+	case 'Q': ResetObject(); break;
+	}
+}
+
+GLvoid ClearObject(GLvoid)
+{
+	g_v.clear();
+	MOUSEMANAGER->GetPosList().clear();
+
+	ZeroMemory(&g_line, sizeof(g_line));
+	ZeroMemory(&lastLine, sizeof(lastLine));
+	ZeroMemory(&g_thirdLine, sizeof(g_thirdLine));
+	ZeroMemory(&g_polygon, sizeof(g_polygon));
+	ZeroMemory(&g_whitePolygon, sizeof(g_whitePolygon));
+}
+
+GLvoid ResetObject(GLvoid)
+{
+	ClearObject();
+	InitObject();
 }

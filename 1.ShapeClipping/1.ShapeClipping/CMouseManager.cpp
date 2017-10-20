@@ -11,6 +11,8 @@ void CMouseManager::Init()
 	glutMotionFunc(this->MouseClickMove);
 	glutPassiveMotionFunc(this->MouseMove);
 	m_isLeftOn = false;
+
+
 }
 
 void CMouseManager::ConvertDeviceToOpenGL(const int x, const int y, Vector2& pos)
