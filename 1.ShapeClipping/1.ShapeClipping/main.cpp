@@ -10,14 +10,18 @@ GLvoid Animate(int n);
 GLvoid DoClliping();
 GLvoid CutLine();
 GLvoid Key(unsigned char key, int x, int y);
+GLvoid CheckCollision();
+GLvoid DrawWaterPart();
+float GetDist();
 bool VerticalCheck();
 bool HorizontalCheck();
-double GetDistance(const Vector2& v1, const Vector2& v2);
+float GetDistance(const Vector2& v1, const Vector2& v2);
 
 GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info);
 BITMAPINFO* m_bitinfo;
 GLubyte* m_bitmap;
 
+bool g_drawWaterPart = false;
 
 const unsigned int ANIMATION_TIME = 1000 / 30;
 
@@ -104,10 +108,13 @@ GLvoid DrawScene(GLvoid)
 	/*
 	glBegin(GL_LINES);
 	glColor3f(0.0f, 0.0f, 0.0f);
-	glVertex2f(g_line[0].x, g_line[0].y);
-	glVertex2f(g_line[1].x, g_line[1].y);
+	//glVertex2f(g_line[0].x, g_line[0].y);
+	//glVertex2f(g_line[1].x, g_line[1].y);
+	glVertex2f(g_polygon.GetPolygonLeftPos(), g_polygon.GetPolygonBottomPos());
+	glVertex2f(g_polygon.GetPolygonRightPos(), g_polygon.GetPolygonBottomPos());
 	glEnd();
 	*/
+	if(g_drawWaterPart) DrawWaterPart();
 	glPopMatrix();
 	glutSwapBuffers(); // Draw
 }
@@ -176,6 +183,7 @@ GLubyte* LoadDlBitmap(const char* filename, BITMAPINFO** info)
 
 GLvoid Animate(int n)
 {
+
 	if (MOUSEMANAGER->HaveSomethingToClip()) DoClliping();
 	g_polygon.Update();
 	g_whitePolygon.Update();
@@ -190,6 +198,7 @@ GLvoid Animate(int n)
 	if (g_v[BASKET]->GetLeftPos() < -1.0f || g_v[BASKET]->GetRightPos() > 1.0f) g_v[BASKET]->ChangeDirection();
 
 	DrawScene();
+	CheckCollision();
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 }
 
@@ -275,7 +284,7 @@ GLvoid CutLine()
 	g_polygon.SetDrop();
 }
 
-double GetDistance(const Vector2& v1, const Vector2& v2)
+float GetDistance(const Vector2& v1, const Vector2& v2)
 {
 	return sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
 
@@ -364,3 +373,93 @@ GLvoid ResetObject(GLvoid)
 	ClearObject();
 	InitObject();
 }
+
+GLvoid CheckCollision()
+{
+	// Let's check collision
+
+	// Left
+	if (g_polygon.GetDrop()) {
+		if (g_polygon.GetPolygonBottomPos() < g_v[BASKET]->GetTopPos() &&
+			g_polygon.GetPolygonTopPos() > g_v[BASKET]->GetBottomPos() &&
+			(g_polygon.GetPolygonLeftPos() < g_v[BASKET]->GetLeftPos() &&
+				g_polygon.GetPolygonRightPos() > g_v[BASKET]->GetLeftPos() + 0.02f)) {
+			g_polygon.StopDrop();
+			g_v[BASKET]->StopMove();
+			Vector2 pos;
+			pos.x = g_polygon.GetPos().x;
+			pos.y = g_polygon.GetPos().y + (g_v[BASKET]->GetTopPos() - g_polygon.GetPolygonBottomPos());
+			g_polygon.SetPos(pos);
+		}
+
+		// Right
+		if (g_polygon.GetPolygonBottomPos() < g_v[BASKET]->GetTopPos() &&
+			g_polygon.GetPolygonTopPos() > g_v[BASKET]->GetBottomPos() &&
+			(g_polygon.GetPolygonLeftPos() > g_v[BASKET]->GetRightPos() - 0.02f &&
+				g_polygon.GetPolygonRightPos() < g_v[BASKET]->GetRightPos())) {
+			g_polygon.StopDrop();
+			g_v[BASKET]->StopMove();
+			Vector2 pos;
+			pos.x = g_polygon.GetPos().x;
+			pos.y = g_polygon.GetPos().y + (g_v[BASKET]->GetTopPos() - g_polygon.GetPolygonBottomPos());
+			g_polygon.SetPos(pos);
+		}
+
+		if (g_polygon.GetPolygonBottomPos() < g_v[BASKET]->GetBottomPos() &&
+			g_polygon.GetPolygonTopPos() > g_v[BASKET]->GetBottomPos() &&
+			(g_polygon.GetPolygonLeftPos() > g_v[BASKET]->GetLeftPos() &&
+				g_polygon.GetPolygonRightPos() < g_v[BASKET]->GetRightPos())) {
+			g_polygon.StopDrop();
+			g_v[BASKET]->StopMove();
+			Vector2 pos;
+			pos.x = g_polygon.GetPos().x;
+			pos.y = g_polygon.GetPos().y + (g_v[BASKET]->GetBottomPos() - g_polygon.GetPolygonBottomPos());
+			g_polygon.SetPos(pos);
+			g_drawWaterPart = true;
+		}
+
+	}
+
+}
+
+GLvoid DrawWaterPart()
+{
+	
+	glColor4f(85.0f / 255.0f, 134.0f / 255.0f, 235.0f / 255.0f, 1.0f);
+	Vector2 v1, v2;
+	v1.x = g_polygon.GetPolygonLeftPos();
+	v1.y = g_polygon.GetPolygonTopPos();
+	v2.x = g_polygon.GetPolygonRightPos();
+	v2.y = g_polygon.GetPolygonBottomPos();
+	float dif = g_polygon.GetPolygonRightPos() - g_polygon.GetPolygonLeftPos();
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(g_polygon.GetPolygonLeftPos(), g_polygon.GetPolygonBottomPos());
+	glVertex2f(g_polygon.GetPolygonLeftPos(), g_polygon.GetPolygonTopPos());
+	glVertex2f(g_polygon.GetPolygonRightPos(), g_polygon.GetPolygonTopPos());
+	glVertex2f(g_polygon.GetPolygonRightPos(), g_polygon.GetPolygonBottomPos());
+	/*
+	Vector2 v1, v2;
+	v1.x = g_polygon.GetPolygonLeftPos();
+	v1.y = g_polygon.GetPolygonTopPos();
+	v2.x = g_polygon.GetPolygonRightPos();
+	v2.y = g_polygon.GetPolygonBottomPos();
+	float dif = g_polygon.GetPolygonRightPos() - g_polygon.GetPolygonLeftPos();
+	glVertex2f(g_v[BASKET]->GetLeftPos(), g_v[BASKET]->GetWaterHeight());
+	glVertex2f((g_v[BASKET]->GetLeftPos() + GetDistance(v1, v2) / g_v[BASKET]->GetDevide()) - dif  , g_v[BASKET]->GetWaterHeight());
+	glEnd();
+	*/
+	/*
+	glPushMatrix();
+	glTranslatef(0.0f, g_polygon.GetPos().y, 0.0f);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(g_polygon.GetV1().x, g_polygon.GetV1().y);
+	glVertex2f(g_polygon.GetV2().x, g_polygon.GetV2().y);
+	if(g_polygon.HaveV3()) glVertex2f(g_polygon.GetV3().x, g_polygon.GetV3().y);
+	glVertex2f(g_polygon.GetV4().x, g_polygon.GetV4().y);
+	*/
+	glEnd();
+	//glPopMatrix();
+	
+
+}
+

@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <random>
-
+#include <math.h>
 #include "CObject.h"
 #include "CRect.h"
 #include "CMouseManager.h"

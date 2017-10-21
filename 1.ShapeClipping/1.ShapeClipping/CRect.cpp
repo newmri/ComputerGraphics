@@ -6,7 +6,10 @@ void CRect::Init()
 	m_haveToDrawWhite = false;
 	m_vX = SPEED;
 	m_waterHDevide = WATER_DEVIDE;
-	m_waterInc = WATER_INC;
+	m_waterHDevide2 = MAX_WATER_H;
+	m_waterInc = -WATER_INC;
+	m_waterInc2 = WATER_INC;
+	m_move = true;
 	switch (m_position) {
 	case LT:
 		m_pos.x = -m_size;
@@ -52,7 +55,7 @@ void CRect::Init()
 
 void CRect::Update()
 {
-	//m_pos.x -= m_vX;
+	if(m_move) m_pos.x -= m_vX;
 }
 
 void CRect::Render()
@@ -66,13 +69,15 @@ void CRect::Render()
 
 	if (m_position == BASKET) {
 		m_waterHDevide += m_waterInc;
+		m_waterHDevide2 += m_waterInc2;
 		if (m_waterHDevide < MAX_WATER_H || m_waterHDevide > WATER_DEVIDE) m_waterInc = -m_waterInc;
+		if (m_waterHDevide2 < MAX_WATER_H || m_waterHDevide2 > WATER_DEVIDE) m_waterInc2 = -m_waterInc2;
 		glBegin(GL_POLYGON);
 		glColor4f(85.0f / 255.0f, 134.0f / 255.0f, 235.0f / 255.0f, 1.0f);
-		glVertex2f(this->GetLeftPos(), this->GetBottomPos());
-		glVertex2f(this->GetLeftPos(), this->GetBottomPos() + (m_size / m_waterHDevide));
-		glVertex2f(this->GetRightPos(), this->GetBottomPos() + (m_size / m_waterHDevide));
-		glVertex2f(this->GetRightPos(), this->GetBottomPos());
+		glVertex2f(this->GetLeftPos() + 0.02f, this->GetBottomPos());
+		glVertex2f(this->GetLeftPos() + 0.02f, this->GetBottomPos() + (m_size / m_waterHDevide));
+		glVertex2f(this->GetRightPos() - 0.02f, this->GetBottomPos() + (m_size / m_waterHDevide));
+		glVertex2f(this->GetRightPos() - 0.02f, this->GetBottomPos());
 		glEnd();
 	}
 

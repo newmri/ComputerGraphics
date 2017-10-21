@@ -25,6 +25,14 @@ void CPolygon::Render()
 	if (m_haveV3) glVertex2f(m_v3.x, m_v3.y);
 	glVertex2f(m_v4.x, m_v4.y);
 	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+	glVertex2f(m_v1.x, m_v1.y);
+	glVertex2f(m_v2.x, m_v2.y);
+	if (m_haveV3) glVertex2f(m_v3.x, m_v3.y);
+	glVertex2f(m_v4.x, m_v4.y);
+	glEnd();
 	glPopMatrix();
 }
 

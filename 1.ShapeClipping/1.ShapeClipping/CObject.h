@@ -48,11 +48,12 @@ public:
 	void ChangeDirection() { m_vX = -m_vX; }
 public:
 	const Vector2& GetPos() { return m_pos; }
-	const float& GetLeftPos() { return m_pos.x - (m_size / 2.0f); }
-	const float& GetRightPos() { return m_pos.x + (m_size / 2.0f); }
-	const float& GetTopPos() { return m_pos.y + (m_size / 2.0f); }
-	const float& GetBottomPos() { return m_pos.y - (m_size / 2.0f); }
-	const float GetDirection() { return m_vX; }
+	const float GetLeftPos() { return m_pos.x - (m_size / 2.0f); }
+	const float GetRightPos() { return m_pos.x + (m_size / 2.0f); }
+	const float GetTopPos() { return m_pos.y + (m_size / 2.0f); }
+	const float GetBottomPos() { return m_pos.y - (m_size / 2.0f); }
+	const float& GetDirection() { return m_vX; }
+	const float& GetSize() { return m_size; }
 protected:
 	Vector2 m_pos;
 	Color m_color;
