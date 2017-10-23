@@ -12,7 +12,6 @@ GLvoid CutLine();
 GLvoid Key(unsigned char key, int x, int y);
 GLvoid CheckCollision();
 GLvoid DrawWaterPart();
-float GetDist();
 bool VerticalCheck();
 bool HorizontalCheck();
 float GetDistance(const Vector2& v1, const Vector2& v2);
@@ -33,14 +32,14 @@ Vector2 g_thirdLine;
 CPolygon g_polygon;
 CPolygon g_whitePolygon;
 
-
+int g_winId;
 bool g_haveToRenderWhite;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
 
 	Init();
-	glutCreateWindow("ShapeClipping");
+	g_winId = glutCreateWindow("ShapeClipping");
 
 	glutDisplayFunc(DrawScene);
 	glutReshapeFunc(Reshape);
@@ -79,6 +78,7 @@ GLvoid DrawScene(GLvoid)
 
 	for (auto& d : g_v) d->Render();
 	g_polygon.Render();
+	g_v[BASKET]->RenderWater();
 	g_whitePolygon.RenderWhitePolygon();
 	GLfloat xsize, ysize;
 	GLfloat xoffset, yoffset;
@@ -114,7 +114,7 @@ GLvoid DrawScene(GLvoid)
 	glVertex2f(g_polygon.GetPolygonRightPos(), g_polygon.GetPolygonBottomPos());
 	glEnd();
 	*/
-	if(g_drawWaterPart) DrawWaterPart();
+	//if(g_drawWaterPart) DrawWaterPart();
 	glPopMatrix();
 	glutSwapBuffers(); // Draw
 }
@@ -351,8 +351,14 @@ GLvoid InitObject(GLvoid)
 GLvoid Key(unsigned char key, int x, int y)
 {
 	switch (key) {
+	case 'p':
+	case 'P': ResetObject(); break;
 	case 'q':
-	case 'Q': ResetObject(); break;
+	case 'Q':
+		glutDestroyWindow(g_winId);
+		exit(0);
+		break;
+	default: break;
 	}
 }
 
@@ -378,8 +384,23 @@ GLvoid CheckCollision()
 {
 	// Let's check collision
 
+
 	// Left
 	if (g_polygon.GetDrop()) {
+
+		if (g_polygon.GetPolygonBottomPos() < g_v[BASKET]->GetBottomPos() &&
+			g_polygon.GetPolygonTopPos() > g_v[BASKET]->GetBottomPos() &&
+			(g_polygon.GetPolygonLeftPos() > g_v[BASKET]->GetLeftPos() &&
+				g_polygon.GetPolygonRightPos() < g_v[BASKET]->GetRightPos())) {
+			g_polygon.StopDrop();
+			g_v[BASKET]->StopMove();
+			Vector2 pos;
+			pos.x = g_polygon.GetPos().x;
+			pos.y = g_polygon.GetPos().y + (g_v[BASKET]->GetBottomPos() - g_polygon.GetPolygonBottomPos());
+			g_polygon.SetPos(pos);
+			g_drawWaterPart = true;
+		}
+
 		if (g_polygon.GetPolygonBottomPos() < g_v[BASKET]->GetTopPos() &&
 			g_polygon.GetPolygonTopPos() > g_v[BASKET]->GetBottomPos() &&
 			(g_polygon.GetPolygonLeftPos() < g_v[BASKET]->GetLeftPos() &&
@@ -405,18 +426,6 @@ GLvoid CheckCollision()
 			g_polygon.SetPos(pos);
 		}
 
-		if (g_polygon.GetPolygonBottomPos() < g_v[BASKET]->GetBottomPos() &&
-			g_polygon.GetPolygonTopPos() > g_v[BASKET]->GetBottomPos() &&
-			(g_polygon.GetPolygonLeftPos() > g_v[BASKET]->GetLeftPos() &&
-				g_polygon.GetPolygonRightPos() < g_v[BASKET]->GetRightPos())) {
-			g_polygon.StopDrop();
-			g_v[BASKET]->StopMove();
-			Vector2 pos;
-			pos.x = g_polygon.GetPos().x;
-			pos.y = g_polygon.GetPos().y + (g_v[BASKET]->GetBottomPos() - g_polygon.GetPolygonBottomPos());
-			g_polygon.SetPos(pos);
-			g_drawWaterPart = true;
-		}
 
 	}
 

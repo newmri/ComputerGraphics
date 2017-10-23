@@ -9,6 +9,7 @@ public:
 	virtual void Init();
 	virtual void Update();
 	virtual void Render();
+	void RenderWater();
 
 public:
 	const POSITION GetPosition() { return m_position; }

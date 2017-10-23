@@ -67,6 +67,11 @@ void CRect::Render()
 		glutSolidCube(m_size);
 	glPopMatrix();
 
+
+}
+
+void CRect::RenderWater()
+{
 	if (m_position == BASKET) {
 		m_waterHDevide += m_waterInc;
 		m_waterHDevide2 += m_waterInc2;
@@ -80,5 +85,4 @@ void CRect::Render()
 		glVertex2f(this->GetRightPos() - 0.02f, this->GetBottomPos());
 		glEnd();
 	}
-
 }
