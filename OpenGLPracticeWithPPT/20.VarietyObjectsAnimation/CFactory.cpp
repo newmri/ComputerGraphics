@@ -12,9 +12,9 @@ shared_ptr<CObject> CFactory::CreateObj(OBJTYPE objType, Vector3 pos, Vector3 sc
 	case OBJTYPE::FLOOR: p = make_shared<CFloor>(); break;
 	case OBJTYPE::HEXAHEDRON_TREE: p = make_shared<CHexahedronTree>(); break;
 	case OBJTYPE::HEXAHEDRON_SPHRE_TREE: p = make_shared<CHexahedronSphereTree>(); break;
-	case OBJTYPE::HEXAHEDRON_TORUS_BUILDING: p = make_shared<CHexahedronTree>(); break;
-	case OBJTYPE::CORN_BUILDING: p = make_shared<CHexahedronTree>(); break;
-	case OBJTYPE::DOOR_BUILDING: p = make_shared<CHexahedronTree>(); break;
+	case OBJTYPE::HEXAHEDRON_TORUS_BUILDING: p = make_shared<CHexahedronTorusTree>(); break;
+	case OBJTYPE::CORN_BUILDING: p = make_shared<CCornBuilding>(); break;
+	case OBJTYPE::DOOR_BUILDING: p = make_shared<CDoorBuilding>(); break;
 	default: break;
 	}
 

@@ -28,7 +28,7 @@ static const float WINDOW_DEPTH = 150.0f;
 static const float REAL_WINDOW_DEPTH = WINDOW_DEPTH / 2.0f;
 static const float GAP_OF_END = REAL_WINDOW_WIDTH / 4.0f;
 
-const int SPEED = 5;
+static const float SPEED = 0.1f;
 const int SPEED_UP = 1, SPEED_DOWN = -1;
 
 const float PIE = 3.141592;

@@ -148,9 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CCameraManager.h" />
+    <ClInclude Include="CCornBuilding.h" />
+    <ClInclude Include="CDoorBuilding.h" />
     <ClInclude Include="CFactory.h" />
     <ClInclude Include="CFloor.h" />
     <ClInclude Include="CHexahedronSphereTree.h" />
+    <ClInclude Include="CHexahedronTorusTree.h" />
     <ClInclude Include="CHexahedronTree.h" />
     <ClInclude Include="CObject.h" />
     <ClInclude Include="Define.h" />
@@ -159,9 +162,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraManager.cpp" />
+    <ClCompile Include="CCornBuilding.cpp" />
+    <ClCompile Include="CDoorBuilding.cpp" />
     <ClCompile Include="CFactory.cpp" />
     <ClCompile Include="CFloor.cpp" />
     <ClCompile Include="CHexahedronSphereTree.cpp" />
+    <ClCompile Include="CHexahedronTorusTree.cpp" />
     <ClCompile Include="CHexahedronTree.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

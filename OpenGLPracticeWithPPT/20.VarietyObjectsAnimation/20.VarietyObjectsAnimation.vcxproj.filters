@@ -42,6 +42,15 @@
     <ClInclude Include="CHexahedronSphereTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CHexahedronTorusTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CCornBuilding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CDoorBuilding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraManager.cpp">
@@ -60,6 +69,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CHexahedronSphereTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHexahedronTorusTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCornBuilding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CDoorBuilding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

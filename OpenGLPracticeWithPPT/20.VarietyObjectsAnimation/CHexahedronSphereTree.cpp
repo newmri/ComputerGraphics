@@ -3,12 +3,20 @@
 
 void CHexahedronSphereTree::Init()
 {
-	this->SetRotation(Vector3(0.0f, 1.0f, 0.0f));
+	m_leafSize = m_size;
+	m_incre = 0.1f;
+}
+
+void CHexahedronSphereTree::ExpandAndReduct()
+{
+	if (m_leafSize > m_size * 2.0f || m_leafSize < m_size * 0.5f) m_incre = -m_incre;
+
+	m_leafSize += m_incre;
 }
 
 void CHexahedronSphereTree::Update()
 {
-	this->Rotate();
+	this->ExpandAndReduct();
 }
 
 
@@ -28,6 +36,6 @@ void CHexahedronSphereTree::Render()
 	glTranslatef(0.0f, m_scale.y * 3.5f, 0.0f);
 	glRotatef(m_angle, m_rotation.x, m_rotation.y, m_rotation.z);
 	glColor3f(m_leafColor.R, m_leafColor.G, m_leafColor.B);
-	glutWireSphere(m_size, 25, 25);
+	glutWireSphere(m_leafSize, 25, 25);
 	glPopMatrix();
 }

@@ -2,8 +2,7 @@
 
 #include "CObject.h"
 
-
-class CHexahedronSphereTree : public CObject
+class CCornBuilding : public CObject
 {
 public:
 	virtual void Init();
@@ -12,8 +11,9 @@ public:
 
 public:
 	void ExpandAndReduct();
-
 private:
 	float m_leafSize;
-	float m_incre;
+	float m_incre[2];
+	float m_maxSize;
+	Vector3 m_scale2;
 };

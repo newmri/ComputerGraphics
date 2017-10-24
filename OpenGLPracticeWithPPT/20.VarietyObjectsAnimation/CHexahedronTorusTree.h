@@ -2,8 +2,7 @@
 
 #include "CObject.h"
 
-
-class CHexahedronSphereTree : public CObject
+class CHexahedronTorusTree : public CObject
 {
 public:
 	virtual void Init();
@@ -11,9 +10,10 @@ public:
 	virtual void Render();
 
 public:
-	void ExpandAndReduct();
+	void MoveUpAndDown();
 
 private:
-	float m_leafSize;
-	float m_incre;
+	Vector3 m_leafPos;
+	float m_speed;
+
 };

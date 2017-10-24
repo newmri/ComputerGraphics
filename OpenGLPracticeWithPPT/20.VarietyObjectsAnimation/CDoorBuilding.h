@@ -2,18 +2,15 @@
 
 #include "CObject.h"
 
-
-class CHexahedronSphereTree : public CObject
+class CDoorBuilding : public CObject
 {
 public:
 	virtual void Init();
 	virtual void Update();
 	virtual void Render();
 
-public:
-	void ExpandAndReduct();
-
 private:
-	float m_leafSize;
-	float m_incre;
+	Vector3 m_doorScale;
+	float m_yDist;
+	float m_doorIncre, m_doorPosIncre;
 };

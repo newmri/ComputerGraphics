@@ -45,7 +45,14 @@ GLvoid Init(GLvoid)
 		FLOOR_SIZE, Color(1.0f, 1.0f, 1.0f)));
 	g_v.emplace_back(FACTORYMANAGER->CreateObj(HEXAHEDRON_TREE, Vector3(-(REAL_WINDOW_WIDTH - GAP_OF_END), 0.0f, -(REAL_WINDOW_DEPTH - GAP_OF_END)), Vector3(1.0f, 5.0f, 1.0f),
 		HEXAHEDRON_TREE_SIZE, Color(1.0f, 108.0f / RGB, 108.0f / RGB), Color(67.0f / RGB, 116.0f / RGB, 217.0f / RGB)));
-	g_v.emplace_back(FACTORYMANAGER->CreateObj(HEXAHEDRON_SPHRE_TREE, Vector3(-(REAL_WINDOW_WIDTH - GAP_OF_END), 0.0f, 0.0f), Vector3(1.0f, 5.0f, 1.0f),
+	g_v.emplace_back(FACTORYMANAGER->CreateObj(HEXAHEDRON_SPHRE_TREE, Vector3((REAL_WINDOW_WIDTH - GAP_OF_END), 0.0f, -(REAL_WINDOW_DEPTH - GAP_OF_END)), Vector3(1.0f, 5.0f, 1.0f),
+		HEXAHEDRON_TREE_SIZE, Color(1.0f, 108.0f / RGB, 108.0f / RGB), Color(67.0f / RGB, 116.0f / RGB, 217.0f / RGB)));
+	g_v.emplace_back(FACTORYMANAGER->CreateObj(HEXAHEDRON_TORUS_BUILDING, Vector3(-(REAL_WINDOW_WIDTH - GAP_OF_END), 0.0f, 0.0f), Vector3(1.0f, 5.0f, 1.0f),
+		HEXAHEDRON_TREE_SIZE, Color(1.0f, 108.0f / RGB, 108.0f / RGB), Color(67.0f / RGB, 116.0f / RGB, 217.0f / RGB)));
+	g_v.emplace_back(FACTORYMANAGER->CreateObj(CORN_BUILDING, Vector3((REAL_WINDOW_WIDTH - GAP_OF_END * 2), 0.0f, GAP_OF_END), Vector3(2.0f, 2.0f, 1.0f),
+		HEXAHEDRON_TREE_SIZE, Color(1.0f, 108.0f / RGB, 108.0f / RGB), Color(67.0f / RGB, 116.0f / RGB, 217.0f / RGB)));
+
+	g_v.emplace_back(FACTORYMANAGER->CreateObj(DOOR_BUILDING, Vector3(0.0f, 0.0f, -((REAL_WINDOW_DEPTH - GAP_OF_END) / 2.0f)), Vector3(1.0f, 5.0f, 1.0f),
 		HEXAHEDRON_TREE_SIZE, Color(1.0f, 108.0f / RGB, 108.0f / RGB), Color(67.0f / RGB, 116.0f / RGB, 217.0f / RGB)));
 }
 
