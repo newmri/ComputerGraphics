@@ -39,7 +39,7 @@ public:
 
 	void Rotate()
 	{
-		if (m_angle < 360.0f) m_angle += 3.0f;
+		if (m_angle < 360.0f) m_angle += BALL_ROTATION_SPEED;
 		else m_angle = 0.0f;
 
 	}
@@ -52,6 +52,31 @@ public:
 public:
 	float GetSize() { return m_size; }
 
+public:
+	bool CheckCollision(CObject* other)
+	{
+		Vector3 v1(m_pos.x - other->GetPos().x, m_pos.z - other->GetPos().z, 0.0f);
+
+		Vector3 v[4];
+		v[0].x = m_pos.x - m_size;
+		v[0].y = m_pos.z;
+		v[1].x = m_pos.x + m_size;
+		v[1].y = m_pos.z;
+		v[2].x = m_pos.x;
+		v[2].y = m_pos.z + m_size;
+		v[3].x = m_pos.x;
+		v[3].y = m_pos.z - m_size;
+
+		float dist = sqrtf((v1.x * v1.x) + (v1.y * v1.y));
+		if (dist < m_size + other->GetSize()) return true;
+		for (int i = 0; i < 4; ++i) {
+			if (other->GetPos().x - other->GetSize() < v[i].x &&  other->GetPos().x + other->GetSize() > v[i].x &&
+				other->GetPos().z - other->GetSize() < v[i].y && other->GetPos().z + other->GetSize() < v[i].y) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 protected:
 	OBJTYPE m_objType;

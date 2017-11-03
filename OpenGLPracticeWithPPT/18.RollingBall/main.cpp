@@ -55,6 +55,7 @@ GLvoid DrawScene(GLvoid)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	GLfloat tempMatrix[16];
 	CAMERAMANAGER->Update();
 
 	// Draw floor
@@ -70,9 +71,21 @@ GLvoid DrawScene(GLvoid)
 
 		glPushMatrix();
 			glColor3f(1.0f, 0.0f, 0.0f);
-			glTranslatef(g_ballPos.x, g_ballPos.y, g_ballPos.z);
-			glRotatef(g_ballAngle, g_ballRotate.x, g_ballRotate.y, g_ballRotate.z);
-			glutWireSphere(BALL_RAD, 25, 25);
+			glLoadIdentity();
+			glGetFloatv(GL_MODELVIEW_MATRIX, tempMatrix);
+		glPopMatrix();
+
+		glPushMatrix();
+		glLoadIdentity();
+		glRotatef(g_ballAngle, g_ballRotate.x, g_ballRotate.y, g_ballRotate.z);
+		glMultMatrixf(tempMatrix);
+		glGetFloatv(GL_MODELVIEW_MATRIX, tempMatrix);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(g_ballPos.x, g_ballPos.y, g_ballPos.z);
+		glMultMatrixf(tempMatrix);
+		glutWireSphere(BALL_RAD, 25, 25);
 		glPopMatrix();
 	glPopMatrix();
 
@@ -92,6 +105,7 @@ GLvoid Reshape(int w, int h)
 
 GLvoid Animate(int n)
 {
+
 	if(g_ballAngle < 360.0f) g_ballAngle += BALL_ROTATION_SPEED;
 	else g_ballAngle = 0.0f;
 	if(g_ballMove[X]) g_ballPos.x -= (BALL_ROTATION_SPEED / 360.0f)  * BALL_RAD * PIE * 2;
@@ -133,7 +147,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'l':
 	case 'L':
 		g_ballRotate.x = 1.0f;
-		g_ballRotate.y = 0.0f;
+		//g_ballRotate.y = 0.0f;
 		g_ballRotate.z = 0.0f;
 		g_ballMove[Z] = true;
 		g_ballMove[X] = false;
@@ -141,14 +155,17 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		break;
 	case 'm':
 	case 'M':
-		g_ballRotate.x = 0.0f;
+		//g_ballRotate.x = 0.0f;
 		g_ballRotate.y = 1.0f;
-		g_ballRotate.z = 0.0f;
+		//g_ballRotate.z = 0.0f;
+		g_ballMove[Z] = false;
+		g_ballMove[X] = false;
+		g_ballMove[Y] = false;
 		break;
 	case 'n':
 	case 'N':
-		g_ballRotate.x = 0.0f;
-		//g_ballRotate.y = 0.0f;
+		//g_ballRotate.x = 0.0f;
+		g_ballRotate.y = 0.0f;
 		g_ballRotate.z = 1.0f;
 		g_ballMove[X] = true;
 		g_ballMove[Y] = false;
