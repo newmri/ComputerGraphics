@@ -58,6 +58,8 @@ void CCameraManager::SetMove(const unsigned char key)
 	case 's': m_pos.y += -CAMERA_SPEED; break;
 	case 'a': m_pos.x += -CAMERA_SPEED; break;
 	case 'd': m_pos.x +=  CAMERA_SPEED; break;
+	case 'q': m_pos.x += -CAMERA_SPEED; m_pos.z += -CAMERA_SPEED; break;
+	case 'e': m_pos.x += CAMERA_SPEED; m_pos.z += -CAMERA_SPEED; break;
 	case '+': m_pos.z += -CAMERA_SPEED; break;
 	case '-': m_pos.z += CAMERA_SPEED;  break;
 	}

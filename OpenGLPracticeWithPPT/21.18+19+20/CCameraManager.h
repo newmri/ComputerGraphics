@@ -10,6 +10,38 @@ struct Vector3
 
 	Vector3(float x, float y, float z) : x(x), y(y), z(z) {};
 	Vector3(float x, float y) : x(x), y(y) {};
+
+	Vector3 operator-(const Vector3& other)
+	{
+		return Vector3(x - other.x, y - other.y, z - other.z);
+	}
+
+	void Normalize()
+	{
+		x = x / this->GetLength();
+		y = y / this->GetLength();
+	    z = z / this->GetLength();
+	}
+
+	Vector3 GetNormalized()
+	{
+		return Vector3(x / this->GetLength(), y / this->GetLength(), z / this->GetLength());
+	}
+
+	float GetDot(const Vector3& other)
+	{
+		return (x * other.x) + (y * other.y) + (z * other.z);
+	}
+
+	Vector3 GetCross(const Vector3& other)
+	{
+		return Vector3((y * other.z - other.y * z), (z*other.x - other.z - x), (x * other.y - other.x * y));
+	}
+
+	double GetLength()
+	{
+		return sqrt((x * x) + (y * y) + (z * z));
+	}
 };
 
 class CCameraManager

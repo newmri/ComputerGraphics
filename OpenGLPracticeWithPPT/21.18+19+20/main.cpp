@@ -58,7 +58,7 @@ GLvoid Init(GLvoid)
 	g_v.emplace_back(FACTORYMANAGER->CreateObj(BALL, Vector3((REAL_WINDOW_WIDTH - GAP_OF_END), 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f),
 		3.0f, Color(1.0f, 108.0f / RGB, 108.0f / RGB)));
 
-	g_v.emplace_back(FACTORYMANAGER->CreateObj(AIRPLAIN, Vector3((REAL_WINDOW_WIDTH - GAP_OF_END), 50.0f, 0.0f), Vector3(2.0f, 1.0f, 1.0f),
+	g_v.emplace_back(FACTORYMANAGER->CreateObj(AIRPLAIN, Vector3(0.0f, 50.0f, 0.0f), Vector3(2.0f, 1.0f, 1.0f),
 		3.0f, Color(1.0f, 108.0f / RGB, 108.0f / RGB)));
 }
 
@@ -106,9 +106,20 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 's':
 	case 'a':
 	case 'd':
+	case 'q':
+	case 'e':
 	case '+':
 	case '-': CAMERAMANAGER->SetMove(key); break;
 	case 'i': CAMERAMANAGER->Reset(); break;
+
+	case 'l': {
+		CAirplain* p = dynamic_cast<CAirplain*>(g_v[AIRPLAIN - 1].get());
+		p->SetLeftRotate(); break;
+	}
+	case 'r': {
+		CAirplain* p = dynamic_cast<CAirplain*>(g_v[AIRPLAIN - 1].get());
+		p->SetRightRotate(); break;
+	}
 	default: break;
 	}
 	RenderScene();

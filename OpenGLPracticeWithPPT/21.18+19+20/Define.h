@@ -35,6 +35,7 @@ const float PIE = 3.141592;
 
 const float CRANE_SPEED = 1.0f;
 
+const float TRACK_RAD = 20.0f;
 
 const float CAMERA_ANGLE_IN = 2.0f;
 const float CAMERA_SPEED = 1.0f;
