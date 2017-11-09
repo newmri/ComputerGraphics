@@ -55,11 +55,11 @@ void CAirplain::Move()
 
 	if (!m_left) m_headAngle = 180.0f - m_headAngle;
 	else m_headAngle = 360.0f - m_headAngle;
-	//Vector3 right = v.GetCross(Vector3(0.0f, 1.0f, 0.0f));
+	Vector3 right = v.GetCross(Vector3(0.0f, 1.0f, 0.0f));
 
-	//if (right.GetDot(t) < 0) m_headAngle = -m_headAngle;
+	if (right.GetDot(t) < 0) m_headAngle = -m_headAngle;
 
-	cout << "Fucking Bloody Angle: " << m_headAngle << endl;
+
 
 }
 
