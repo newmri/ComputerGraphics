@@ -7,7 +7,7 @@ GLvoid RenderScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Animate(int n);
 GLvoid Keyboard(unsigned char key, int x, int y);
-GLvoid Mouse(int button, int state, int x, int y);
+GLvoid MouseMotion(int x, int y);
 GLvoid Rotate();
 GLvoid Update();
 GLvoid Render();
@@ -29,7 +29,7 @@ void main(int argc, char* argv[])
 	glutDisplayFunc(RenderScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
-	glutMouseFunc(Mouse);
+	glutPassiveMotionFunc(MouseMotion);
 	glutTimerFunc(ANIMATION_TIME, Animate, true);
 	glutMainLoop();
 }
@@ -112,8 +112,11 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 }
 
 
-GLvoid Mouse(int button, int state, int x, int y)
+GLvoid MouseMotion(int x, int y)
 {
+	if ((x - (WINDOW_WIDTH / 2.0f)) < 0 && !CAMERAMANAGER->IsRotatingToCCW()) CAMERAMANAGER->SetRotate('z');
+	else if ((x - (WINDOW_WIDTH / 2.0f)) > 0 && CAMERAMANAGER->IsRotatingToCCW()) CAMERAMANAGER->SetRotate('Z');
+	
 	RenderScene();
 }
 

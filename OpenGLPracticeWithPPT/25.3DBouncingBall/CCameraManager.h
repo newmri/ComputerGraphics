@@ -80,6 +80,7 @@ public:
 	float GetIncre() { return m_angleIn; }
 public:
 	bool IsRotatingToCCW() { return (m_angleIn > 0.0f); }
+	bool IsRotatingWithZ() { return (m_rotate.z == 1.0f); }
 public:
 	void Rotate();
 	void Move();
