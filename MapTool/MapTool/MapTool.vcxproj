@@ -147,9 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CMouseManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CMouseManager.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "resource.h"
+#include "CMouseManager.h"
 
 #pragma comment(lib,"comctl32.lib")
 
@@ -20,3 +21,5 @@ static unsigned const int WINDOW_INIT_X = 300;
 static unsigned const int WINDOW_INIT_Y = 100;
 static unsigned const int REAL_WINDOW_FOVY = 60;
 static unsigned const int WINDOW_DEPTH = 150;
+
+#define MOUSEMANAGER CMouseManager::GetInstance()

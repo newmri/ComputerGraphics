@@ -77,21 +77,37 @@ BOOL CALLBACK ProjectionInfoDlgProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 BOOL CALLBACK ObjectListProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	int sel{};
-
 	switch (iMessage) {
 	case WM_INITDIALOG:
 		InitTab(hDlg);
+		MOUSEMANAGER->Init(hDlg, g_hInst);
 		InitViewList(hDlg);
 		ChangeViewList(sel);
 		break;
 	case WM_NOTIFY:
-		switch (((LPNMHDR)lParam)->code) {
+		LPNMHDR hdr;
+		LPNMLISTVIEW nlv;
+		hdr = (LPNMHDR)lParam;
+		nlv = (LPNMLISTVIEW)lParam;
+
+		switch (hdr->code) {
 		case TCN_SELCHANGE:
 			sel = TabCtrl_GetCurSel(g_hObjectTab);
 			ChangeViewList(sel);
 			break;
+		case LVN_BEGINDRAG:
+			// 드래그되는 항목 저장
+			MOUSEMANAGER->SetDrag(nlv->iItem, sel, hdr);
+			break;
 		}
 
+	case WM_MOUSEMOVE:
+		MOUSEMANAGER->MouseMove(lParam);
+		break;
+
+	case WM_LBUTTONUP:
+		MOUSEMANAGER->MouseButtonUp();
+		break;
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case IDCANCEL:
