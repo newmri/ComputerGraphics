@@ -117,6 +117,7 @@ void CTinyCube::Move()
 		// CW -> CCW
 		if (CAMERAMANAGER->GetAngle() > -270 && CAMERAMANAGER->GetAngle() < -180 && CAMERAMANAGER->IsRotatingToCCW()) {
 			if (m_pos.y + m_size < 33) m_pos.y += CAMERA_ANGLE_IN;
+
 		}
 	}
 	
@@ -125,6 +126,7 @@ void CTinyCube::Move()
 void CTinyCube::Update()
 {
 	this->Move();
+	
 }
 
 void CTinyCube::Render()

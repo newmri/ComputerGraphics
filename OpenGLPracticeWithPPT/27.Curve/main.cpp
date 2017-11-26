@@ -82,8 +82,12 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'X':
 	case 'y':
 	case 'Y':
+		CAMERAMANAGER->SetRotate(key);
+		CAMERAMANAGER->SaveCurrentAngle(); break;
 	case 'z':
-	case 'Z': CAMERAMANAGER->SetRotate(key); break;
+	case 'Z':
+		CAMERAMANAGER->RollBackAngle();
+		CAMERAMANAGER->SetRotate(key); break;
 
 	case 'w':
 	case 's':

@@ -6,7 +6,7 @@ void CCameraManager::Init()
 {
 	m_angle = 0.0f;
 	m_angleIn = CAMERA_ANGLE_IN;
-	m_haveBackUpData = false;
+	m_pos.x = 10;
 }
 
 void CCameraManager::Reset()
@@ -59,8 +59,6 @@ void CCameraManager::SetMove(const unsigned char key)
 	case 's': m_pos.y += -CAMERA_SPEED; break;
 	case 'a': m_pos.x += -CAMERA_SPEED; break;
 	case 'd': m_pos.x +=  CAMERA_SPEED; break;
-	case 'q': m_pos.x += -CAMERA_SPEED; m_pos.z += -CAMERA_SPEED; break;
-	case 'e': m_pos.x += CAMERA_SPEED; m_pos.z += -CAMERA_SPEED; break;
 	case '+': m_pos.z += -CAMERA_SPEED; break;
 	case '-': m_pos.z += CAMERA_SPEED;  break;
 	}

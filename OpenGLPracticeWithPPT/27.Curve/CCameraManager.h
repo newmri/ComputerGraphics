@@ -73,9 +73,15 @@ public:
 public:
 	void Rotate();
 	void Move();
+
+public:
+	void SaveCurrentAngle() { m_backAngle = m_angle; m_haveBackUpAngle = true; }
+	void RollBackAngle() { if (m_haveBackUpAngle) { m_angle = m_backAngle; m_haveBackUpAngle = false; } }
 private:
 	static CCameraManager* m_instance;
 	Vector3 m_rotate;
 	float m_angle, m_angleIn;
+	float m_backAngle;
+	bool m_haveBackUpAngle;
 	Vector3 m_pos;
 };

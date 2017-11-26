@@ -117,6 +117,7 @@ GLvoid MouseMotion(int x, int y)
 	if ((x - (WINDOW_WIDTH / 2.0f)) < 0 && !CAMERAMANAGER->IsRotatingToCCW()) CAMERAMANAGER->SetRotate('z');
 	else if ((x - (WINDOW_WIDTH / 2.0f)) > 0 && CAMERAMANAGER->IsRotatingToCCW()) CAMERAMANAGER->SetRotate('Z');
 	
+	cout << CAMERAMANAGER->GetAngle() << endl;
 	RenderScene();
 }
 
