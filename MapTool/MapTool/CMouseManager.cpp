@@ -77,6 +77,39 @@ void CMouseManager::MouseButtonUp()
 	}
 }
 
+Vector3 CMouseManager::Do3DPicking(int x, int y)
+{
+	// Normalized DEvice Coordinates
+	// range[-1:1, -1:1, -1:1]
+	Vector3 ray;
+	ray.x = (2.0f * x) / WINDOW_WIDTH - 1.0f;
+	ray.y = 1.0f - (2.0f * y) / WINDOW_HEIGHT;
+	ray.z = 1.0f;
+
+	// 4d Homogeneous Clip Coordinates
+	// range[-1:1,-1:1,-1:1,-1:1]
+	Vector4 rayClip(ray.x, ray.y, -1.0f, 1.0f);
+
+	// 4d Eye(Camera) Coordinates
+	// range[-x:x, -y:y, -z:z, -w:w]
+	float tempMatrix[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, tempMatrix);
+	Matrix4 projection(tempMatrix);
+	Vector4 rayEye = projection.Inverse() * rayClip;
+	rayEye.z = -1.0f;
+	rayEye.w = 0.0f;
+
+	// 4d World Coordinates
+	// range[-x:x, -y:y, -z:z, -w:w]
+	glGetFloatv(GL_MODELVIEW_MATRIX, tempMatrix);
+	Matrix4 viewMatrix(tempMatrix);
+	Vector4 tmp = (viewMatrix.Inverse() * rayEye);
+	Vector3 rayWor(tmp.x, tmp.y, tmp.z);
+	Normalize3f(rayWor, rayWor);
+
+	return rayWor;
+
+}
 void CMouseManager::SetDrag(int& hDrag, int& sel, LPNMHDR& hdr)
 {
 	// 드래그 이미지 리스트 만듦

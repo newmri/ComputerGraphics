@@ -7,15 +7,13 @@
 #define IDD_OBJECT_LIST                 110
 #define IDB_BITMAP1                     114
 #define IDB_BITMAP2                     115
-#define IDD_PROJECTION_DIG              116
+#define IDD_PERSPECTIVE_DIG             116
 #define IDC_OBJECT_TAB                  1008
-#define IDC_PROJECTION_W_EDIT           1011
-#define IDC_PROJECTION_H_EDIT           1012
+#define IDC_PERSPECTIVE_NEAR_EDIT       1011
+#define IDC_PERSPECTIVE_FAR_EDIT        1012
 #define IDC_PROJECTION_APPLY_BUTTON     1013
-#define IDC_PROJECTION_FOVY_EDIT        1015
-#define IDC_PROJECTION_F_EDIT           1016
-#define IDC_PROJECTION_F_EDIT2          1017
-#define IDC_PROJECTION_Z_EDIT           1017
+#define IDC_PERSPECTIVE_APPLY_BUTTON    1013
+#define IDC_PERSPECTIVE_FOVY_EDIT       1015
 #define ID_BUTTON2                      40001
 
 // Next default values for new objects

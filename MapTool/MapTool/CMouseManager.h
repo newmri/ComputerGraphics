@@ -1,5 +1,7 @@
 #pragma once
 
+struct Vector3;
+
 class CMouseManager
 {
 public:
@@ -16,6 +18,7 @@ public:
 public:
 	void MouseMove(const LPARAM& lParam);
 	void MouseButtonUp();
+	Vector3 Do3DPicking(int x, int y);
 
 public:
 	void SetDrag(int& hDrag, int& sel, LPNMHDR& hdr);
