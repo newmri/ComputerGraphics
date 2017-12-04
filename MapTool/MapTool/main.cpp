@@ -7,6 +7,7 @@ HINSTANCE g_hInst;
 
 HWND g_hWnd;
 HWND g_hProjectionInfoDlg;
+HWND g_hObjectInfoDlg;
 HWND g_hObjectTab;
 HWND g_hViewList[2];
 
@@ -15,8 +16,6 @@ void RenderScene();
 void Reshape(int w, int h);
 void Idle();
 void InitTab(HWND& hWnd);
-void InitViewList(HWND& hWnd);
-void ChangeViewList(const int& sel);
 
 GLvoid Mouse(int button, int state, int x, int y);
 GLvoid MouseMotion(int x, int y);
@@ -24,10 +23,10 @@ GLvoid Keyboard(unsigned char key, int x, int y);
 void WheelFunc(int wheel, int dir, int x, int y);
 
 RECT rcWindow;
-Vector3 v;
 
 BOOL CALLBACK PerspectiveInfoDlgProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK ObjectListProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK ObjectInfoProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance
 	, LPSTR lpszCmdParam, int nCmdShow)
@@ -42,6 +41,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance
 	g_hProjectionInfoDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_PERSPECTIVE_DIG), NULL, PerspectiveInfoDlgProc);
 	ShowWindow(g_hProjectionInfoDlg, SW_SHOW);
 
+	g_hObjectInfoDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_OBJECT_INFO), NULL, ObjectInfoProc);
+	ShowWindow(g_hObjectInfoDlg, SW_SHOW);
 	g_hWnd = hWnd;
 	char *myargv[1];
 	int myargc = 1;
@@ -89,16 +90,112 @@ BOOL CALLBACK PerspectiveInfoDlgProc(HWND hWnd, UINT iMessage, WPARAM wParam, LP
 	}
 	return 0;
 }
+
+BOOL CALLBACK ObjectInfoProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
+{
+	static RECT rcWindow;
+	char color[3][40];
+	char pos[3][40];
+	char rotation[4][40];
+	char scale[3][40];
+	char size[40];
+	Color initColor;
+	Vector3 initPos;
+	Vector3 initScale(1.0f, 1.0f, 1.0f);
+	Vector4 initRotation;
+
+	sprintf(color[0], "%0.1f", initColor.r);
+	sprintf(color[1], "%0.1f", initColor.g);
+	sprintf(color[2], "%0.1f", initColor.b);
+
+	sprintf(pos[0], "%0.1f", initPos.x);
+	sprintf(pos[1], "%0.1f", initPos.y);
+	sprintf(pos[2], "%0.1f", initPos.z);
+
+	sprintf(rotation[0], "%0.1f", initRotation.x);
+	sprintf(rotation[1], "%0.1f", initRotation.y);
+	sprintf(rotation[2], "%0.1f", initRotation.z);
+	sprintf(rotation[3], "%0.1f", initRotation.w);
+
+	sprintf(scale[0], "%0.1f", initScale.x);
+	sprintf(scale[1], "%0.1f", initScale.y);
+	sprintf(scale[2], "%0.1f", initScale.z);
+
+	sprintf(size, "%d", 3);
+
+
+	//sprintf(Near, "%0.3f", RENDERMANAGER->GetPerspective().Near);
+	//sprintf(Far, "%0.3f", RENDERMANAGER->GetPerspective().Far);
+	switch (iMessage) {
+	case WM_INITDIALOG:
+		GetWindowRect(hDlg, &rcWindow);
+		SetWindowPos(hDlg, NULL, WINDOW_INIT_X - rcWindow.right, TAB_WINDOW_INIT_Y + 345, NULL, NULL, SWP_NOSIZE);
+		SetDlgItemText(hDlg, IDC_COLOR_R_EDIT, color[0]);
+		SetDlgItemText(hDlg, IDC_COLOR_G_EDIT, color[1]);
+		SetDlgItemText(hDlg, IDC_COLOR_B_EDIT, color[2]);
+
+		SetDlgItemText(hDlg, IDC_POS_X_EDIT, pos[0]);
+		SetDlgItemText(hDlg, IDC_POS_Y_EDIT, pos[1]);
+		SetDlgItemText(hDlg, IDC_POS_Z_EDIT, pos[2]);
+
+		SetDlgItemText(hDlg, IDC_ROTATION_X_EDIT, rotation[0]);
+		SetDlgItemText(hDlg, IDC_ROTATION_Y_EDIT, rotation[1]);
+		SetDlgItemText(hDlg, IDC_ROTATION_Z_EDIT, rotation[2]);
+		SetDlgItemText(hDlg, IDC_ROTATION_ANGLE_EDIT, rotation[3]);
+
+		SetDlgItemText(hDlg, IDC_SCALE_X_EDIT, color[0]);
+		SetDlgItemText(hDlg, IDC_SCALE_Y_EDIT, color[1]);
+		SetDlgItemText(hDlg, IDC_SCALE_Z_EDIT, color[2]);
+
+		SetDlgItemText(hDlg, IDC_SIZE_EDIT, size);
+		//SetDlgItemText(hWnd, IDC_PERSPECTIVE_FAR_EDIT, Far);
+		break;
+
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case IDC_OBJECT_INFO_APPLY_BUTTON:
+			GetDlgItemText(hDlg, IDC_COLOR_R_EDIT, color[0],40);
+			GetDlgItemText(hDlg, IDC_COLOR_G_EDIT, color[1], 40);
+			GetDlgItemText(hDlg, IDC_COLOR_B_EDIT, color[2], 40);
+
+			GetDlgItemText(hDlg, IDC_POS_X_EDIT, pos[0], 40);
+			GetDlgItemText(hDlg, IDC_POS_Y_EDIT, pos[1], 40);
+			GetDlgItemText(hDlg, IDC_POS_Z_EDIT, pos[2], 40);
+
+			GetDlgItemText(hDlg, IDC_ROTATION_X_EDIT, rotation[0], 40);
+			GetDlgItemText(hDlg, IDC_ROTATION_Y_EDIT, rotation[1], 40);
+			GetDlgItemText(hDlg, IDC_ROTATION_Z_EDIT, rotation[2], 40);
+			GetDlgItemText(hDlg, IDC_ROTATION_ANGLE_EDIT, rotation[3], 40);
+		
+			GetDlgItemText(hDlg, IDC_SCALE_X_EDIT, scale[0], 40);
+			GetDlgItemText(hDlg, IDC_SCALE_Y_EDIT, scale[1], 40);
+			GetDlgItemText(hDlg, IDC_SCALE_Z_EDIT, scale[2], 40);
+
+			GetDlgItemText(hDlg, IDC_SIZE_EDIT, size, 40);
+			
+			RENDERMANAGER->AddObject(Object(DIALOGMANAGER->GetSelectedObject(), Color(atof(color[0]), atof(color[1]), atof(color[2])),
+				Vector3(atof(pos[0]), atof(pos[1]), atof(pos[2])),
+				Vector4(atof(rotation[0]), atof(rotation[1]), atof(rotation[2]), atof(rotation[3])),
+				Vector3(atof(scale[0]), atof(scale[1]), atof(scale[2])), atoi(size)));
+				
+			break;
+		}
+
+	}
+	return 0;
+}
 BOOL CALLBACK ObjectListProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	int sel{};
 	switch (iMessage) {
-	case WM_INITDIALOG:
+	case WM_INITDIALOG: {
 		InitTab(hDlg);
-		MOUSEMANAGER->Init(hDlg, g_hInst);
-		InitViewList(hDlg);
-		ChangeViewList(sel);
+		DIALOGMANAGER->Init(hDlg, g_hInst);
+		DIALOGMANAGER->ChangeViewList(sel);
+		RENDERMANAGER->Init();
+		//SetDlgItemText(hDlg, IDC_NAME_STATIC, "the new text");
 		break;
+	}
 	case WM_NOTIFY:
 		LPNMHDR hdr;
 		LPNMLISTVIEW nlv;
@@ -108,24 +205,29 @@ BOOL CALLBACK ObjectListProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPa
 		switch (hdr->code) {
 		case TCN_SELCHANGE:
 			sel = TabCtrl_GetCurSel(g_hObjectTab);
-			ChangeViewList(sel);
+			DIALOGMANAGER->ChangeViewList(sel);
 			break;
+
+		case NM_CLICK: DIALOGMANAGER->SelectItem(sel); break;
+	
 		case LVN_BEGINDRAG:
 			// 드래그되는 항목 저장
-			MOUSEMANAGER->SetDrag(nlv->iItem, sel, hdr);
+			DIALOGMANAGER->SetDrag(nlv->iItem, sel, hdr);
 			break;
 		}
 
 	case WM_MOUSEMOVE:
-		MOUSEMANAGER->MouseMove(lParam);
+		DIALOGMANAGER->MouseMove(lParam);
 		break;
 
 	case WM_LBUTTONUP:
-		MOUSEMANAGER->MouseButtonUp();
-
+		DIALOGMANAGER->MouseButtonUp();
+		/*
 		if (LOWORD(lParam) > rcWindow.right) {
 			RENDERMANAGER->MoveObject(LOWORD(lParam) - rcWindow.right, HIWORD(lParam));
+			RENDERMANAGER->AddObject(LOWORD(lParam) - rcWindow.right, HIWORD(lParam));
 		}
+		*/
 		break;
 
 	case WM_RBUTTONDOWN:
@@ -151,7 +253,7 @@ void InitTab(HWND& hWnd)
 	SetWindowPos(hWnd, NULL, WINDOW_INIT_X - rcWindow.right, TAB_WINDOW_INIT_Y, NULL, NULL, SWP_NOSIZE);
 	g_hObjectTab = GetDlgItem(hWnd, IDC_OBJECT_TAB);
 	tie.mask = TCIF_TEXT;
-	tie.pszText = "Brick";
+	tie.pszText = "Shape";
 	TabCtrl_InsertItem(g_hObjectTab, 0, &tie);
 	tie.pszText = "Object2";
 	TabCtrl_InsertItem(g_hObjectTab, 1, &tie);
@@ -160,55 +262,7 @@ void InitTab(HWND& hWnd)
 
 }
 
-void InitViewList(HWND& hWnd)
-{
-	LVITEM ritem;
-	HIMAGELIST hSmall;
 
-	for (int i = 0; i < OBJECT_SELECT_TYPE::END; ++i)
-		g_hViewList[i] = CreateWindow(WC_LISTVIEW, NULL, WS_CHILD | LVS_SMALLICON | WS_VISIBLE,
-			30, 70, 100, 100, hWnd, (HMENU)0, g_hInst, NULL);
-
-
-	hSmall = ImageList_LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP2), 16, 1, RGB(192, 192, 192));
-	SendMessage(g_hViewList[0], LVM_SETIMAGELIST, (WPARAM)LVSIL_SMALL, (LPARAM)hSmall);
-
-	ritem.mask = LVIF_TEXT | LVIF_IMAGE;
-	ritem.state = 0;
-	ritem.stateMask = 0;
-	ritem.iImage = 1;
-	ritem.iSubItem = 0;
-	ritem.iItem = 0;
-	ritem.pszText = "Brick";
-	SendMessage(g_hViewList[0], LVM_INSERTITEM, 0, (LPARAM)&ritem);
-
-	hSmall = ImageList_LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP2), 16, 1, RGB(192, 192, 192));
-	SendMessage(g_hViewList[1], LVM_SETIMAGELIST, (WPARAM)LVSIL_SMALL, (LPARAM)hSmall);
-
-	ritem.mask = LVIF_TEXT | LVIF_IMAGE;
-	ritem.state = 0;
-	ritem.stateMask = 0;
-	ritem.iImage = 1;
-	ritem.iSubItem = 0;
-	ritem.iItem = 0;
-	ritem.pszText = "Obstacle";
-	SendMessage(g_hViewList[1], LVM_INSERTITEM, 0, (LPARAM)&ritem);
-
-	/*
-	ritem.iSubItem = 0;
-	ritem.iItem = 1;
-	ritem.pszText = L"Jone";
-	SendMessage(hList, LVM_INSERTITEM, 0, (LPARAM)&ritem);
-	*/
-}
-
-
-
-void ChangeViewList(const int& sel)
-{
-	for (int i = 0; i < OBJECT_SELECT_TYPE::END; ++i) ShowWindow(g_hViewList[i], SW_HIDE);
-	ShowWindow(g_hViewList[sel], SW_SHOW);
-}
 
 void SetUpRC()
 {
@@ -217,6 +271,7 @@ void SetUpRC()
 	glEnable(GL_DEPTH_TEST);
 	glutInitWindowPosition(WINDOW_INIT_X, WINDOW_INIT_Y);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
 
 }
 
@@ -227,13 +282,6 @@ void RenderScene()
 	glLoadIdentity();
 	glEnable(GL_DEPTH_TEST);
 	CAMERAMANAGER->Update();
-
-	glPushMatrix();
-	glTranslatef(RENDERMANAGER->GetObjPos().x, RENDERMANAGER->GetObjPos().y, RENDERMANAGER->GetObjPos().z);
-	//glutSolidCube(3);
-	glPopMatrix();
-
-	//glutSolidCube(50);
 
 	RENDERMANAGER->Render();
 	
@@ -251,7 +299,6 @@ void Reshape(int w, int h)
 GLvoid Mouse(int button, int state, int x, int y)
 {
 	if(state == GLUT_DOWN) CAMERAMANAGER->SetButton(button, x, y);
-
 }
 
 void Idle()
@@ -262,12 +309,9 @@ void Idle()
 GLvoid Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
-	case 'x':
 	case 'X':
 	case 'y':
-	case 'Y':
-	case 'z':
-	case 'Z': CAMERAMANAGER->SetRotate(key); break;
+	case 'Y': CAMERAMANAGER->SetRotate(key); break;
 
 	case 'w':
 	case 's':
@@ -275,9 +319,11 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'd':
 	case 'q':
 	case 'e':
-	case '+':
-	case '-': CAMERAMANAGER->SetMove(key);break;
+	case 'z':
+	case 'x': CAMERAMANAGER->SetMove(key);break;
 	case 'i': CAMERAMANAGER->Reset(); break;
+	case '1': FILEMANAGER->LoadFile(); break;
+	case '2': FILEMANAGER->SaveFile(); break;
 
 	default: break;
 	}
@@ -291,6 +337,9 @@ void WheelFunc(int wheel, int dir, int x, int y)
 
 GLvoid MouseMotion(int x, int y)
 {
-	if(CAMERAMANAGER->GetButton() == GLUT_RIGHT_BUTTON) CAMERAMANAGER->OnMouseMove(x, y);
-	else RENDERMANAGER->MoveObject(x, y);
+	if (CAMERAMANAGER->GetButton() == GLUT_RIGHT_BUTTON) {
+		CAMERAMANAGER->OnMouseMove(CAMERAMANAGER->GetLastCurPos().x - x, CAMERAMANAGER->GetLastCurPos().y - y);
+		CAMERAMANAGER->SetLastCurPos(x, y);
+	}
+	//else RENDERMANAGER->MoveObject(x, y);
 }

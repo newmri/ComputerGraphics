@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Enum.h"
 
 struct Perspective
 {
@@ -18,6 +19,32 @@ struct Perspective
 
 };
 
+struct Color
+{
+	float r, g, b;
+	Color()
+	{
+		r = 1.0f;
+		g = 1.0f;
+		b = 1.0f;
+	}
+
+	Color(float r, float g, float b) : r(r), g(g), b(b) {};
+};
+
+
+struct Object
+{
+	OBJECT_TYPE objType;
+	Color color;
+	Vector4 rotation;
+	Vector3 pos, scale;
+	float size;
+
+	Object() {};
+	Object(OBJECT_TYPE objType, Color color, Vector3 pos, Vector4 rotation, Vector3 scale, float size) : objType(objType), color(color), pos(pos), rotation(rotation), scale(scale), size(size) {};
+};
+
 class CRenderManager
 {
 public:
@@ -29,7 +56,7 @@ public:
 		return m_instance;
 	}
 
-	CRenderManager() { this->Init(); }
+	CRenderManager() {  }
 	~CRenderManager() { delete m_instance; }
 
 public:
@@ -38,14 +65,18 @@ public:
 	void Render();
 
 public:
+	void AddObject(Object obj);
+	std::vector<Object>& GetObjects() { return m_v; }
 	void SelectObject(int x, int y);
 	void MoveObject(int x, int y);
+	void SelectObject(int a) { objects = a; }
 
 public:
-	Vector3 GetObjPos() { return m_objPos; }
 	const Perspective& GetPerspective() { return m_perspective; }
+
 public:
 	void SetPerspective(const Perspective p) { m_perspective = p; this->Resize(m_width, m_height); }
+
 private:
 	static CRenderManager* m_instance;
 
@@ -54,13 +85,13 @@ private:
 
 	//CShaderProgram Shader;
 
-	int ObjectsCount, LightObjectID;
+	//int ObjectsCount, LightObjectID;
 	//CObject* Objects;
-
+	std::vector<Object> m_v;
+	int objCnt;
 	int SelectedObject;
 	float m_planeD;
 	Vector3 m_selectedPoint, m_planeNormal;
-	Vector3 m_objPos;
 	Perspective m_perspective;
-
+	int objects;
 };

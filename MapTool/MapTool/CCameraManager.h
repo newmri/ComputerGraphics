@@ -2,6 +2,8 @@
 
 #include "Matrix.h"
 
+
+
 class CCameraManager
 {
 public:
@@ -30,11 +32,14 @@ public:
 		m_view = (Matrix4*)view;
 		this->CalculateViewMatrix();
 	}
+	void SetLastCurPos(int x, int y) { m_lastCurPos.x = x, m_lastCurPos.y = y; }
+
 	void SetButton(int n, int x, int y);
 	int GetButton() { return m_button; }
 
 public:
 	Vector3& GetPos() { return m_pos; }
+	POINT& GetLastCurPos() { return m_lastCurPos; }
 	Vector3& GetZ() { return m_z; }
 
 public:
@@ -42,6 +47,7 @@ public:
 
 public:
 	void Rotate();
+	void LookAt(Vector3 reference, Vector3 pos, bool rotateAroundReference);
 	void Move();
 	void Wheel(float z );
 	void OnMouseMove(int x, int y);

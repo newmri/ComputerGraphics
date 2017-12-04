@@ -23,16 +23,37 @@ extern "C"
 		{
 			return Vector3(x + other.x, y + other.y, z + other.z);
 		}
+		void operator+=(const Vector3& other)
+		{
+			x += other.x;
+			y += other.y;
+			z += other.z;
+		}
 		
 		Vector3 operator-(const Vector3& other)
 		{
 			return Vector3(x - other.x, y - other.y, z - other.z);
 		}
 
+		void operator-=(const Vector3& other)
+		{
+			x -= other.x;
+			y -= other.y;
+			z -= other.z;
+		}
+
 		Vector3 operator* (float num)
 		{
 			return Vector3(x * num, y * num, z * num); 
 		}
+
+		void operator*= (float num)
+		{
+			x *= num;
+			y *= num;
+			z *= num;
+		}
+
 		float operator[](const int i) const
 		{
 			if (i == 0) return x;
