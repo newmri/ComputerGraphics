@@ -56,4 +56,5 @@ protected:
 	DATA_TYPE m_size;
 	float m_angle;
 	bool m_rotate;
+
 };

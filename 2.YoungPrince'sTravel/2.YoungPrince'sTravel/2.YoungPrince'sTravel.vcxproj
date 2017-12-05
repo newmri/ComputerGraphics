@@ -147,7 +147,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CAirPlane.h" />
     <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CCameraManager.h" />
+    <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CController.h" />
     <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CCube.h" />
     <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CFactory.h" />
     <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CObject.h" />
@@ -160,7 +162,9 @@
     <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\Objects.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CAirPlane.cpp" />
     <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CCameraManager.cpp" />
+    <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CController.cpp" />
     <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CCube.cpp" />
     <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CFactory.cpp" />
     <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CParticle.cpp" />

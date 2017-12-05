@@ -24,6 +24,7 @@ void CCameraManager::Reset()
 	m_y.y = 1.0f;
 	m_z.z = 1.0f;
 	this->LookAt(Vector3(0.0f, 0.0f, 0.0f), Vector3(30.0f, 0.0f, 90.0f), true);
+	
 }
 void CCameraManager::SetRotate(unsigned char rotate)
 {
@@ -136,7 +137,7 @@ void CCameraManager::SetButton(int button, int x, int y)
 		winY = (float)viewport[3] - (float)y;   // invert winY so that down lowers value
 		glReadPixels(x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
 		gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
-		RENDERMANAGER->IncreaseRow(Vector3(posX, -posY, -posZ));
+		//RENDERMANAGER->IncreaseRow(Vector3(posX, -posY, -posZ));
 
 
 	}

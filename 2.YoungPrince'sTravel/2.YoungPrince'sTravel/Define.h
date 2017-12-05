@@ -7,12 +7,12 @@
 #include <gl/glut.h>
 #include <time.h>
 #include <Windows.h>
+#include <memory>
 
 #include "CFactory.h"
 #include "CCameraManager.h"
 #include "CTextureManager.h"
 #include "CRenderManager.h"
-
 #include "Enum.h"
 #include "Matrix.h"
 
@@ -53,6 +53,10 @@ static const float EARTH_RAD = 5.0f;
 static const int HOUSE_FRONT = 8;
 static const int HOUSE_SIDE = 9;
 static const int HOUSE_RAD = 2;
+
+static const int CONTROLLER_SPEED = 1;
+
+static const int AIRPLANE_SIZE = 2;
 
 enum { X, Y, Z };
 

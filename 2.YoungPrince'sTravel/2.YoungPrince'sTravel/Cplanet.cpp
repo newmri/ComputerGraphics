@@ -92,11 +92,12 @@ void CPlanet::Render()
 		glEnd();
 	}
 
-
+	glDisable(GL_TEXTURE_2D);
 	// Draw Marker
 	if (m_objType == EARTH) {
-		if(m_pos.x > 0) glTranslatef(m_pos.x, m_pos.y + m_size + HOUSE_RAD * 4.0f, m_pos.z);
-		else  glTranslatef(m_pos.x, m_pos.y + m_size + 3, m_pos.z);
+		if (m_pos.x > 0) glTranslatef(m_pos.x, m_pos.y + m_size + HOUSE_RAD * 4.0f, m_pos.z);
+		else glTranslatef(m_pos.x, m_pos.y + m_size + 3, m_pos.z);
+		glColor3f(m_color.R, m_color.G, m_color.B);
 		glBegin(GL_QUADS);
 		glVertex3f(1.0f, -1.0f, 0.0f);
 		glVertex3f(-1.0f, -1.0f, 0.0f);
@@ -111,5 +112,5 @@ void CPlanet::Render()
 	}
 	glPopMatrix();
 
-	glDisable(GL_TEXTURE_2D);
+	
 }

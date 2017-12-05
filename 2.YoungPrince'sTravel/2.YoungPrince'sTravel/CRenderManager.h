@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+
 #include "Matrix.h"
 struct Perspective
 {
@@ -33,6 +35,8 @@ struct Points
 	}
 };
 
+struct CObject;
+
 class CRenderManager
 {
 public:
@@ -49,35 +53,26 @@ public:
 
 public:
 	void Init();
+	void Update();
 	void Resize(int w, int h);
 	void Render();
 
 public:
-	//std::vector<Vector3> GetObjPos() { return m_v; }
+	void Reset();
+	void ResetController();
+public:
+	std::vector<std::shared_ptr<CObject>> GetObj() { return m_obj; }
 	const Perspective& GetPerspective() { return m_perspective; }
 
 public:
-	void IncreaseRow(Vector3 pos)
-	{
-		m_ctrlpoints[m_row][0] = pos.x;
-		m_ctrlpoints[m_row][1] = pos.y;
-		m_ctrlpoints[m_row][2] = pos.z;
-		m_pointZ[m_row] = pos.z;
+	void IncreaseRow(Vector3 pos);
 
-		m_row++;
-
-		if (m_row == 4) {
-			m_controlV.push_back(Points(m_ctrlpoints, m_pointZ));
-			m_row = 1;
-			for (int i = 0; i < 3; ++i) m_ctrlpoints[0][i] = m_ctrlpoints[3][i];
-		}
-	}
 public:
 	void SetPerspective(const Perspective p) { m_perspective = p; this->Resize(m_width, m_height); }
 
 private:
 	static CRenderManager* m_instance;
-
+	std::vector<std::shared_ptr<CObject>> m_obj;
 	int m_width, m_height;
 	Matrix4 m_model, m_view, m_projection, m_projectionBiasInverse;
 
@@ -86,5 +81,7 @@ private:
 	int m_row;
 	float m_ctrlpoints[4][4]{};
 	float m_pointZ[4];
+	bool m_haveAirPlane;
+
 
 }; 

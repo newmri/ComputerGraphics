@@ -22,6 +22,7 @@ public:
 	}
 
 	std::shared_ptr<CObject> CreateObj(OBJTYPE objType, Vector3 pos, DATA_TYPE size, Color color);
+	std::shared_ptr<CObject> CreateObj(OBJTYPE objType, Vector3 pos, Vector3 target[], DATA_TYPE size, Color color);
 private:
 	CFactory(void) {};
 	~CFactory(void) { delete m_instance; };

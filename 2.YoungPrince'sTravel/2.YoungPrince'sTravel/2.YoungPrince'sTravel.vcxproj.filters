@@ -48,6 +48,12 @@
     <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CRenderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CAirPlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CCameraManager.cpp">
@@ -72,6 +78,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CRenderManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2.YoungPrince%27sTravel\2.YoungPrince%27sTravel\CAirPlane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿#include "Define.h"
+#include "Objects.h"
 
 CRenderManager* CRenderManager::m_instance = nullptr;
 
@@ -11,6 +12,78 @@ void CRenderManager::Init()
 	m_perspective.Far = PERSPEVTIVE_FAR;
 	CAMERAMANAGER->LookAt(Vector3(0.0f, 0.0f, 0.0f), Vector3(30.0f, 0.0f, 90.0f), true);
 	m_row = 0;
+	m_haveAirPlane = false;
+
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(CUBE, Vector3(0.0f, 0.0f, 0.0f), CUBE_SIZE, Color(1.0f, 1.0f, 1.0f)));
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(PARTICLE, Vector3(0.0f, 0.0f, 0.0f), 0.3f, Color(1.0f, 1.0f, 1.0f)));
+	Vector3 lt(Vector3(-CUBE_SIZE / 2.0f + EARTH_RAD, CUBE_SIZE / 2.0f - EARTH_RAD, CUBE_SIZE / 2.0f - EARTH_RAD));
+	Vector3 rb(Vector3(CUBE_SIZE / 2.0f - EARTH_RAD, -CUBE_SIZE / 2.0f + EARTH_RAD, -CUBE_SIZE / 2.0f + EARTH_RAD));
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(EARTH, lt, EARTH_RAD, Color(1.0f, 1.0f, 1.0f)));
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(EARTH, rb, EARTH_RAD, Color(1.0f, 1.0f, 1.0f)));
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(CONTROLLER, rb, EARTH_RAD, Color(1.0f, 1.0f, 1.0f)));
+
+	int num = rand() % 20 + 15;
+	Vector3* pos = new Vector3[num];
+	int* rad = new int[num];
+	for (int i = 0; i < num; ++i) {
+		if (i == 0) {
+			pos[i] = lt;
+			rad[i] = EARTH_RAD;
+		}
+		if (i == 1) {
+			pos[i] = rb;
+			rad[i] = EARTH_RAD;
+		}
+		bool chk = false;
+		if (i != 0 && i != 1) {
+			rad[i] = rand() % 5 + 2;
+			int max = CUBE_SIZE - rad[i] * 2;
+			float min = (CUBE_SIZE / 2.0f) - rad[i];
+
+			pos[i].x = (float)(rand() % max) - min;
+			pos[i].y = (float)(rand() % max) - min;
+			pos[i].z = (float)(rand() % max) - min;
+		}
+		for (int j = 0; j < i; ++j) {
+			chk = (pow(pos[j].x - pos[i].x, 2) + pow(pos[j].y - pos[i].y, 2) +
+				pow(pos[j].z - pos[i].z, 2) < pow(rad[i] + rad[j], 2));
+
+			if (chk) {
+				chk = false;
+				i -= 1;
+			}
+		}
+
+	}
+
+
+	for (int i = 0; i < num; ++i) {
+		m_obj.emplace_back(FACTORYMANAGER->CreateObj(PLANET, pos[i], rad[i], Color(1.0f, 1.0f, 1.0f)));
+	}
+	delete[] pos;
+	delete[] rad;
+}
+
+void CRenderManager::Reset()
+{
+	this->ResetController();
+	vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
+	while (itor != m_obj.end()) {
+		
+		if((*itor)->GetObjType() == AIRPLANE) itor = m_obj.erase(itor);
+		else ++itor;
+	}
+	
+}
+void CRenderManager::ResetController()
+{
+	m_obj[CONTROLLER]->Init();
+	m_row = 0;
+	ZeroMemory(&m_controlV, sizeof(m_controlV));
+}
+void CRenderManager::Update()
+{
+	for (auto& d : m_obj) d->Update();
 }
 
 void CRenderManager::Resize(int w, int h)
@@ -27,15 +100,60 @@ void CRenderManager::Resize(int w, int h)
 
 }
 
+void CRenderManager::IncreaseRow(Vector3 pos)
+{
+	m_ctrlpoints[m_row][0] = pos.x;
+	m_ctrlpoints[m_row][1] = pos.y;
+	m_ctrlpoints[m_row][2] = pos.z;
+	m_pointZ[m_row] = pos.z;
+
+	if ((pos.x < CUBE_SIZE / 2.0f && pos.x > CUBE_SIZE / 2.0f - (EARTH_RAD * 2.0f)) &&
+		(pos.y > -CUBE_SIZE / 2.0f && pos.y < -CUBE_SIZE / 2.0f + (EARTH_RAD * 2.0f)) &&
+		(pos.z < -CUBE_SIZE / 2.0f + EARTH_RAD && pos.z > -CUBE_SIZE / 2.0f)) {
+		m_obj[EARTH]->SetColor(Color(1.0f, 0.0f, 0.0f));
+	}
 
 
+	m_row++;
 
-
+	if (m_row == 4) {
+		if (!m_haveAirPlane) {
+			m_haveAirPlane = true;
+			Vector3 airplanePos = Vector3(m_ctrlpoints[0][0], m_ctrlpoints[0][1], m_ctrlpoints[0][2]);
+			Vector3 targetPos[3];
+			for (int i = 0; i < m_row - 1; ++i) {
+					targetPos[i].x = m_ctrlpoints[i + 1][0];
+					targetPos[i].y = m_ctrlpoints[i + 1][1];
+					targetPos[i].z = m_ctrlpoints[i + 1][2];
+			}
+			m_obj.emplace_back(FACTORYMANAGER->CreateObj(AIRPLANE, airplanePos, targetPos, AIRPLANE_SIZE, Color(1.0f, 1.0f, 1.0f)));
+		}
+		else {
+			Vector3 targetPos[3];
+			for (int i = 0; i < m_row - 1; ++i) {
+				targetPos[i].x = m_ctrlpoints[i + 1][0];
+				targetPos[i].y = m_ctrlpoints[i + 1][1];
+				targetPos[i].z = m_ctrlpoints[i + 1][2];
+			}
+			for (auto& d : m_obj) {
+				if (d->GetObjType() == AIRPLANE) {
+					CAirPlane* ap = dynamic_cast<CAirPlane*> (d.get());
+					ap->SetTarget(targetPos);
+					break;
+				}
+			}
+		}
+		m_controlV.push_back(Points(m_ctrlpoints, m_pointZ));
+		m_row = 1;
+		for (int i = 0; i < 3; ++i) m_ctrlpoints[0][i] = m_ctrlpoints[3][i];
+	}
+}
 
 void CRenderManager::Render()
 {
 
-	
+	for (auto& d : m_obj) d->Render();
+
 	glPushMatrix();
 
 	if (m_controlV.size() != 0) {
@@ -53,7 +171,7 @@ void CRenderManager::Render()
 			glColor3f(0.0, 0.0, 1.0);
 			for (int i = 0; i < m_row; i++) {
 				glPushMatrix();
-				glTranslatef(0.0f, 0.0f, m_pointZ[i]);
+				//glTranslatef(0.0f, 0.0f, m_pointZ[i]);
 				glBegin(GL_POINTS);
 				glVertex3fv(&m_ctrlpoints[i][0]);
 				glEnd();
@@ -65,13 +183,13 @@ void CRenderManager::Render()
 		glColor3f(0.0, 0.0, 1.0);
 		for (int i = 0; i < m_row; i++) {
 			glPushMatrix();
-			glTranslatef(0.0f, 0.0f, m_pointZ[i]);
+			//glTranslatef(0.0f, 0.0f, m_pointZ[i]);
 			glBegin(GL_POINTS);
 			glVertex3fv(&m_ctrlpoints[i][0]);
 			glEnd();
 			glPopMatrix();
 		}
-	}
+	} 
 	else {
 		// 제어점에 점을 그린다.
 		glPointSize(5.0);
@@ -79,7 +197,7 @@ void CRenderManager::Render()
 		
 		for (int i = 0; i < m_row; i++) {
 			glPushMatrix();
-			glTranslatef(0.0f, 0.0f, m_pointZ[i]);
+			//glTranslatef(0.0f, 0.0f, m_pointZ[i]);
 			glBegin(GL_POINTS);
 			glVertex3fv(&m_ctrlpoints[i][0]);
 			glEnd();
