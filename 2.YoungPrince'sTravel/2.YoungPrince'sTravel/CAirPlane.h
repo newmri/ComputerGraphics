@@ -12,6 +12,7 @@ public:
 
 public:
 	void SetTarget(Vector3 target[]);
+	bool DidGetGoal();
 
 public:
 	void Move();

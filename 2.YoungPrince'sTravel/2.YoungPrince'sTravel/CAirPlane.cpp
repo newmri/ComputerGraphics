@@ -35,6 +35,15 @@ void CAirPlane::SetTarget(Vector3 target[])
 
 }
 
+bool CAirPlane::DidGetGoal()
+{
+	// 목표를 바라보는 방향벡터 생성. 방향벡터를 단위벡터로 만든다
+	Vector3 face = m_target[m_idx] - m_pos;
+	float dist = sqrt(face.x + face.y + face.z);
+	dist = abs(dist);
+	if (dist == 0 || dist < 1) return true;
+	return false;
+}
 
 void CAirPlane::Move()
 {
@@ -43,11 +52,9 @@ void CAirPlane::Move()
 	// 목표를 바라보는 방향벡터 생성. 방향벡터를 단위벡터로 만든다
 	Vector3 face = m_target[m_idx] - m_pos;
 
-	float dist = sqrt(face.x + face.y + face.z);
-	dist = abs(dist);
-	if (dist == 0 || dist < 1) {
+	if (this->DidGetGoal()) return;
+	else {
 		if (m_idx < 2) m_idx++;
-		else return;
 	}
 
 
@@ -75,6 +82,8 @@ void CAirPlane::Update()
 	else m_proplerAngle = 0.0f;
 
 	this->Move();
+
+
 }
 
 

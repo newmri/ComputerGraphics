@@ -76,7 +76,8 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 's':
 	case 'z':
 	case 'x': CAMERAMANAGER->SetMove(key); break;
-	case 'i': CAMERAMANAGER->Reset(); RENDERMANAGER->Reset(); break;
+	case 'i':
+	case 'I': CAMERAMANAGER->Reset(); RENDERMANAGER->Reset(); break;
 	case 'q':
 	case 'Q': glutDestroyWindow(winId); exit(0); break;
 	case '6':
@@ -95,7 +96,8 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case '9': {
 		RENDERMANAGER->ResetController(); break;
 	}
-
+	case '-': RENDERMANAGER->DecreaseRow(); break;
+		
 	default: break;
 	}
 	RenderScene();

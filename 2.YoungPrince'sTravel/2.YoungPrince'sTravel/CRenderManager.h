@@ -66,10 +66,15 @@ public:
 
 public:
 	void IncreaseRow(Vector3 pos);
-
+	void DecreaseRow();
+public:
+	bool HaveAirPlane() { return m_haveAirPlane; }
+	CObject* GetAirPlane() { return m_obj[AIRPLANE].get(); }
 public:
 	void SetPerspective(const Perspective p) { m_perspective = p; this->Resize(m_width, m_height); }
 
+public:
+	bool DidGetGoal() { return m_gotGoal; }
 private:
 	static CRenderManager* m_instance;
 	std::vector<std::shared_ptr<CObject>> m_obj;
@@ -82,6 +87,8 @@ private:
 	float m_ctrlpoints[4][4]{};
 	float m_pointZ[4];
 	bool m_haveAirPlane;
+	bool m_gotGoal;
+	int m_pointCnt;
 
 
 }; 

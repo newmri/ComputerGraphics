@@ -39,6 +39,7 @@ public:
 	void SetLastPos(int x, int y) { m_lastPos.x = x, m_lastPos.y = y; }
 
 public:
+	void SwapLook();
 	void LookAt(Vector3 reference, Vector3 pos, bool rotateAroundReference);
 	void CalculateViewMatrix() { if (m_view) *m_view = GetViewMatrix(m_x, m_y, m_z, m_pos); }
 public:

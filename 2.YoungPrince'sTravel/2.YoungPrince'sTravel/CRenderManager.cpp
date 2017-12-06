@@ -13,7 +13,8 @@ void CRenderManager::Init()
 	CAMERAMANAGER->LookAt(Vector3(0.0f, 0.0f, 0.0f), Vector3(30.0f, 0.0f, 90.0f), true);
 	m_row = 0;
 	m_haveAirPlane = false;
-
+	m_gotGoal = false;
+	m_pointCnt = 0;
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(CUBE, Vector3(0.0f, 0.0f, 0.0f), CUBE_SIZE, Color(1.0f, 1.0f, 1.0f)));
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(PARTICLE, Vector3(0.0f, 0.0f, 0.0f), 0.3f, Color(1.0f, 1.0f, 1.0f)));
 	Vector3 lt(Vector3(-CUBE_SIZE / 2.0f + EARTH_RAD, CUBE_SIZE / 2.0f - EARTH_RAD, CUBE_SIZE / 2.0f - EARTH_RAD));
@@ -70,7 +71,7 @@ void CRenderManager::Reset()
 	vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
 	while (itor != m_obj.end()) {
 		
-		if((*itor)->GetObjType() == AIRPLANE) itor = m_obj.erase(itor);
+		if ((*itor)->GetObjType() == AIRPLANE) { itor = m_obj.erase(itor); m_haveAirPlane = false; }
 		else ++itor;
 	}
 	
@@ -83,7 +84,9 @@ void CRenderManager::ResetController()
 }
 void CRenderManager::Update()
 {
+	
 	for (auto& d : m_obj) d->Update();
+
 }
 
 void CRenderManager::Resize(int w, int h)
@@ -102,6 +105,8 @@ void CRenderManager::Resize(int w, int h)
 
 void CRenderManager::IncreaseRow(Vector3 pos)
 {
+	if (m_pointCnt == 30) return;
+
 	m_ctrlpoints[m_row][0] = pos.x;
 	m_ctrlpoints[m_row][1] = pos.y;
 	m_ctrlpoints[m_row][2] = pos.z;
@@ -109,12 +114,14 @@ void CRenderManager::IncreaseRow(Vector3 pos)
 
 	if ((pos.x < CUBE_SIZE / 2.0f && pos.x > CUBE_SIZE / 2.0f - (EARTH_RAD * 2.0f)) &&
 		(pos.y > -CUBE_SIZE / 2.0f && pos.y < -CUBE_SIZE / 2.0f + (EARTH_RAD * 2.0f)) &&
-		(pos.z < -CUBE_SIZE / 2.0f + EARTH_RAD && pos.z > -CUBE_SIZE / 2.0f)) {
+		(pos.z > -CUBE_SIZE / 2.0f + EARTH_RAD && pos.z < -CUBE_SIZE / 2.0f + EARTH_RAD * 2)) {
 		m_obj[EARTH]->SetColor(Color(1.0f, 0.0f, 0.0f));
+		m_gotGoal = true;
 	}
 
-
 	m_row++;
+
+	m_pointCnt++;
 
 	if (m_row == 4) {
 		if (!m_haveAirPlane) {
@@ -149,9 +156,13 @@ void CRenderManager::IncreaseRow(Vector3 pos)
 	}
 }
 
+void CRenderManager::DecreaseRow()
+{
+	if(m_row > 1) m_row--;
+}
+
 void CRenderManager::Render()
 {
-
 	for (auto& d : m_obj) d->Render();
 
 	glPushMatrix();

@@ -1,4 +1,5 @@
 #include "Define.h"
+#include "Objects.h"
 
 CCameraManager* CCameraManager::m_instance = nullptr;
 
@@ -9,6 +10,7 @@ void CCameraManager::Init()
 	m_x.x = 1.0f;
 	m_y.y = 1.0f;
 	m_z.z = 1.0f;
+
 }
 
 void CCameraManager::Reset()
@@ -26,6 +28,7 @@ void CCameraManager::Reset()
 	this->LookAt(Vector3(0.0f, 0.0f, 0.0f), Vector3(30.0f, 0.0f, 90.0f), true);
 	
 }
+
 void CCameraManager::SetRotate(unsigned char rotate)
 {
 	switch (rotate) {
@@ -156,13 +159,6 @@ void CCameraManager::OnMouseMove(int x, int y)
 		m_y = RotateVector(m_y, vangle, m_x);
 		m_z = RotateVector(m_z, vangle, m_x);
 
-		/*
-		if (m_y.y < 0.0f)
-		{
-			m_z = Vector3(0.0f, m_z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-			Cross3f(m_y, m_z, m_x);
-		}
-		*/
 		m_x = RotateVector(m_x, hangle, Vector3(0.0f, 1.0f, 0.0f));
 		m_y = RotateVector(m_y, hangle, Vector3(0.0f, 1.0f, 0.0f));
 		m_z = RotateVector(m_z, hangle, Vector3(0.0f, 1.0f, 0.0f));
@@ -171,6 +167,11 @@ void CCameraManager::OnMouseMove(int x, int y)
 		
 }
 
+void CCameraManager::SwapLook()
+{
+
+	
+}
 
 void CCameraManager::LookAt(Vector3 reference, Vector3 pos, bool rotateAroundReference)
 {
@@ -190,4 +191,5 @@ void CCameraManager::LookAt(Vector3 reference, Vector3 pos, bool rotateAroundRef
 	}
 
 	CalculateViewMatrix();
+
 }
