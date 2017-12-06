@@ -8,6 +8,7 @@ HINSTANCE g_hInst;
 HWND g_hWnd;
 HWND g_hProjectionInfoDlg;
 HWND g_hObjectInfoDlg;
+HWND g_hObjectInfoModifyDlg;
 HWND g_hObjectTab;
 HWND g_hViewList[2];
 
@@ -17,9 +18,13 @@ void Reshape(int w, int h);
 void Idle();
 void InitTab(HWND& hWnd);
 
+void AddObject();
+
+
 GLvoid Mouse(int button, int state, int x, int y);
 GLvoid MouseMotion(int x, int y);
 GLvoid Keyboard(unsigned char key, int x, int y);
+GLvoid SpecialKeyboard(int key, int x, int y);
 void WheelFunc(int wheel, int dir, int x, int y);
 
 RECT rcWindow;
@@ -27,6 +32,7 @@ RECT rcWindow;
 BOOL CALLBACK PerspectiveInfoDlgProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK ObjectListProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK ObjectInfoProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK ObjectInfoModifyProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance
 	, LPSTR lpszCmdParam, int nCmdShow)
@@ -43,6 +49,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance
 
 	g_hObjectInfoDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_OBJECT_INFO), NULL, ObjectInfoProc);
 	ShowWindow(g_hObjectInfoDlg, SW_SHOW);
+
+	g_hObjectInfoModifyDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_OBJECT_INFO), NULL, ObjectInfoModifyProc);
+	ShowWindow(g_hObjectInfoModifyDlg, SW_SHOW);
+
 	g_hWnd = hWnd;
 	char *myargv[1];
 	int myargc = 1;
@@ -54,6 +64,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance
 	glutReshapeFunc(Reshape);
 	glutMouseFunc(Mouse);
 	glutKeyboardFunc(Keyboard);
+	glutSpecialFunc(SpecialKeyboard);
 	glutMouseWheelFunc(WheelFunc);
 	glutMotionFunc(MouseMotion);
 	glutIdleFunc(Idle);
@@ -124,10 +135,9 @@ BOOL CALLBACK ObjectInfoProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPa
 	sprintf(size, "%d", 3);
 
 
-	//sprintf(Near, "%0.3f", RENDERMANAGER->GetPerspective().Near);
-	//sprintf(Far, "%0.3f", RENDERMANAGER->GetPerspective().Far);
 	switch (iMessage) {
 	case WM_INITDIALOG:
+		RENDERMANAGER->SetObjectInfoDlg(hDlg);
 		GetWindowRect(hDlg, &rcWindow);
 		SetWindowPos(hDlg, NULL, WINDOW_INIT_X - rcWindow.right, TAB_WINDOW_INIT_Y + 345, NULL, NULL, SWP_NOSIZE);
 		SetDlgItemText(hDlg, IDC_COLOR_R_EDIT, color[0]);
@@ -148,40 +158,34 @@ BOOL CALLBACK ObjectInfoProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPa
 		SetDlgItemText(hDlg, IDC_SCALE_Z_EDIT, color[2]);
 
 		SetDlgItemText(hDlg, IDC_SIZE_EDIT, size);
-		//SetDlgItemText(hWnd, IDC_PERSPECTIVE_FAR_EDIT, Far);
 		break;
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case IDC_OBJECT_INFO_APPLY_BUTTON:
-			GetDlgItemText(hDlg, IDC_COLOR_R_EDIT, color[0],40);
-			GetDlgItemText(hDlg, IDC_COLOR_G_EDIT, color[1], 40);
-			GetDlgItemText(hDlg, IDC_COLOR_B_EDIT, color[2], 40);
-
-			GetDlgItemText(hDlg, IDC_POS_X_EDIT, pos[0], 40);
-			GetDlgItemText(hDlg, IDC_POS_Y_EDIT, pos[1], 40);
-			GetDlgItemText(hDlg, IDC_POS_Z_EDIT, pos[2], 40);
-
-			GetDlgItemText(hDlg, IDC_ROTATION_X_EDIT, rotation[0], 40);
-			GetDlgItemText(hDlg, IDC_ROTATION_Y_EDIT, rotation[1], 40);
-			GetDlgItemText(hDlg, IDC_ROTATION_Z_EDIT, rotation[2], 40);
-			GetDlgItemText(hDlg, IDC_ROTATION_ANGLE_EDIT, rotation[3], 40);
-		
-			GetDlgItemText(hDlg, IDC_SCALE_X_EDIT, scale[0], 40);
-			GetDlgItemText(hDlg, IDC_SCALE_Y_EDIT, scale[1], 40);
-			GetDlgItemText(hDlg, IDC_SCALE_Z_EDIT, scale[2], 40);
-
-			GetDlgItemText(hDlg, IDC_SIZE_EDIT, size, 40);
-			
-			RENDERMANAGER->AddObject(Object(DIALOGMANAGER->GetSelectedObject(), Color(atof(color[0]), atof(color[1]), atof(color[2])),
-				Vector3(atof(pos[0]), atof(pos[1]), atof(pos[2])),
-				Vector4(atof(rotation[0]), atof(rotation[1]), atof(rotation[2]), atof(rotation[3])),
-				Vector3(atof(scale[0]), atof(scale[1]), atof(scale[2])), atoi(size)));
-				
+			AddObject();
 			break;
 		}
 
 	}
+	return 0;
+}
+
+BOOL CALLBACK ObjectInfoModifyProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
+{
+
+	switch (iMessage) {
+	case WM_INITDIALOG:
+		SetWindowPos(hDlg, NULL, WINDOW_INIT_X + WINDOW_WIDTH, TAB_WINDOW_INIT_Y + 345, NULL, NULL, SWP_NOSIZE);
+		SetDlgItemText(hDlg, IDC_OBJECT_INFO_APPLY_BUTTON, "Modify");
+		RENDERMANAGER->SetObjectModifyDlg(hDlg);
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case IDC_OBJECT_INFO_APPLY_BUTTON: RENDERMANAGER->ModifySelectedObject(); break;
+		}
+	}
+
 	return 0;
 }
 BOOL CALLBACK ObjectListProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -308,23 +312,43 @@ void Idle()
 
 GLvoid Keyboard(unsigned char key, int x, int y)
 {
+
 	switch (key) {
 	case 'X':
 	case 'y':
 	case 'Y': CAMERAMANAGER->SetRotate(key); break;
 
 	case 'w':
-	case 's':
 	case 'a':
 	case 'd':
 	case 'q':
 	case 'e':
 	case 'z':
-	case 'x': CAMERAMANAGER->SetMove(key);break;
-	case 'i': CAMERAMANAGER->Reset(); break;
-	case '1': FILEMANAGER->LoadFile(); break;
-	case '2': FILEMANAGER->SaveFile(); break;
+	case 'x': CAMERAMANAGER->SetMove(key); break;
 
+	case 'i': CAMERAMANAGER->Reset(); break;
+	case 'r': RENDERMANAGER->GoToStartPos(); break;
+	case 's': {
+		int mod = glutGetModifiers();
+		if (mod && GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT)  FILEMANAGER->SaveFile();
+		else CAMERAMANAGER->SetMove(key);
+		break;
+	}
+	case 'o': {
+		int mod = glutGetModifiers();
+		if (mod && GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT)  FILEMANAGER->LoadFile();
+		break;
+	}
+
+	case '4':
+	case '6':
+	case '8':
+	case '5':
+	case '+':
+	case '-': if (RENDERMANAGER->haveObject()) RENDERMANAGER->MoveSelectedObject(key); break;
+
+	case 127: RENDERMANAGER->DeleteObject(); break;
+	case ' ':  AddObject(); break;
 	default: break;
 	}
 	RenderScene();
@@ -343,3 +367,44 @@ GLvoid MouseMotion(int x, int y)
 	}
 	//else RENDERMANAGER->MoveObject(x, y);
 }
+
+GLvoid SpecialKeyboard(int key, int x, int y)
+{
+	//if(key == GLUT_KEY
+}
+
+void AddObject()
+{
+	char color[3][40];
+	char pos[3][40];
+	char rotation[4][40];
+	char scale[3][40];
+	char size[40];
+
+	GetDlgItemText(g_hObjectInfoDlg, IDC_COLOR_R_EDIT, color[0], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_COLOR_G_EDIT, color[1], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_COLOR_B_EDIT, color[2], 40);
+
+	GetDlgItemText(g_hObjectInfoDlg, IDC_POS_X_EDIT, pos[0], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_POS_Y_EDIT, pos[1], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_POS_Z_EDIT, pos[2], 40);
+
+	GetDlgItemText(g_hObjectInfoDlg, IDC_ROTATION_X_EDIT, rotation[0], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_ROTATION_Y_EDIT, rotation[1], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_ROTATION_Z_EDIT, rotation[2], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_ROTATION_ANGLE_EDIT, rotation[3], 40);
+
+	GetDlgItemText(g_hObjectInfoDlg, IDC_SCALE_X_EDIT, scale[0], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_SCALE_Y_EDIT, scale[1], 40);
+	GetDlgItemText(g_hObjectInfoDlg, IDC_SCALE_Z_EDIT, scale[2], 40);
+
+	GetDlgItemText(g_hObjectInfoDlg, IDC_SIZE_EDIT, size, 40);
+
+	RENDERMANAGER->AddObject(Object(DIALOGMANAGER->GetSelectedObject(), Color(atof(color[0]), atof(color[1]), atof(color[2])),
+		Vector3(atof(pos[0]), atof(pos[1]), atof(pos[2])),
+		Vector4(atof(rotation[0]), atof(rotation[1]), atof(rotation[2]), atof(rotation[3])),
+		Vector3(atof(scale[0]), atof(scale[1]), atof(scale[2])), atoi(size)));
+
+
+}
+

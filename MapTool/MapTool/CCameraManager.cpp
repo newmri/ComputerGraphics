@@ -81,7 +81,6 @@ void CCameraManager::SetMove(const unsigned char key)
 	up *= CAMERA_SPEED;
 	right *= CAMERA_SPEED;
 	forward *= CAMERA_SPEED;
-
 	Vector3 move;
 
 	switch (key) {

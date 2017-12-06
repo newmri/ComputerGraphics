@@ -30,6 +30,7 @@
 #define IDC_SCALE_Z_EDIT                1028
 #define IDC_SIZE_EDIT                   1029
 #define IDC_ROTATION_ANGLE_EDIT         1030
+#define IDC_OBJECT_INFO_APPLY_BUTTON2   1031
 #define IDC_NAME_STATIC                 1033
 #define ID_BUTTON2                      40001
 

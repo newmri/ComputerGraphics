@@ -14,6 +14,8 @@ void CFileManager::LoadFile()
 	m_OFN.lpstrFile = m_fileName;
 	m_OFN.nMaxFile = 256;
 	m_OFN.lpstrInitialDir = "c:\\";
+	m_OFN.Flags = OFN_EXPLORER | OFN_ENABLEHOOK;
+	m_OFN.lpfnHook = OFNHookProc;
 
 	if (GetOpenFileName(&m_OFN) != 0) {
 		m_hFile = CreateFile(m_OFN.lpstrFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, 0);
@@ -35,6 +37,7 @@ void CFileManager::LoadFile()
 
 }
 
+
 void CFileManager::SaveFile()
 {
 
@@ -46,6 +49,9 @@ void CFileManager::SaveFile()
 	m_OFN.lpstrFile = m_fileName;
 	m_OFN.nMaxFile = 256;
 	m_OFN.lpstrInitialDir = "c:\\";
+	m_OFN.Flags = OFN_EXPLORER | OFN_ENABLEHOOK;
+	m_OFN.lpfnHook = OFNHookProc;
+	//SetWindowPos(m_hWnd, HWND_TOPMOST, 200, 200, 0, 0, SWP_NOSIZE);
 
 	if (GetSaveFileName(&m_OFN) != 0) {
 		m_hFile = CreateFile(m_OFN.lpstrFile, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, 0, 0);
@@ -61,4 +67,15 @@ void CFileManager::SaveFile()
 		}
 		CloseHandle(m_hFile);
 	}
+}
+
+static UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+{
+
+	if ((uiMsg == WM_NOTIFY) &&
+		(reinterpret_cast<OFNOTIFY*>(lParam)->hdr.code == CDN_INITDONE)){
+		SetWindowPos(GetParent(hdlg), HWND_TOPMOST, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 0, 0, SWP_NOSIZE);
+	}
+
+	return 0;
 }

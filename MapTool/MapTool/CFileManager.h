@@ -3,6 +3,8 @@
 #include <Windows.h>
 
 
+static UINT_PTR CALLBACK OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
+
 class CFileManager
 {
 public:

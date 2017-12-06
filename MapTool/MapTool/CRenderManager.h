@@ -40,9 +40,9 @@ struct Object
 	Vector4 rotation;
 	Vector3 pos, scale;
 	float size;
-
+	bool haveToDelete;
 	Object() {};
-	Object(OBJECT_TYPE objType, Color color, Vector3 pos, Vector4 rotation, Vector3 scale, float size) : objType(objType), color(color), pos(pos), rotation(rotation), scale(scale), size(size) {};
+	Object(OBJECT_TYPE objType, Color color, Vector3 pos, Vector4 rotation, Vector3 scale, float size) : objType(objType), color(color), pos(pos), rotation(rotation), scale(scale), size(size) { haveToDelete = false; };
 };
 
 class CRenderManager
@@ -66,16 +66,29 @@ public:
 
 public:
 	void AddObject(Object obj);
-	std::vector<Object>& GetObjects() { return m_v; }
+	void DeleteObject();
+	void ModifySelectedObject();
+	void MoveSelectedObject(char key);
+	std::vector<Object>& GetObjects() { return m_obj; }
+	bool haveObject() { if (m_selectedObjIdx > -1) return true; return false; }
+	bool haveBeforeObject() { if (m_selectedObjIdx > 0) return true; return false; }
+	Object GetSelectedObject() { return m_obj[m_selectedObjIdx]; }
+	Vector3 GetBeforeObjectPos() { return m_obj[m_selectedObjIdx - 1].pos; }
 	void SelectObject(int x, int y);
 	void MoveObject(int x, int y);
-	void SelectObject(int a) { objects = a; }
 
 public:
 	const Perspective& GetPerspective() { return m_perspective; }
 
 public:
 	void SetPerspective(const Perspective p) { m_perspective = p; this->Resize(m_width, m_height); }
+	void SetObjectInfoDlg(HWND& hWnd) { m_objectInfoDlg = hWnd; }
+	void SetObjectModifyDlg(HWND& hWnd) { m_ObjectModifyDlg = hWnd; }
+	void SetText(Object obj);
+	void ReSetText();
+
+public:
+	void GoToStartPos();
 
 private:
 	static CRenderManager* m_instance;
@@ -87,11 +100,14 @@ private:
 
 	//int ObjectsCount, LightObjectID;
 	//CObject* Objects;
-	std::vector<Object> m_v;
+	std::vector<Object> m_obj;
 	int objCnt;
 	int SelectedObject;
 	float m_planeD;
 	Vector3 m_selectedPoint, m_planeNormal;
 	Perspective m_perspective;
-	int objects;
+	int m_selectedObjIdx;
+
+	HWND m_objectInfoDlg;
+	HWND m_ObjectModifyDlg;
 };

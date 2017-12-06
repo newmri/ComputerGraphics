@@ -4,6 +4,7 @@
 #include <CommCtrl.h>
 #include <atlimage.h>
 //#include <gl/glut.h>
+#include <gl/glew.h>
 #include <gl/freeglut.h>
 #include <iostream>
 #include <vector>
@@ -35,6 +36,7 @@ static const float CAMERA_ANGLE_IN = 2.0f;
 static const float CAMERA_SPEED = 1.0f;
 static const float CAMERA_INIT_Z = 20.0f;
 
+static const float OBJECT_SPEED = 1.0f;
 //CString g_moduleDirectory, g_errorLog;
 
 #define CAMERAMANAGER CCameraManager::GetInstance()
