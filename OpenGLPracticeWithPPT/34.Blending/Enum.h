@@ -1,0 +1,3 @@
+#pragma once
+
+enum OBJTYPE { UNKNOWN, TEAPOT, SPHERE, CONE, END};
