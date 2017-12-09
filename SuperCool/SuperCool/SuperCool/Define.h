@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Windows.h>
-#include <gl/glew.h>
-#include <gl/glut.h>
-#include <gl/wglew.h>
+#include "./GL/glew.h"
+#include "./GL/glut.h"
+#include "./GL/wglew.h"
 #include <iostream>
 #include <vector>
 #include <atlstr.h>
