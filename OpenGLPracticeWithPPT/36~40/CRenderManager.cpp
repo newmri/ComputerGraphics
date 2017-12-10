@@ -6,7 +6,6 @@ void CRenderManager::Init()
 {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glFrontFace(GL_CCW);
-	glEnable(GL_DEPTH_TEST);
 
 	CAMERAMANAGER->SetViewMatrix(&m_view);
 
@@ -15,8 +14,8 @@ void CRenderManager::Init()
 	m_perspective.Far = PERSPEVTIVE_FAR;
 	m_selectedObjIdx = -1;
 
-	ObjectInfo objInfo(PYRAMID, Color(), Vector3(0.0f,3.0f,0.0f), Vector4(), Vector3(), 3);
-	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(objInfo));
+	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(PYRAMID, Color(), Vector3(0.0f, 3.0f, 0.0f), Vector4(), Vector3(), 3)));
+	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(CUBE, Color(1.0f, 1.0f, 0.0f), Vector3(-10.0f, 2.5f, -10.0f), Vector4(), Vector3(), 3)));
 
 }
 
@@ -100,7 +99,6 @@ void CRenderManager::Render(float frameTime)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_DEPTH_TEST);
 
 	glPushMatrix();
 

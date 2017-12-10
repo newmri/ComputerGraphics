@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CCameraManager.h" />
+    <ClInclude Include="CCube.h" />
     <ClInclude Include="CPyramid.h" />
     <ClInclude Include="CFactoryManagerr.h" />
     <ClInclude Include="CRenderManager.h" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraManager.cpp" />
+    <ClCompile Include="CCube.cpp" />
     <ClCompile Include="CPyramid.cpp" />
     <ClCompile Include="CFactoryManager.cpp" />
     <ClCompile Include="CRenderManager.cpp" />
