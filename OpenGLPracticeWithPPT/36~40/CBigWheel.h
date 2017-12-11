@@ -2,11 +2,13 @@
 
 #include "CObject.h"
 
-class CCube : public CObject
+class CBigWheel : public CObject
 {
 public:
 	virtual void Init();
 	virtual void Update();
 	virtual void Render();
 
+private:
+	float m_seatSize;
 };

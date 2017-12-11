@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CBigWheel.h" />
     <ClInclude Include="CCameraManager.h" />
     <ClInclude Include="CCube.h" />
     <ClInclude Include="CPyramid.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Objects.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBigWheel.cpp" />
     <ClCompile Include="CCameraManager.cpp" />
     <ClCompile Include="CCube.cpp" />
     <ClCompile Include="CPyramid.cpp" />

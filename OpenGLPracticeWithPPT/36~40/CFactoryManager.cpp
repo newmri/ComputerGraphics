@@ -11,6 +11,7 @@ shared_ptr<CObject> CFactoryManager::CreateObj(ObjectInfo objInfo)
 	switch (objInfo.objType) {
 	case OBJECT_TYPE::PYRAMID: p = make_shared<CPyramid>(); break;
 	case OBJECT_TYPE::CUBE: p = make_shared<CCube>(); break;
+	case OBJECT_TYPE::BIGWHEEL: p = make_shared<CBigWheel>(); break;
 	default: break;
 	}
 	

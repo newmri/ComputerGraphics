@@ -15,8 +15,9 @@ void CRenderManager::Init()
 	m_selectedObjIdx = -1;
 
 	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(PYRAMID, Color(), Vector3(0.0f, 3.0f, 0.0f), Vector4(), Vector3(), 3)));
-	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(CUBE, Color(1.0f, 1.0f, 0.0f), Vector3(-10.0f, 2.5f, -10.0f), Vector4(), Vector3(), 3)));
-
+	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(CUBE, Color(1.0f, 1.0f, 0.0f), Vector3(-10.0f, 2.5f, -10.0f), Vector4(0.0f, 1.0f, 0.0f, 0.0f), Vector3(), 3)));
+	this->m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(BIGWHEEL, Color(), Vector3(10.0f, 9.0f, -10.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f), Vector3(2.5f,0.1f,0.1f), 6)));
+	
 }
 
 void CRenderManager::Resize(int w, int h)

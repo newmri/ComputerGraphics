@@ -315,10 +315,14 @@ void CWnd::OnPaint()
 	static int FPS = 0;
 
 	DWORD Time = GetTickCount();
-
+	DWORD dwInterval = 1000 / 60;
+	DWORD dwDelay;
 	float FrameTime = (Time - LastFrameTime) * 0.001f;
 
 	LastFrameTime = Time;
+
+	dwDelay = dwInterval - (GetTickCount() - Time);
+	if (dwDelay > 0) Sleep(dwDelay);
 
 	if (Time - LastFPSTime > 1000)
 	{

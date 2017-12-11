@@ -4,19 +4,15 @@
 
 void CCube::Init()
 {
-	m_time = GetTickCount();
+	
 }
 
 
 
 void CCube::Update()
 {
-	if (m_time + 1000 / 60 < GetTickCount()) {
-		if (m_objInfo.rotation.w < 360) m_objInfo.rotation.w++;
-		else m_objInfo.rotation.w = 0.0f;
-		m_time = GetTickCount();
-	}
-	
+	if (m_objInfo.rotation.w < 360) m_objInfo.rotation.w++;
+	else m_objInfo.rotation.w = 0.0f;
 }
 
 
@@ -26,7 +22,7 @@ void CCube::Render()
 	glEnable(GL_BLEND);
 	glPushMatrix();
 	glTranslatef(m_objInfo.pos.x, m_objInfo.pos.y, m_objInfo.pos.z);
-	glRotatef(m_objInfo.rotation.w, 0.0f, 1.0f, 0.0f);
+	glRotatef(m_objInfo.rotation.w, m_objInfo.rotation.x, m_objInfo.rotation.y, m_objInfo.rotation.z);
 	glPushMatrix();
 	glRotatef(90.0f, 1.0f, 1.0f, 0.0f);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
