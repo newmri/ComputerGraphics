@@ -14,8 +14,26 @@ void CCameraManager::Init()
 	m_pos.z = CAMERA_INIT_Z;
 	m_pos.y = 5.0f;
 	m_button = -1;
-	
-	//this->LookAt(Vector3(0.0f, 0.875f, 0.0f), Vector3(0.0f, 0.875f, 2.5f), true);
+
+	m_onJump = false;
+}
+
+void CCameraManager::Update(float frameTime)
+{
+	if (m_pos.y <= 5) m_onJump = false;
+
+	float speed = FALL_SPEED;
+
+	if (m_onJump) {
+		float dist = speed * frameTime;
+		Vector3 up(0.0f, 1.0f, 0.0f);
+		up *= dist;
+
+		m_ref -= up;
+		m_pos -= up;
+
+		this->CalculateViewMatrix();
+	}
 
 }
 
@@ -115,10 +133,15 @@ Vector3 CCameraManager::OnKeys(BYTE Keys, float frameTime)
 	if (Keys & 0x04) move -= right;
 	// d
 	if (Keys & 0x08) move += right;
-	// r
-	if (Keys & 0x10) move += up;
-	// f
-	if (Keys & 0x20) move -= up;
+
+	// Space
+	if (Keys & 0x10) {
+		if (!m_onJump) {
+			up *= JUMP_MULTI;
+			move += up;
+			m_onJump = true;
+		}
+	}
 	
 	return move;
 }

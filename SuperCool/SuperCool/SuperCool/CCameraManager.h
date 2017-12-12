@@ -18,6 +18,7 @@ public:
 
 public:
 	void Init();
+	void Update(float frameTime);
 	void Reset();
 
 public:
@@ -52,4 +53,5 @@ private:
 	Matrix4* m_view;
 	int m_button;
 	POINT m_lastCurPos;
+	bool m_onJump;
 };

@@ -251,31 +251,8 @@ void CWnd::OnKeyDown(UINT Key)
 {
 	switch (Key)
 	{
-	case VK_F1:
-		//OpenGLRenderer.ShowAxisGrid = !OpenGLRenderer.ShowAxisGrid;
-		break;
 
-	case VK_F2:
-		//OpenGLRenderer.WireFrame = !OpenGLRenderer.WireFrame;
-		break;
-
-	case VK_F3:
-		//OpenGLRenderer.Texturing = !OpenGLRenderer.Texturing;
-		break;
-
-	case '1':
-		use_gl_version = 11;
-		break;
-
-	case '2':
-		use_gl_version = 15;
-		break;
-
-	case '3':
-		use_gl_version = 21;
-		break;
-
-	case 'i': CAMERAMANAGER->Reset(); break;
+	default: break;
 
 	}
 }
@@ -315,10 +292,14 @@ void CWnd::OnPaint()
 	static int FPS = 0;
 
 	DWORD Time = GetTickCount();
-
+	DWORD dwInterval = 1000 / 60;
+	DWORD dwDelay;
 	float FrameTime = (Time - LastFrameTime) * 0.001f;
 
 	LastFrameTime = Time;
+
+	dwDelay = dwInterval - (GetTickCount() - Time);
+	if (dwDelay > 0) Sleep(dwDelay);
 
 	if (Time - LastFPSTime > 1000)
 	{
@@ -344,9 +325,8 @@ void CWnd::OnPaint()
 	if (GetKeyState('S') & 0x80) Keys |= 0x02;
 	if (GetKeyState('A') & 0x80) Keys |= 0x04;
 	if (GetKeyState('D') & 0x80) Keys |= 0x08;
-	if (GetKeyState('R') & 0x80) Keys |= 0x10;
-	if (GetKeyState('F') & 0x80) Keys |= 0x20;
 
+	if (GetKeyState(VK_SPACE) & 0x80) Keys |= 0x10;
 	if (GetKeyState(VK_SHIFT) & 0x80) Keys |= 0x40;
 
 	if (Keys & 0x3F)
@@ -355,6 +335,7 @@ void CWnd::OnPaint()
 		CAMERAMANAGER->Move(Movement);
 	}
 
+	CAMERAMANAGER->Update(FrameTime);
 	RENDERMANAGER->Render(FrameTime);
 	SwapBuffers(hDC);
 
