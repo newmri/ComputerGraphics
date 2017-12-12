@@ -8,13 +8,12 @@ void CRenderManager::Init()
 	glFrontFace(GL_CCW);
 	glEnable(GL_DEPTH_TEST);
 
-	CAMERAMANAGER->SetViewMatrix(&m_view);
-
 	m_perspective.Fovy = PERSPEVTIVE_FOVY;
 	m_perspective.Near = PERSPEVTIVE_NEAR;
 	m_perspective.Far = PERSPEVTIVE_FAR;
 	m_selectedObjIdx = -1;
 
+	CAMERAMANAGER->SetViewMatrix(&m_view);
 	FILEMANAGER->LoadFileWithPath("./Resources//Stage//default.txt");
 
 }

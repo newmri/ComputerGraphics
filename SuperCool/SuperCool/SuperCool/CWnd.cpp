@@ -202,6 +202,7 @@ bool CWnd::Create(HINSTANCE hInstance, char *WindowName, int Width, int Height, 
 		wglSwapIntervalEXT(0);
 	}
 
+	CAMERAMANAGER->Init();
 	RENDERMANAGER->Init();
 	return true;
 }

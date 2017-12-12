@@ -14,8 +14,9 @@ void CCameraManager::Init()
 	m_pos.z = CAMERA_INIT_Z;
 	m_pos.y = 5.0f;
 	m_button = -1;
-
+	m_ref.y = 5.0f;
 	m_onJump = false;
+
 }
 
 void CCameraManager::Update(float frameTime)
@@ -51,6 +52,7 @@ void CCameraManager::Reset()
 
 void CCameraManager::Move(Vector3 move)
 {
+
 	m_ref += move;
 	m_pos += move;
 
@@ -79,17 +81,16 @@ void CCameraManager::LookAt(Vector3 reference, Vector3 pos, bool rotateAroundRef
 
 void CCameraManager::OnMouseMove(int x, int y)
 {
-
+	y = 0;
 	float sensitivity = 0.10f;
-
 	float hangle = (float)x * sensitivity;
 	float vangle = (float)y * sensitivity;
-
+	
 	m_pos -= m_ref;
-
 	m_y = RotateVector(m_y, vangle, m_x);
 	m_z = RotateVector(m_z, vangle, m_x);
 
+	
 	if (m_y.y < 0.0f)
 	{
 		m_z = Vector3(0.0f, m_z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
@@ -99,8 +100,8 @@ void CCameraManager::OnMouseMove(int x, int y)
 	m_x = RotateVector(m_x, hangle, Vector3(0.0f, 1.0f, 0.0f));
 	m_y = RotateVector(m_y, hangle, Vector3(0.0f, 1.0f, 0.0f));
 	m_z = RotateVector(m_z, hangle, Vector3(0.0f, 1.0f, 0.0f));
-
 	m_pos = m_ref + m_z * m_pos.Len();
+
 	CalculateViewMatrix();
 }
 
@@ -118,7 +119,6 @@ Vector3 CCameraManager::OnKeys(BYTE Keys, float frameTime)
 	Vector3 right = m_x;
 	Vector3 forward;
 	Cross3f(forward, up, right);
-
 	up *= dist;
 	right *= dist;
 	forward *= dist;
@@ -133,7 +133,7 @@ Vector3 CCameraManager::OnKeys(BYTE Keys, float frameTime)
 	if (Keys & 0x04) move -= right;
 	// d
 	if (Keys & 0x08) move += right;
-
+	
 	// Space
 	if (Keys & 0x10) {
 		if (!m_onJump) {

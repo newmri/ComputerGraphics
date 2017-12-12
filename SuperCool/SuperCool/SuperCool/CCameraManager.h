@@ -13,7 +13,7 @@ public:
 		return m_instance;
 	}
 
-	CCameraManager() { this->Init(); }
+	CCameraManager() { }
 	~CCameraManager() { delete m_instance; }
 
 public:
