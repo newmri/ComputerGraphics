@@ -34,6 +34,7 @@ void CCameraManager::Update(float frameTime)
 		m_pos -= up;
 
 		this->CalculateViewMatrix();
+		RENDERMANAGER->SetPlayerPos(m_pos.x, m_pos.y, CAMERAMANAGER->GetPos().z - 1.0f);
 	}
 
 }
@@ -55,7 +56,7 @@ void CCameraManager::Move(Vector3 move)
 
 	m_ref += move;
 	m_pos += move;
-
+	RENDERMANAGER->SetPlayerPos(m_pos.x, m_pos.y, CAMERAMANAGER->GetPos().z - 1.0f);
 	this->CalculateViewMatrix();
 }
 
@@ -101,8 +102,8 @@ void CCameraManager::OnMouseMove(int x, int y)
 	m_y = RotateVector(m_y, hangle, Vector3(0.0f, 1.0f, 0.0f));
 	m_z = RotateVector(m_z, hangle, Vector3(0.0f, 1.0f, 0.0f));
 	m_pos = m_ref + m_z * m_pos.Len();
-
 	CalculateViewMatrix();
+
 }
 
 
@@ -156,4 +157,9 @@ void CCameraManager::OnMouseWheel(float zDelta)
 	m_pos += m_ref;
 
 	CalculateViewMatrix();
+}
+
+float CCameraManager::GetDegreeX()
+{
+	return (atan2f(-m_view->get(2, 0), m_view->get(0, 0)) * (180 / PIE));
 }

@@ -272,10 +272,12 @@ void CWnd::OnMouseMove(int cx, int cy)
 
 	if (GetKeyState(VK_RBUTTON) & 0x80){
 		CAMERAMANAGER->OnMouseMove(LastCurPos.x - cx, LastCurPos.y - cy);
-
 		LastCurPos.x = cx;
 		LastCurPos.y = cy;
 	}
+
+	//RENDERMANAGER->SetPlayerPos((static_cast<float>(cx) / static_cast<float>(Width - 1)) - 0.6f , static_cast<float>(cy) / static_cast<float>(Height - 1));
+
 }
 
 void CWnd::OnMouseWheel(short zDelta)
@@ -337,6 +339,7 @@ void CWnd::OnPaint()
 	}
 
 	CAMERAMANAGER->Update(FrameTime);
+	RENDERMANAGER->Update();
 	RENDERMANAGER->Render(FrameTime);
 	SwapBuffers(hDC);
 

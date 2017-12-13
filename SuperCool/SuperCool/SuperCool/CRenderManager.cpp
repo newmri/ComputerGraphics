@@ -15,6 +15,11 @@ void CRenderManager::Init()
 
 	CAMERAMANAGER->SetViewMatrix(&m_view);
 	FILEMANAGER->LoadFileWithPath("./Resources//Stage//default.txt");
+	m_player = make_shared<CPlayer>();
+	m_player->Init();
+	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(GUN, Color(0.0f, 1.0f, 1.0f), Vector3(0.0f, 0.5f, -10.0f), Vector4(), Vector3(), 1.0f)));
+
 
 }
 
@@ -86,6 +91,13 @@ void CRenderManager::SelectObject(int x, int y)
 	
 }
 
+void CRenderManager::Update()
+{
+	for (auto& d : m_obj) {
+		if(d->GetObjInfo().objType == GUN) 
+			if (!m_player->CheckCollision(d->GetObjInfo())) cout << "a";
+	}
+}
 
 void CRenderManager::Render(float frameTime)
 {
@@ -146,7 +158,7 @@ void CRenderManager::Render(float frameTime)
 	glEnd();
 	
 	for (auto d : m_obj) d->Render();
-	
+	m_player->Render();
 	glPopMatrix();
 
 	glDisable(GL_DEPTH_TEST);

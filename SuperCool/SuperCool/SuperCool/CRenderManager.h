@@ -39,6 +39,7 @@ public:
 
 public:
 	void Init();
+	void Update();
 	void Resize(int w, int h);
 	void Render(float frameTime);
 
@@ -56,6 +57,8 @@ public:
 public:
 	void SetPerspective(const Perspective p) { m_perspective = p; this->Resize(m_width, m_height); }
 
+public:
+	void SetPlayerPos(const float x, const float y, const float z) { m_player->SetPos(x, y, z); }
 
 private:
 	static CRenderManager* m_instance;
@@ -71,5 +74,5 @@ private:
 
 private:
 	std::vector<std::shared_ptr<CObject>> m_obj;
-
+	std::shared_ptr<CPlayer> m_player;
 };

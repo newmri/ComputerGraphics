@@ -33,7 +33,13 @@ class CObject
 {
 public:
 	void Init(ObjectInfo objInfo) { m_objInfo = objInfo; }
-
+	const ObjectInfo& GetObjInfo() { return m_objInfo; }
+	bool CheckCollision(const ObjectInfo& other)
+	{
+		if (pow(other.pos.x - m_objInfo.pos.x, 2) + pow(other.pos.y - m_objInfo.pos.y, 2) + pow(other.pos.z - m_objInfo.pos.z, 2) <= pow(m_objInfo.size + other.size, 2)) // 이게 참이면 충돌함.
+			return false;
+		return true;
+	}
 public:
 	virtual void Init() = 0;
 	virtual void Update() = 0;

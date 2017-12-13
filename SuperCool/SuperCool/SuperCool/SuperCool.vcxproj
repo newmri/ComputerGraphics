@@ -149,13 +149,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CCameraManager.h" />
+    <ClInclude Include="CCharacter.h" />
     <ClInclude Include="CCube.h" />
     <ClInclude Include="CFactoryManagerr.h" />
     <ClInclude Include="CFileManager.h" />
+    <ClInclude Include="CGun.h" />
     <ClInclude Include="CObject.h" />
+    <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CRenderManager.h" />
     <ClInclude Include="CWnd.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="Objects.h" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +167,8 @@
     <ClCompile Include="CCube.cpp" />
     <ClCompile Include="CFactoryManager.cpp" />
     <ClCompile Include="CFileManager.cpp" />
+    <ClCompile Include="CGun.cpp" />
+    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CRenderManager.cpp" />
     <ClCompile Include="CWnd.cpp" />
     <ClCompile Include="main.cpp" />
