@@ -59,7 +59,7 @@ public:
 
 public:
 	void SetPlayerPos(const float x, const float y, const float z) { m_player->SetPos(x, y, z); }
-
+	void ShootBullet() { m_player->Shoot(); }
 private:
 	static CRenderManager* m_instance;
 

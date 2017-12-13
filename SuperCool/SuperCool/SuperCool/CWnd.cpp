@@ -260,6 +260,7 @@ void CWnd::OnKeyDown(UINT Key)
 
 void CWnd::OnLButtonDown(int cx, int cy)
 {
+	RENDERMANAGER->ShootBullet();
 	RENDERMANAGER->SelectObject(cx, cy);
 }
 
@@ -267,7 +268,7 @@ void CWnd::OnMouseMove(int cx, int cy)
 {
 	if (GetKeyState(VK_LBUTTON) & 0x80)
 	{
-		//RENDERMANAGER->MoveSelectedObject(cx, cy);
+
 	}
 
 	if (GetKeyState(VK_RBUTTON) & 0x80){
@@ -276,8 +277,8 @@ void CWnd::OnMouseMove(int cx, int cy)
 		LastCurPos.y = cy;
 	}
 
-	//RENDERMANAGER->SetPlayerPos((static_cast<float>(cx) / static_cast<float>(Width - 1)) - 0.6f , static_cast<float>(cy) / static_cast<float>(Height - 1));
-
+	//RENDERMANAGER->SetPlayerPos((static_cast<float>(cx) / static_cast<float>(Width - 1)) - 0.6f , CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
+	
 }
 
 void CWnd::OnMouseWheel(short zDelta)

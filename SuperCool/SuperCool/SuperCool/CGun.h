@@ -7,7 +7,6 @@ struct Bullet
 	Vector3 pos;
 	float speed;
 	float size;
-
 	Bullet()
 	{
 		speed = 1.0f;
@@ -22,6 +21,7 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-private:
-	Bullet m_bullet;
+public:
+	Bullet m_bullet[5];
+	int m_bulletIdx;
 };

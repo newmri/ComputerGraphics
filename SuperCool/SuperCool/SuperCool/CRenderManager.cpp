@@ -93,9 +93,17 @@ void CRenderManager::SelectObject(int x, int y)
 
 void CRenderManager::Update()
 {
+	m_player->Update();
 	for (auto& d : m_obj) {
-		if(d->GetObjInfo().objType == GUN) 
-			if (!m_player->CheckCollision(d->GetObjInfo())) cout << "a";
+		if (d->GetObjInfo().objType == GUN)
+			if (!m_player->CheckCollision(d->GetObjInfo())) {
+				m_player->SetGun(d->GetObjInfo().color);
+				vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
+				while (itor != m_obj.end()) {
+					if ((*itor)->GetObjInfo().objType == GUN) itor = m_obj.erase(itor);
+					else ++itor;
+				}
+			}
 	}
 }
 

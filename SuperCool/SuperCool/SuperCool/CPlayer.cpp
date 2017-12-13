@@ -11,9 +11,14 @@ void CPlayer::Move()
 
 }
 
+void CPlayer::Shoot()
+{
+	if (m_gun.m_bulletIdx < 5 && m_playerInfo.haveGun) m_gun.m_bulletIdx++; 
+}
+
 void CPlayer::Update()
 {
-	
+	if (m_playerInfo.haveGun) m_gun.Update();
 }
 
 void CPlayer::Render()
@@ -22,7 +27,6 @@ void CPlayer::Render()
 	glPushMatrix();
 
 	glTranslatef(m_objInfo.pos.x, m_objInfo.pos.y, m_objInfo.pos.z);
-	//glTranslatef(m_objInfo.pos.x, CAMERAMANAGER->GetPos().y - (m_playerInfo.handSize + m_playerInfo.armSize), CAMERAMANAGER->GetPos().z - 1.0f);
 	glRotatef(-30.0, 0.0, 0.0, 1.0);
 	//glRotatef(CAMERAMANAGER->GetDegreeX(), 0.0f, 0.0f, 1.0f);
 	glPushMatrix();
@@ -38,23 +42,13 @@ void CPlayer::Render()
 		glTranslatef(0.0, 0.3, 0.0);
 		glColor3f(0.6, 0.6, 0.0);
 		glutSolidSphere(m_playerInfo.handSize, 20, 20);
-		/*
+		
 		if (m_playerInfo.haveGun) // ÃÑÀÌ¶û Ãæµ¹µÇ¾úÀ¸¸é
 		{
-			gun.pos.x = 0;
-			gun.pos.y = 0.1;
-			gun.pos.z = 0;
-			gun.size = 0.1;
-			gun.draw_gun();
-
-
-			glTranslatef(gun.bullets.pos.x, gun.bullets.pos.y, gun.bullets.pos.z);
-			printf("%f %f %f\n", gun.bullets.pos.x, gun.bullets.pos.y, gun.bullets.pos.z);
-			glColor4f(0.0, 1.0, 0.0, 1.0);
-			glutSolidSphere(gun.bullets.size, 10, 10);
+			m_gun.Render();
 
 		}
-		*/
+		
 	}
 	glPopMatrix();
 	glPopMatrix();
