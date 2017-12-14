@@ -39,6 +39,11 @@ static const float FALL_SPEED = CAMERA_SPEED / 3.0f;
 static const float JUMP_MULTI = 20.0f;
 static const float OBJECT_SPEED = 1.0f;
 
+static const int ENEMY_SIZE = 5;
+
+static const double PI = 3.141592654;
+static const double TWOPI = 6.283185308;
+static const double PID2 = 1.570796326794897;
 
 #define CAMERAMANAGER CCameraManager::GetInstance()
 #define RENDERMANAGER CRenderManager::GetInstance()

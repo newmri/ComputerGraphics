@@ -39,7 +39,7 @@ public:
 
 public:
 	void Init();
-	void Update();
+	void Update(float frameTime);
 	void Resize(int w, int h);
 	void Render(float frameTime);
 
@@ -53,7 +53,7 @@ public:
 
 public:
 	const Perspective& GetPerspective() { return m_perspective; }
-
+	Vector3 GetPlayerPos() { return m_player->GetObjInfo().pos; }
 public:
 	void SetPerspective(const Perspective p) { m_perspective = p; this->Resize(m_width, m_height); }
 

@@ -6,6 +6,6 @@ class CCube : public CObject
 {
 public:
 	virtual void Init();
-	virtual void Update();
+	virtual void Update(float frameTime);
 	virtual void Render();
 };

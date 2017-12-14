@@ -340,7 +340,7 @@ void CWnd::OnPaint()
 	}
 
 	CAMERAMANAGER->Update(FrameTime);
-	RENDERMANAGER->Update();
+	RENDERMANAGER->Update(FrameTime);
 	RENDERMANAGER->Render(FrameTime);
 	SwapBuffers(hDC);
 

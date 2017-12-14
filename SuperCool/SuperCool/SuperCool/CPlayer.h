@@ -19,8 +19,8 @@ class CPlayer : public CCharacter
 {
 public:
 	virtual void Init();
-	virtual void Move();
-	virtual void Update();
+	virtual void Move(float frameTime);
+	virtual void Update(float frameTime);
 	virtual void Render();
 
 public:

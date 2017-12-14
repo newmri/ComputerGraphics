@@ -7,10 +7,12 @@ void CGun::Init()
 	m_bulletIdx = 0;
 }
 
-void CGun::Update()
+void CGun::Update(float frameTime)
 {
-	for (int i = 0; i < m_bulletIdx; ++i) m_bullet[i].pos.z -= m_bullet[i].speed;
-	
+	for (int i = 0; i < m_bulletIdx; ++i) {
+		float dist = m_bullet[i].speed * frameTime;
+		m_bullet[i].pos.z -= dist;
+	}
 }
 
 void CGun::Render()

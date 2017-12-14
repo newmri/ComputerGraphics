@@ -151,6 +151,7 @@
     <ClInclude Include="CCameraManager.h" />
     <ClInclude Include="CCharacter.h" />
     <ClInclude Include="CCube.h" />
+    <ClInclude Include="CEnemy.h" />
     <ClInclude Include="CFactoryManagerr.h" />
     <ClInclude Include="CFileManager.h" />
     <ClInclude Include="CGun.h" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClCompile Include="CCameraManager.cpp" />
     <ClCompile Include="CCube.cpp" />
+    <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CFactoryManager.cpp" />
     <ClCompile Include="CFileManager.cpp" />
     <ClCompile Include="CGun.cpp" />

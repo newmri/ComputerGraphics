@@ -6,7 +6,7 @@ void CPlayer::Init()
 	m_objInfo.size = 5.0f;
 }
 
-void CPlayer::Move()
+void CPlayer::Move(float frameTime)
 {
 
 }
@@ -16,9 +16,9 @@ void CPlayer::Shoot()
 	if (m_gun.m_bulletIdx < 5 && m_playerInfo.haveGun) m_gun.m_bulletIdx++; 
 }
 
-void CPlayer::Update()
+void CPlayer::Update(float frameTime)
 {
-	if (m_playerInfo.haveGun) m_gun.Update();
+	if (m_playerInfo.haveGun) m_gun.Update(frameTime);
 }
 
 void CPlayer::Render()

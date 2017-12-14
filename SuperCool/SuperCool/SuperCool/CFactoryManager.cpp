@@ -11,6 +11,7 @@ shared_ptr<CObject> CFactoryManager::CreateObj(ObjectInfo objInfo)
 	switch (objInfo.objType) {
 	case OBJECT_TYPE::CUBE: p = make_shared<CCube>(); break;
 	case OBJECT_TYPE::PLAYER: p = make_shared<CPlayer>(); break;
+	case OBJECT_TYPE::ENEMY: p = make_shared<CEnemy>(); break;
 	case OBJECT_TYPE::GUN: p = make_shared<CGun>(); break;
 	default: break;
 	}

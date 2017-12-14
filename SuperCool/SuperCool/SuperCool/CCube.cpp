@@ -7,14 +7,13 @@ void CCube::Init()
 
 }
 
-void CCube::Update()
+void CCube::Update(float frameTime)
 {
 
 }
 
 void CCube::Render()
 {
-	
 	glPushMatrix();
 
 	glColor3f(m_objInfo.color.r, m_objInfo.color.g, m_objInfo.color.b);

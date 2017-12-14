@@ -9,7 +9,7 @@ struct Bullet
 	float size;
 	Bullet()
 	{
-		speed = 1.0f;
+		speed = 10.0f;
 		size = 0.01f;
 	}
 };
@@ -18,7 +18,7 @@ class CGun : public CObject
 {
 public:
 	virtual void Init();
-	virtual void Update();
+	virtual void Update(float frameTime);
 	virtual void Render();
 
 public:

@@ -19,6 +19,7 @@ void CRenderManager::Init()
 	m_player->Init();
 	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(GUN, Color(0.0f, 1.0f, 1.0f), Vector3(0.0f, 0.5f, -10.0f), Vector4(), Vector3(), 1.0f)));
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ENEMY, Color(0.0f, 1.0f, 1.0f), Vector3(5.0f, ENEMY_SIZE / 1.5f, -10.0f), Vector4(Vector3(),5.0f), Vector3(), ENEMY_SIZE)));
 
 
 }
@@ -91,19 +92,22 @@ void CRenderManager::SelectObject(int x, int y)
 	
 }
 
-void CRenderManager::Update()
+void CRenderManager::Update(float frameTime)
 {
-	m_player->Update();
+	m_player->Update(frameTime);
 	for (auto& d : m_obj) {
-		if (d->GetObjInfo().objType == GUN)
-			if (!m_player->CheckCollision(d->GetObjInfo())) {
-				m_player->SetGun(d->GetObjInfo().color);
-				vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
-				while (itor != m_obj.end()) {
-					if ((*itor)->GetObjInfo().objType == GUN) itor = m_obj.erase(itor);
-					else ++itor;
+		if (d != nullptr) {
+		d->Update(frameTime);
+			if (d->GetObjInfo().objType == GUN)
+				if (!m_player->CheckCollision(d->GetObjInfo())) {
+					m_player->SetGun(d->GetObjInfo().color);
+					vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
+					while (itor != m_obj.end()) {
+						if ((*itor)->GetObjInfo().objType == GUN) itor = m_obj.erase(itor);
+						else ++itor;
+					}
 				}
-			}
+		}
 	}
 }
 
