@@ -10,4 +10,5 @@ public:
 	virtual void Update(float frameTime) = 0;
 	virtual void Render() = 0;
 
+
 };

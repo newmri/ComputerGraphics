@@ -3,7 +3,7 @@
 
 void CEnemy::Init()
 {
-	m_speed = 1.0f;
+	m_speed = ENEMY_SPEED;
 	m_rotate = 0.0f;
 }
 
@@ -25,10 +25,12 @@ void CEnemy::LookPlayer()
 	m_objInfo.rotation.y = cross.y;
 	m_objInfo.rotation.z = cross.z;
 	m_objInfo.rotation.w = degree;
+	
 }
 
 void CEnemy::Move(float frameTime)
 {
+
 	Vector3 face = RENDERMANAGER->GetPlayerPos() - m_objInfo.pos;
 	float dist = sqrt(face.x + face.y + face.z);
 	float move = m_speed * frameTime;
@@ -36,6 +38,7 @@ void CEnemy::Move(float frameTime)
 	if (dist == 0 || dist < 1.0f) return;
 	face *= move;
 	m_objInfo.pos += face;
+	
 }
 
 
@@ -51,85 +54,94 @@ void CEnemy::Render()
 	glPushMatrix();
 	glTranslatef(m_objInfo.pos.x, m_objInfo.pos.y, m_objInfo.pos.z);
 	glRotatef(m_objInfo.rotation.w, m_objInfo.rotation.x, m_objInfo.rotation.y, m_objInfo.rotation.z);
+	if (RENDERMANAGER->ShowCollisionArea()) {
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glutWireCube(m_objInfo.size);
+	}
 	glScalef(0.5, 0.5, 0.4);
 	glPushMatrix(); // ¸öÅë
 	{
-		glColor3f(1.0, 0.0, 1.0);
-		glScalef(1.0, 1.5, 1.0);
-		glutSolidCube(m_objInfo.size);
-	}
-	glPopMatrix();
-
-	glPushMatrix(); // ¸Ó¸®
-	{
-		glTranslatef(0.0, m_objInfo.size, 0.0);
-
-		glPushMatrix(); // ÄÚ
+		//glRotatef(-90, 1.0f, 0.0f, 0.0f);
+		glPushMatrix(); // ¸öÅë
 		{
-			glScalef(0.8, 1.0, 0.8);
-			glColor3f(1.0, 1.0, 0.0);
+			glColor3f(1.0, 0.0, 1.0);
+			glScalef(1.0, 1.5, 1.0);
 			glutSolidCube(m_objInfo.size);
 		}
 		glPopMatrix();
 
-		glTranslatef(0.0, m_objInfo.size / 10, m_objInfo.size / 10);
-		glColor3f(0.0, 1.0, 1.0);
-		glScalef(0.1, 0.1, 1.0);
-		glutSolidCube(m_objInfo.size);
+		glPushMatrix(); // ¸Ó¸®
+		{
+			glTranslatef(0.0, m_objInfo.size, 0.0);
 
+			glPushMatrix(); // ÄÚ
+			{
+				glScalef(0.8, 1.0, 0.8);
+				glColor3f(1.0, 1.0, 0.0);
+				glutSolidCube(m_objInfo.size);
+			}
+			glPopMatrix();
+
+			/*glTranslatef(0.0, m_objInfo.size / 10, m_objInfo.size / 10);
+			glColor3f(0.0, 1.0, 1.0);
+			glScalef(0.1, 0.1, 1.0);
+			glutSolidCube(m_objInfo.size);
+			*/
+		}
+		glPopMatrix();
+
+		glPushMatrix(); // ¿ÞÂÊ ÆÈ
+		{
+			glTranslatef(-m_objInfo.size * 0.65, 0.0, 0.0);
+			glColor3f(1.0, 0.0, 0.0);
+			glTranslatef(0.0, 0.7, 0.0);
+			//glRotatef(m_rotate, 1.0, 0.0, 0.0);
+			glTranslatef(0.0, -0.7, 0.0);
+			glScalef(0.3, 0.7, 0.3);
+
+			glutSolidCube(m_objInfo.size);
+
+		}
+		glPopMatrix();
+
+		glPushMatrix(); // ¿À¸¥ÂÊ ÆÈ
+		{
+			glTranslatef(m_objInfo.size * 0.65, 0.0, 0.0);
+			glTranslatef(0.0, 0.7, 0.0);
+			//glRotatef(-m_rotate, 1.0, 0.0, 0.0);
+			glTranslatef(0.0, -0.7, 0.0);
+			glScalef(0.3, 0.7, 0.3);
+			glColor3f(0.0, 0.0, 1.0);
+			glutSolidCube(m_objInfo.size);
+		}
+		glPopMatrix();
+
+		glPushMatrix(); // ¿Þ ´Ù¸® ( ¿À¸¥ ÆÈÀÌ¶û °°Àº »ö )
+		{
+			glTranslatef(-m_objInfo.size * 0.2, -m_objInfo.size, 0.0);
+			glTranslatef(0.0, m_objInfo.size * 0.6, 0.0);
+			//glRotatef(-m_rotate, 1.0, 0.0, 0.0);
+			glTranslatef(0.0, -m_objInfo.size * 0.6, 0.0);
+			glScalef(0.3, 0.6, 0.3);
+			glColor3f(0.0, 0.0, 1.0);
+			glutSolidCube(m_objInfo.size);
+		}
+		glPopMatrix();
+
+		glPushMatrix(); // ¿À¸¥ ´Ù¸® ( ¿Þ ÆÈÀÌ¶û °°Àº »ö )
+		{
+			glTranslatef(m_objInfo.size * 0.2, -m_objInfo.size, 0.0);
+			glTranslatef(0.0, m_objInfo.size * 0.6, 0.0);
+			//glRotatef(m_rotate, 1.0, 0.0, 0.0);
+			glTranslatef(0.0, -m_objInfo.size * 0.6, 0.0);
+			glScalef(0.3, 0.6, 0.3);
+			glColor3f(1.0, 0.0, 0.0);
+			glutSolidCube(m_objInfo.size);
+		}
+		glPopMatrix();
 	}
-	glPopMatrix();
-
-	glPushMatrix(); // ¿ÞÂÊ ÆÈ
-	{
-		glTranslatef(-m_objInfo.size * 0.65, 0.0, 0.0);
-		glColor3f(1.0, 0.0, 0.0);
-		glTranslatef(0.0, 0.7, 0.0);
-		//glRotatef(m_rotate, 1.0, 0.0, 0.0);
-		glTranslatef(0.0, -0.7, 0.0);
-		glScalef(0.3, 0.7, 0.3);
-
-		glutSolidCube(m_objInfo.size);
-
-	}
-	glPopMatrix();
-
-	glPushMatrix(); // ¿À¸¥ÂÊ ÆÈ
-	{
-		glTranslatef(m_objInfo.size * 0.65, 0.0, 0.0);
-		glTranslatef(0.0, 0.7, 0.0);
-		//glRotatef(-m_rotate, 1.0, 0.0, 0.0);
-		glTranslatef(0.0, -0.7, 0.0);
-		glScalef(0.3, 0.7, 0.3);
-		glColor3f(0.0, 0.0, 1.0);
-		glutSolidCube(m_objInfo.size);
-	}
-	glPopMatrix();
-
-	glPushMatrix(); // ¿Þ ´Ù¸® ( ¿À¸¥ ÆÈÀÌ¶û °°Àº »ö )
-	{
-		glTranslatef(-m_objInfo.size * 0.2, -m_objInfo.size, 0.0);
-		glTranslatef(0.0, m_objInfo.size * 0.6, 0.0);
-		//glRotatef(-m_rotate, 1.0, 0.0, 0.0);
-		glTranslatef(0.0, -m_objInfo.size * 0.6, 0.0);
-		glScalef(0.3, 0.6, 0.3);
-		glColor3f(0.0, 0.0, 1.0);
-		glutSolidCube(m_objInfo.size);
-	}
-	glPopMatrix();
-
-	glPushMatrix(); // ¿À¸¥ ´Ù¸® ( ¿Þ ÆÈÀÌ¶û °°Àº »ö )
-	{
-		glTranslatef(m_objInfo.size * 0.2, -m_objInfo.size, 0.0);
-		glTranslatef(0.0, m_objInfo.size * 0.6, 0.0);
-		//glRotatef(m_rotate, 1.0, 0.0, 0.0);
-		glTranslatef(0.0, -m_objInfo.size * 0.6, 0.0);
-		glScalef(0.3, 0.6, 0.3);
-		glColor3f(1.0, 0.0, 0.0);
-		glutSolidCube(m_objInfo.size);
-	}
-	glPopMatrix();
-
+		glPopMatrix();
+	
 	glPopMatrix();
 
 

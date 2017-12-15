@@ -40,10 +40,16 @@ static const float JUMP_MULTI = 20.0f;
 static const float OBJECT_SPEED = 1.0f;
 
 static const int ENEMY_SIZE = 5;
+static const float ENEMY_SPEED = 0.8f;
 
 static const double PI = 3.141592654;
 static const double TWOPI = 6.283185308;
 static const double PID2 = 1.570796326794897;
+
+static const float BULLET_RAD = 0.5f;
+static const float BULLET_SPEED = 100.0f;
+
+static int FPS_RATE = 60;
 
 #define CAMERAMANAGER CCameraManager::GetInstance()
 #define RENDERMANAGER CRenderManager::GetInstance()

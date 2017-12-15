@@ -20,6 +20,7 @@ public:
 	}
 
 	std::shared_ptr<CObject> CreateObj(ObjectInfo objInfo);
+	std::unique_ptr<CBullet> CreateBullet(ObjectInfo objInfo);
 
 private:
 	CFactoryManager(void) {};

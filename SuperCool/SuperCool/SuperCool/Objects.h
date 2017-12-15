@@ -4,6 +4,6 @@
 #include "CCharacter.h"
 #include "CPlayer.h"
 #include "CEnemy.h"
-#include "CGun.h"
+#include "CBullet.h"
 #include "CCube.h"
 

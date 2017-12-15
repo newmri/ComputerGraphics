@@ -76,6 +76,8 @@ extern "C"
 		LIBSPEC void set(const int col, const int row, const double val) { matrix[col * 4 + row] = val; }
 		LIBSPEC float get(const int col, const int row) const { return matrix[col * 4 + row]; }
 		LIBSPEC float& element(const int col, const int row) { return matrix[col * 4 + row]; }
+		LIBSPEC Vector4 GetRow(int row);
+		LIBSPEC void GetAngle(Vector3& rotate);
 
 	};
 	LIBSPEC Matrix4 operator*(Matrix4& mat1, Matrix4& mat2);

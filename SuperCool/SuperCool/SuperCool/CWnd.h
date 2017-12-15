@@ -14,7 +14,6 @@ protected:
 	char *WindowName;
 	int Width, Height, Samples;
 	POINT LastCurPos;
-
 public:
 	CWnd();
 	~CWnd();

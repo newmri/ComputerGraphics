@@ -12,13 +12,14 @@ void CRenderManager::Init()
 	m_perspective.Near = PERSPEVTIVE_NEAR;
 	m_perspective.Far = PERSPEVTIVE_FAR;
 	m_selectedObjIdx = -1;
+	m_showCollisionArea = false;
 
 	CAMERAMANAGER->SetViewMatrix(&m_view);
 	FILEMANAGER->LoadFileWithPath("./Resources//Stage//default.txt");
 	m_player = make_shared<CPlayer>();
 	m_player->Init();
 	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
-	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(GUN, Color(0.0f, 1.0f, 1.0f), Vector3(0.0f, 0.5f, -10.0f), Vector4(), Vector3(), 1.0f)));
+	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(BULLET, Color(0.0f, 1.0f, 1.0f), Vector3(0.0f, BULLET_RAD, -10.0f), Vector4(), Vector3(), BULLET_RAD)));
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ENEMY, Color(0.0f, 1.0f, 1.0f), Vector3(5.0f, ENEMY_SIZE / 1.5f, -10.0f), Vector4(Vector3(),5.0f), Vector3(), ENEMY_SIZE)));
 
 
@@ -98,17 +99,15 @@ void CRenderManager::Update(float frameTime)
 	for (auto& d : m_obj) {
 		if (d != nullptr) {
 		d->Update(frameTime);
-			if (d->GetObjInfo().objType == GUN)
+			if (d->GetObjInfo().objType == BULLET)
 				if (!m_player->CheckCollision(d->GetObjInfo())) {
-					m_player->SetGun(d->GetObjInfo().color);
-					vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
-					while (itor != m_obj.end()) {
-						if ((*itor)->GetObjInfo().objType == GUN) itor = m_obj.erase(itor);
-						else ++itor;
-					}
+					m_player->CreateBullet(d->GetObjInfo());
+					d->SetDelete();
 				}
 		}
 	}
+
+	this->DeleteObject();
 }
 
 void CRenderManager::Render(float frameTime)
@@ -184,5 +183,12 @@ void CRenderManager::AddObject(ObjectInfo obj)
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(obj));
 }
 
-
+void CRenderManager::DeleteObject()
+{
+	vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
+	while (itor != m_obj.end()) {
+		if ((*itor)->GetDelete()) itor = m_obj.erase(itor);
+		else ++itor;
+	}
+}
 

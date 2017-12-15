@@ -54,6 +54,9 @@ void CCameraManager::Reset()
 void CCameraManager::Move(Vector3 move)
 {
 
+	Vector3 t = m_pos;
+	t += move;
+	if (t.x < -48.0f || t.x > 48.0f || t.z > 48.0f || t.z < -48.0f) return;
 	m_ref += move;
 	m_pos += move;
 	RENDERMANAGER->SetPlayerPos(m_pos.x, m_pos.y, CAMERAMANAGER->GetPos().z - 1.0f);
@@ -110,6 +113,12 @@ void CCameraManager::OnMouseMove(int x, int y)
 
 Vector3 CCameraManager::OnKeys(BYTE Keys, float frameTime)
 {
+	// f
+	if (Keys & 0x20) {
+		RENDERMANAGER->ShootBullet();
+		return Vector3();
+	}
+
 	float speed = CAMERA_SPEED;
 	// Shift
 	if (Keys & 0x40) speed *= 2.0f;
@@ -159,7 +168,12 @@ void CCameraManager::OnMouseWheel(float zDelta)
 	CalculateViewMatrix();
 }
 
-float CCameraManager::GetDegreeX()
+Vector3 CCameraManager::GetAngle()
 {
-	return (atan2f(-m_view->get(2, 0), m_view->get(0, 0)) * (180 / PIE));
+	Vector3 rotate;
+	m_view->GetAngle(rotate);
+	rotate.x = rotate.x * 180 / PIE;
+	rotate.y = rotate.y * 180 / PIE;
+	rotate.z = rotate.z * 180 / PIE;
+	return rotate;
 }

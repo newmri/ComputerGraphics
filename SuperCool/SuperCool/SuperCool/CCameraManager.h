@@ -31,7 +31,7 @@ public:
 
 public:
 	Vector3& GetPos() { return m_pos; }
-	float GetDegreeX();
+	Vector3 GetAngle();
 	Vector3& GetZ() { return m_z; }
 
 public:

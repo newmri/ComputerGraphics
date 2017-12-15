@@ -1,7 +1,9 @@
 #pragma once
 
+#include <vector>
+#include <memory>
 #include "CCharacter.h"
-#include "CGun.h"
+#include "CBullet.h"
 
 struct PlayerInfo
 {
@@ -25,11 +27,12 @@ public:
 
 public:
 	void SetPos(const float x, const float y, const float z) { m_objInfo.pos.x = x; m_objInfo.pos.y = y - (m_playerInfo.handSize + m_playerInfo.armSize); m_objInfo.pos.z = z; }
-	void SetGun(Color color) { m_playerInfo.haveGun = true; m_gun.SetPos(Vector3(0.0f, 0.1f, 0.0f)); m_gun.SetSize(0.1f); m_gun.SetColor(color); }
+	void CreateBullet(ObjectInfo info);
+	void DeleteBullet();
 
 public:
 	void Shoot();
 private:
 	PlayerInfo m_playerInfo;
-	CGun m_gun;
+	std::vector<std::unique_ptr<CBullet>> m_bullet;
 };

@@ -60,6 +60,11 @@ public:
 public:
 	void SetPlayerPos(const float x, const float y, const float z) { m_player->SetPos(x, y, z); }
 	void ShootBullet() { m_player->Shoot(); }
+
+public:
+	void SwapShowCollisionArea() { m_showCollisionArea = !m_showCollisionArea; }
+	bool ShowCollisionArea() { return m_showCollisionArea; }
+
 private:
 	static CRenderManager* m_instance;
 
@@ -75,4 +80,5 @@ private:
 private:
 	std::vector<std::shared_ptr<CObject>> m_obj;
 	std::shared_ptr<CPlayer> m_player;
+	bool m_showCollisionArea;
 };

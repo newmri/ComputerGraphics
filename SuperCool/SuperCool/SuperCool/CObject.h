@@ -37,6 +37,10 @@ public:
 	void SetPos(Vector3 pos) { m_objInfo.pos = pos; }
 	void SetSize(float size) { m_objInfo.size = size; }
 	void SetColor(Color color) { m_objInfo.color = color; }
+	void SetDelete() { m_objInfo.haveToDelete = true; }
+
+public:
+	bool GetDelete() { return m_objInfo.haveToDelete; }
 	bool CheckCollision(const ObjectInfo& other)
 	{
 		if (pow(other.pos.x - m_objInfo.pos.x, 2) + pow(other.pos.y - m_objInfo.pos.y, 2) + pow(other.pos.z - m_objInfo.pos.z, 2) <= pow(m_objInfo.size + other.size, 2)) // 이게 참이면 충돌함.

@@ -51,10 +51,10 @@
     <ClInclude Include="Enum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CGun.h">
+    <ClInclude Include="CEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CEnemy.h">
+    <ClInclude Include="CBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,10 +83,10 @@
     <ClCompile Include="CPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CGun.cpp">
+    <ClCompile Include="CEnemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CEnemy.cpp">
+    <ClCompile Include="CBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -276,8 +276,7 @@ void CWnd::OnMouseMove(int cx, int cy)
 		LastCurPos.x = cx;
 		LastCurPos.y = cy;
 	}
-
-	//RENDERMANAGER->SetPlayerPos((static_cast<float>(cx) / static_cast<float>(Width - 1)) - 0.6f , CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
+	
 	
 }
 
@@ -296,7 +295,7 @@ void CWnd::OnPaint()
 	static int FPS = 0;
 
 	DWORD Time = GetTickCount();
-	DWORD dwInterval = 1000 / 60;
+	DWORD dwInterval = 1000 / FPS_RATE;
 	DWORD dwDelay;
 	float FrameTime = (Time - LastFrameTime) * 0.001f;
 
@@ -324,11 +323,13 @@ void CWnd::OnPaint()
 	}
 
 	BYTE Keys = 0x00;
-
+	if (GetKeyState('1')) RENDERMANAGER->SwapShowCollisionArea();
 	if (GetKeyState('W') & 0x80) Keys |= 0x01;
 	if (GetKeyState('S') & 0x80) Keys |= 0x02;
 	if (GetKeyState('A') & 0x80) Keys |= 0x04;
 	if (GetKeyState('D') & 0x80) Keys |= 0x08;
+	if (GetKeyState('F') & 0x80) Keys |= 0x20;
+
 
 	if (GetKeyState(VK_SPACE) & 0x80) Keys |= 0x10;
 	if (GetKeyState(VK_SHIFT) & 0x80) Keys |= 0x40;
@@ -337,6 +338,7 @@ void CWnd::OnPaint()
 	{
 		Vector3 Movement = CAMERAMANAGER->OnKeys(Keys, FrameTime);
 		CAMERAMANAGER->Move(Movement);
+		
 	}
 
 	CAMERAMANAGER->Update(FrameTime);
