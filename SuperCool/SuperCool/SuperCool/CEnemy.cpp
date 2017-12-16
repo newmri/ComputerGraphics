@@ -4,33 +4,35 @@
 void CEnemy::Init()
 {
 	m_speed = ENEMY_SPEED;
-	m_rotate = 0.0f;
+
 }
 
 void CEnemy::LookPlayer()
 {
-	// 목표를 바라보는 방향벡터 생성. 방향벡터를 단위벡터로 만든다
-	Vector3 face = RENDERMANAGER->GetPlayerPos() - m_objInfo.pos;
-	Normalize3f(face, face);
-	// Up 벡터 생성
-	Vector3 up = { 0.0f, 1.0f, 0.0f };
-	// 방향 벡터와 up 백터의 내적을 구함
-	float theta = Dot3f(up, face);
-	theta = acosf(theta);
-	float degree = theta * 180.0 / PI;
-	// 방향 벡터와 up 벡터의 외적을 구함
-	Vector3 cross;
-	Cross3f(cross, up, face);
-	m_objInfo.rotation.x = cross.x;
-	m_objInfo.rotation.y = cross.y;
-	m_objInfo.rotation.z = cross.z;
-	m_objInfo.rotation.w = degree;
+	if (m_speed != 0.0f) {
+		// 목표를 바라보는 방향벡터 생성. 방향벡터를 단위벡터로 만든다
+		Vector3 face = RENDERMANAGER->GetPlayerPos() - m_objInfo.pos;
+		Normalize3f(face, face);
+		// Up 벡터 생성
+		Vector3 up = { 0.0f, 1.0f, 0.0f };
+		// 방향 벡터와 up 백터의 내적을 구함
+		float theta = Dot3f(up, face);
+		theta = acosf(theta);
+		float degree = theta * 180.0 / PI;
+		// 방향 벡터와 up 벡터의 외적을 구함
+		Vector3 cross;
+		Cross3f(cross, up, face);
+		m_objInfo.rotation.x = cross.x;
+		m_objInfo.rotation.y = cross.y;
+		m_objInfo.rotation.z = cross.z;
+		m_objInfo.rotation.w = degree;
+	}
 	
 }
 
 void CEnemy::Move(float frameTime)
 {
-
+	
 	Vector3 face = RENDERMANAGER->GetPlayerPos() - m_objInfo.pos;
 	float dist = sqrt(face.x + face.y + face.z);
 	float move = m_speed * frameTime;

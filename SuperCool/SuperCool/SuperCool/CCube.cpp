@@ -9,7 +9,7 @@ void CCube::Init()
 
 void CCube::Update(float frameTime)
 {
-
+	
 }
 
 void CCube::Render()

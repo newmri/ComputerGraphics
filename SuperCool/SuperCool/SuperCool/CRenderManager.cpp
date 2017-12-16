@@ -21,7 +21,13 @@ void CRenderManager::Init()
 	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(BULLET, Color(0.0f, 1.0f, 1.0f), Vector3(0.0f, BULLET_RAD, -10.0f), Vector4(), Vector3(), BULLET_RAD)));
 	m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ENEMY, Color(0.0f, 1.0f, 1.0f), Vector3(5.0f, ENEMY_SIZE / 1.5f, -10.0f), Vector4(Vector3(),5.0f), Vector3(), ENEMY_SIZE)));
-
+	
+	for (int i = 0; i < 10; ++i) {
+		Vector3 pos(rand() % 50 - ITEM_RAD, 50 - ITEM_RAD, rand() % 50 - ITEM_RAD);
+		if (rand() % 2) pos.x = -pos.x;
+		if (rand() % 2) pos.z = -pos.z;
+		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ITEM, Color(), pos, Vector4(), Vector3(), ITEM_RAD)));
+	}
 
 }
 
@@ -104,6 +110,11 @@ void CRenderManager::Update(float frameTime)
 					m_player->CreateBullet(d->GetObjInfo());
 					d->SetDelete();
 				}
+		}
+		if (d->GetObjInfo().objType == ITEM && !m_player->CheckCollision(d->GetObjInfo())) {
+			CItem* p = dynamic_cast<CItem*>(d.get());
+			CAMERAMANAGER->SetItem(p->GetItemType());
+			d->SetDelete();
 		}
 	}
 
@@ -192,3 +203,37 @@ void CRenderManager::DeleteObject()
 	}
 }
 
+void CRenderManager::SpeedDownEnemies()
+{
+	for (auto& d : m_obj) {
+		if (d != nullptr) {
+			if (d->GetObjInfo().objType == ENEMY) {
+				CEnemy* p = dynamic_cast<CEnemy*>(d.get());
+				p->SetSpeed(ENEMY_DOWN_SPEED);
+			}
+		}
+	}
+}
+
+void CRenderManager::FrozenEnemies()
+{
+	for (auto& d : m_obj) {
+		if (d != nullptr) {
+			if (d->GetObjInfo().objType == ENEMY) {
+				CEnemy* p = dynamic_cast<CEnemy*>(d.get());
+				p->SetSpeed(0.0f);
+			}
+		}
+	}
+}
+void CRenderManager::SpeedResetEnemies()
+{
+	for (auto& d : m_obj) {
+		if (d != nullptr) {
+			if (d->GetObjInfo().objType == ENEMY) {
+				CEnemy* p = dynamic_cast<CEnemy*>(d.get());
+				p->SetSpeed(ENEMY_SPEED);
+			}
+		}
+	}
+}

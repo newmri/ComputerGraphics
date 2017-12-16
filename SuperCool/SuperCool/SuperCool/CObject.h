@@ -26,7 +26,7 @@ struct ObjectInfo
 	float size;
 	bool haveToDelete;
 	ObjectInfo() {};
-	ObjectInfo(OBJECT_TYPE objType, Color color, Vector3 pos, Vector4 rotation, Vector3 scale, float size) : objType(objType), color(color), pos(pos), rotation(rotation), scale(scale), size(size) { haveToDelete = false; };
+	ObjectInfo(OBJECT_TYPE objType, Color color, Vector3 pos, Vector4 rotation, Vector3 scale, float size) : objType(objType), color(color), pos(pos), rotation(rotation), scale(scale), size(size) { haveToDelete = false;};
 };
 
 class CObject
@@ -38,9 +38,10 @@ public:
 	void SetSize(float size) { m_objInfo.size = size; }
 	void SetColor(Color color) { m_objInfo.color = color; }
 	void SetDelete() { m_objInfo.haveToDelete = true; }
-
 public:
 	bool GetDelete() { return m_objInfo.haveToDelete; }
+	float Clamp(float min, float pos, float max) { return min > pos ? min : (max < pos ? max : pos); }
+
 	bool CheckCollision(const ObjectInfo& other)
 	{
 		if (pow(other.pos.x - m_objInfo.pos.x, 2) + pow(other.pos.y - m_objInfo.pos.y, 2) + pow(other.pos.z - m_objInfo.pos.z, 2) <= pow(m_objInfo.size + other.size, 2)) // 이게 참이면 충돌함.

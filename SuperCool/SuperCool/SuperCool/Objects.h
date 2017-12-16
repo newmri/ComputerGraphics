@@ -5,5 +5,6 @@
 #include "CPlayer.h"
 #include "CEnemy.h"
 #include "CBullet.h"
+#include "CItem.h"
 #include "CCube.h"
 

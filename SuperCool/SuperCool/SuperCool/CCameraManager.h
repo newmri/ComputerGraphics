@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Matrix.h"
+#include "Enum.h"
 
 class CCameraManager
 {
@@ -42,6 +43,10 @@ public:
 	void CalculateViewMatrix() { if (m_view) *m_view = GetViewMatrix(m_x, m_y, m_z, m_pos); }
 
 public:
+	void SetItem(int itemType);
+	void ReSetItem(int itemType);
+
+public:
 	void LookAt(Vector3 reference, Vector3 pos, bool rotateAroundReference);
 	void OnMouseMove(int x, int y);
 	void Move(Vector3 move);
@@ -55,4 +60,7 @@ private:
 	int m_button;
 	POINT m_lastCurPos;
 	bool m_onJump;
+	bool m_onItem[ITEM_NUM];
+	DWORD m_itemTime[ITEM_NUM];
+	int m_itemDurationTime[ITEM_NUM];
 };

@@ -16,6 +16,11 @@ void CCameraManager::Init()
 	m_button = -1;
 	m_ref.y = 5.0f;
 	m_onJump = false;
+	
+	for (int i = 0; i < ITEM_NUM; ++i) m_onItem[i] = false;
+	m_itemDurationTime[SPEED_UP] = SPEED_UP_TIME;
+	m_itemDurationTime[SPEED_DOWN] = SPEED_DOWN_TIME;
+	m_itemDurationTime[FROZEN] = FROZEN_TIME;
 
 }
 
@@ -35,6 +40,10 @@ void CCameraManager::Update(float frameTime)
 
 		this->CalculateViewMatrix();
 		RENDERMANAGER->SetPlayerPos(m_pos.x, m_pos.y, CAMERAMANAGER->GetPos().z - 1.0f);
+	}
+
+	for (int i = 0; i < ITEM_NUM; ++i) {
+		if (m_onItem[i] && m_itemTime[i] + m_itemDurationTime[i] < GetTickCount()) this->ReSetItem(i);
 	}
 
 }
@@ -121,8 +130,9 @@ Vector3 CCameraManager::OnKeys(BYTE Keys, float frameTime)
 
 	float speed = CAMERA_SPEED;
 	// Shift
-	if (Keys & 0x40) speed *= 2.0f;
-	
+	//if (Keys & 0x40) speed *= 2.0f;
+	if (m_onItem[SPEED_UP]) speed *= 2.0f;
+
 	float dist = speed * frameTime;
 
 	Vector3 up(0.0f, 1.0f, 0.0f);
@@ -176,4 +186,27 @@ Vector3 CCameraManager::GetAngle()
 	rotate.y = rotate.y * 180 / PIE;
 	rotate.z = rotate.z * 180 / PIE;
 	return rotate;
+}
+
+
+void CCameraManager::SetItem(int itemType)
+{
+	m_onItem[itemType] = true;
+	m_itemTime[itemType] = GetTickCount(); 
+
+	switch (itemType) {
+	case SPEED_DOWN: RENDERMANAGER->SpeedDownEnemies(); break;
+	case FROZEN: RENDERMANAGER->FrozenEnemies(); break;
+	default: break;
+	}
+}
+void CCameraManager::ReSetItem(int itemType) 
+{
+	m_onItem[itemType] = false; 
+	switch (itemType) {
+	case SPEED_DOWN:
+	case FROZEN:
+		RENDERMANAGER->SpeedResetEnemies(); break;
+	default: break;
+	}
 }

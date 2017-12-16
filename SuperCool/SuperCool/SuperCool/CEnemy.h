@@ -11,8 +11,13 @@ public:
 	virtual void Render();
 
 public:
+	void SetSpeed(float speed) { m_speed = speed; }
+
+public:
+	float GetSpeed() { return m_speed; }
+public:
 	void LookPlayer();
 private:
 	float m_speed;
-	float m_rotate;
 };
+

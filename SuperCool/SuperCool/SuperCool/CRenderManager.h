@@ -65,6 +65,11 @@ public:
 	void SwapShowCollisionArea() { m_showCollisionArea = !m_showCollisionArea; }
 	bool ShowCollisionArea() { return m_showCollisionArea; }
 
+public:
+	void SpeedDownEnemies();
+	void FrozenEnemies();
+	void SpeedResetEnemies();
+
 private:
 	static CRenderManager* m_instance;
 

@@ -204,6 +204,7 @@ bool CWnd::Create(HINSTANCE hInstance, char *WindowName, int Width, int Height, 
 
 	CAMERAMANAGER->Init();
 	RENDERMANAGER->Init();
+	TEXTUREMANAGER->Init();
 	return true;
 }
 
