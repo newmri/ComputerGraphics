@@ -50,12 +50,27 @@ void CCameraManager::Update(float frameTime)
 
 void CCameraManager::Reset()
 {
+
+	ZeroMemory(&m_x, sizeof(m_x));
+	ZeroMemory(&m_y, sizeof(m_y));
+	ZeroMemory(&m_z, sizeof(m_z));
+	ZeroMemory(&m_pos, sizeof(m_pos));
+	ZeroMemory(&m_ref, sizeof(m_ref));
+
 	m_angle = 0.0f;
 	m_angleIn = CAMERA_ANGLE_IN;
-	ZeroMemory(&m_pos, sizeof(m_pos));
-	ZeroMemory(&m_rotate, sizeof(m_rotate));
+	m_x.x = 1.0f;
+	m_y.y = 1.0f;
+	m_z.z = 1.0f;
 	m_pos.z = CAMERA_INIT_Z;
 	m_pos.y = 5.0f;
+	m_button = -1;
+	m_ref.y = 5.0f;
+	m_onJump = false;
+
+	for (int i = 0; i < ITEM_NUM; ++i) m_onItem[i] = false;
+
+	this->CalculateViewMatrix();
 
 }
 

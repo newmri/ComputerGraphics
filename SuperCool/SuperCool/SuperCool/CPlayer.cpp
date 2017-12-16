@@ -16,6 +16,7 @@ void CPlayer::Move(float frameTime)
 void CPlayer::CreateBullet(ObjectInfo info)
 {
 	m_bullet.emplace_back(FACTORYMANAGER->CreateBullet(info));
+	SOUNDMANAGER->effplaysound(BULLET_DROP);
 }
 
 void CPlayer::DeleteBullet()
@@ -32,6 +33,7 @@ void CPlayer::Shoot()
 	if (m_bullet.size() >= 1) {
 		m_bullet[m_bullet.size() - 1]->SetPos(Vector3(m_objInfo.pos.x, m_objInfo.pos.y, m_objInfo.pos.z - 10.0f));
 		m_bullet[m_bullet.size() - 1]->Shoot();
+		SOUNDMANAGER->effplaysound(SHOOT);
 		
 	}
 	

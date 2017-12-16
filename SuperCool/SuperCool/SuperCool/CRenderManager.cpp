@@ -19,10 +19,10 @@ void CRenderManager::Init()
 	m_player = make_shared<CPlayer>();
 	m_player->Init();
 	m_stageTime = GetTickCount();
-
+	m_stage = 1;
 	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
 	
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < m_stage; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, ENEMY_SIZE / 1.5f, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
@@ -30,14 +30,52 @@ void CRenderManager::Init()
 		m_enemyCnt++;
 	}
 
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < m_stage + 2; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, 50 - ITEM_RAD, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
 		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ITEM, Color(), pos, Vector4(), Vector3(), ITEM_RAD)));
 	}
 
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < m_stage + 2; ++i) {
+		Vector3 pos(rand() % 50 - ITEM_RAD, BULLET_RAD, rand() % 50 - ITEM_RAD);
+		if (rand() % 2) pos.x = -pos.x;
+		if (rand() % 2) pos.z = -pos.z;
+		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(BULLET, Color(1.0f, 0.0f, 0.0f), pos, Vector4(), Vector3(), BULLET_RAD)));
+	}
+}
+
+void CRenderManager::ReSet()
+{
+	CAMERAMANAGER->Reset();
+	m_player->Init();
+	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
+	m_stageTime = GetTickCount();
+
+	m_enemyCnt = 0;
+
+	vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
+	while (itor != m_obj.end()) {
+		if ((*itor)->GetObjInfo().objType != CUBE) itor = m_obj.erase(itor);
+		else ++itor;
+	}
+
+	for (int i = 0; i < m_stage; ++i) {
+		Vector3 pos(rand() % 50 - ITEM_RAD, ENEMY_SIZE / 1.5f, rand() % 50 - ITEM_RAD);
+		if (rand() % 2) pos.x = -pos.x;
+		if (rand() % 2) pos.z = -pos.z;
+		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ENEMY, Color(0.0f, 1.0f, 1.0f), pos, Vector4(Vector3(), 5.0f), Vector3(), ENEMY_SIZE)));
+		m_enemyCnt++;
+	}
+
+	for (int i = 0; i < m_stage + 2; ++i) {
+		Vector3 pos(rand() % 50 - ITEM_RAD, 50 - ITEM_RAD, rand() % 50 - ITEM_RAD);
+		if (rand() % 2) pos.x = -pos.x;
+		if (rand() % 2) pos.z = -pos.z;
+		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ITEM, Color(), pos, Vector4(), Vector3(), ITEM_RAD)));
+	}
+
+	for (int i = 0; i < m_stage + 2; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, BULLET_RAD, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
@@ -115,6 +153,7 @@ void CRenderManager::SelectObject(int x, int y)
 
 void CRenderManager::Update(float frameTime)
 {
+
 	m_player->Update(frameTime);
 	for (auto& d : m_obj) {
 		if (d != nullptr) {
@@ -124,8 +163,15 @@ void CRenderManager::Update(float frameTime)
 					m_player->CreateBullet(d->GetObjInfo());
 					d->SetDelete();
 				}
+
+			if (d->GetObjInfo().objType == ENEMY)
+				if (!m_player->CheckCollision(d->GetObjInfo())) {
+					this->ReSet();
+					SOUNDMANAGER->effplaysound(DEATH);
+				}
 		}
 		if (d->GetObjInfo().objType == ITEM && !m_player->CheckCollision(d->GetObjInfo())) {
+			SOUNDMANAGER->effplaysound(ITEM_DROP);
 			CItem* p = dynamic_cast<CItem*>(d.get());
 			CAMERAMANAGER->SetItem(p->GetItemType());
 			d->SetDelete();
@@ -133,6 +179,10 @@ void CRenderManager::Update(float frameTime)
 	}
 
 	this->DeleteObject();
+	if (m_enemyCnt == 0) {
+		m_stage++;
+		this->ReSet();
+	}
 }
 
 void CRenderManager::renderBitmapString(float x, float y, void *font, char *string)
@@ -151,6 +201,7 @@ void  CRenderManager::RenderText()
 	sprintf_s(m_text.bullets, "Num of Bullet: %d", m_player->GetBulletNum());
 	sprintf_s(m_text.enymies, "Num of Enemy: %d", m_enemyCnt);
 	sprintf_s(m_text.stageTime, "Stage Time: %.2f", (m_stageTime + STAGE1_TIME - GetTickCount()) / 1000.0f);
+	sprintf_s(m_text.stage, "Stage: %d", m_stage);
 	this->setOrthographicProjection();
 	glColor3f(0.0, 0.0, 0.0);
 	glPushMatrix();
@@ -158,7 +209,8 @@ void  CRenderManager::RenderText()
 		glLoadIdentity();
 		renderBitmapString(0, 10, GLUT_BITMAP_TIMES_ROMAN_24, m_text.bullets);  // 총알
 		renderBitmapString(0, 10 + 15, GLUT_BITMAP_TIMES_ROMAN_24, m_text.enymies);  // 남은 적
-		renderBitmapString(m_width / 2.0f, 10, GLUT_BITMAP_TIMES_ROMAN_24, m_text.stageTime);
+		renderBitmapString(m_width / 2.0f, 10, GLUT_BITMAP_TIMES_ROMAN_24, m_text.stage);
+		renderBitmapString(m_width / 2.0f, 10 + 15, GLUT_BITMAP_TIMES_ROMAN_24, m_text.stageTime); // 스테이지 종료 남은 시간
 		int cnt{};
 		for (int i = 0; i < ITEM_NUM; ++i) {
 			if (CAMERAMANAGER->GetOnItem(i)) {
@@ -214,8 +266,7 @@ void CRenderManager::Render(float frameTime)
 
 	glEnable(GL_DEPTH_TEST);
 
-	glPushMatrix();
-	
+
 	// render axises and grid -------------------------------------------------------------------------------------------------
 
 	glLineWidth(2.0f);
@@ -266,9 +317,13 @@ void CRenderManager::Render(float frameTime)
 	for (auto d : m_obj) d->Render();
 	m_player->Render();
 	this->RenderText();
+
 	glPopMatrix();
 
 	glDisable(GL_DEPTH_TEST);
+
+
+
 
 }
 
@@ -305,6 +360,7 @@ void CRenderManager::SpeedDownEnemies()
 
 void CRenderManager::FrozenEnemies()
 {
+	SOUNDMANAGER->effplaysound(SOUND_FROZEN);
 	for (auto& d : m_obj) {
 		if (d != nullptr) {
 			if (d->GetObjInfo().objType == ENEMY) {

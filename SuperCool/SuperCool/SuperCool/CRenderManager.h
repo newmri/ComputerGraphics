@@ -47,6 +47,7 @@ public:
 
 public:
 	void Init();
+	void ReSet();
 	void Update(float frameTime);
 	void Resize(int w, int h);
 	void Render(float frameTime);
@@ -106,4 +107,5 @@ private:
 	Text m_text;
 	int m_enemyCnt;
 	DWORD m_stageTime;
+	int m_stage;
 };

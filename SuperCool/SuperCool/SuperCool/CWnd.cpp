@@ -205,6 +205,8 @@ bool CWnd::Create(HINSTANCE hInstance, char *WindowName, int Width, int Height, 
 	CAMERAMANAGER->Init();
 	RENDERMANAGER->Init();
 	TEXTUREMANAGER->Init();
+	SOUNDMANAGER->Init();
+	SOUNDMANAGER->playsound(BGM);
 	return true;
 }
 

@@ -11,7 +11,7 @@ void CTextureManager::Init()
 	// Bind texture and object
 	glBindTexture(GL_TEXTURE_2D, m_texture[0]);
 	// Load Image
-	bytes = LoadDIBitmap("Resources//Textures//num1.bmp", &info);
+	bytes = LoadDIBitmap("Resources//Textures//SpeedUp.bmp", &info);
 	if (bytes == NULL) { cout << "CTextureManager::Init() Error" << endl; while (true); }
 	// Set setting of textrue
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, info->bmiHeader.biWidth, info->bmiHeader.biHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, bytes);
@@ -24,7 +24,7 @@ void CTextureManager::Init()
 	// Bind texture and object
 	glBindTexture(GL_TEXTURE_2D, m_texture[1]);
 	// Load Image
-	bytes = LoadDIBitmap("Resources//Textures//num2.bmp", &info);
+	bytes = LoadDIBitmap("Resources//Textures//SpeedDown.bmp", &info);
 	if (bytes == NULL) { cout << "CTextureManager::Init() Error" << endl; while (true); }
 	// Set setting of textrue
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, info->bmiHeader.biWidth, info->bmiHeader.biHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, bytes);
@@ -38,7 +38,7 @@ void CTextureManager::Init()
 	// Bind texture and object
 	glBindTexture(GL_TEXTURE_2D, m_texture[2]);
 	// Load Image
-	bytes = LoadDIBitmap("Resources//Textures//num3.bmp", &info);
+	bytes = LoadDIBitmap("Resources//Textures//Frozen.bmp", &info);
 	if (bytes == NULL) { cout << "CTextureManager::Init() Error" << endl; while (true); }
 	// Set setting of textrue
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, info->bmiHeader.biWidth, info->bmiHeader.biHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, bytes);

@@ -13,6 +13,7 @@
 #include "CFileManager.h"
 #include "CFactoryManagerr.h"
 #include "CTextureManager.h"
+#include "CSoundManager.h"
 
 #include "Matrix.h"
 
@@ -71,4 +72,4 @@ static const int PARTICLE_TIME = 1500;
 #define FILEMANAGER CFileManager::GetInstance()
 #define FACTORYMANAGER CFactoryManager::GetInstance()
 #define TEXTUREMANAGER CTextureManager::GetInstance()
-
+#define SOUNDMANAGER CSoundManager::GetInstance()
