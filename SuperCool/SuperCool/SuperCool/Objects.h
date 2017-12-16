@@ -7,4 +7,5 @@
 #include "CBullet.h"
 #include "CItem.h"
 #include "CCube.h"
+#include "CParticle.h"
 

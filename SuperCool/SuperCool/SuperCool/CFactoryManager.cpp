@@ -13,6 +13,7 @@ shared_ptr<CObject> CFactoryManager::CreateObj(ObjectInfo objInfo)
 	case OBJECT_TYPE::ENEMY: p = make_shared<CEnemy>(); break;
 	case OBJECT_TYPE::BULLET: p = make_shared<CBullet>(); break;
 	case OBJECT_TYPE::ITEM: p = make_shared<CItem>(); break;
+	case OBJECT_TYPE::PARTICLE: p = make_shared<CParticle>(); break;
 	default: break;
 	}
 	

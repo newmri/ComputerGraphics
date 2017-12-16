@@ -17,6 +17,7 @@ void CBullet::Move(float speed)
 		if (d->GetObjInfo().objType == ENEMY) {
 			if (!this->CheckCollision(d->GetObjInfo())) {
 				d->SetDelete();
+				RENDERMANAGER->CreateParticle(d->GetObjInfo().pos);
 				this->SetDelete();
 			}
 		}

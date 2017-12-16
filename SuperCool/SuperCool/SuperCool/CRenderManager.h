@@ -20,8 +20,16 @@ struct Perspective
 
 };
 
+static const int TEXT_LEN = 30;
 
-
+struct Text
+{
+	char bullets[TEXT_LEN];
+	char stage[TEXT_LEN];
+	char enymies[TEXT_LEN];
+	char item[TEXT_LEN];
+	char stageTime[TEXT_LEN];
+};
 
 class CRenderManager
 {
@@ -42,6 +50,12 @@ public:
 	void Update(float frameTime);
 	void Resize(int w, int h);
 	void Render(float frameTime);
+
+public:
+	void setOrthographicProjection();
+	void resetPerspectiveProjection();
+	void renderBitmapString(float x, float y, void *font, char *string);
+	void RenderText();
 
 public:
 	void AddObject(ObjectInfo obj);
@@ -70,6 +84,9 @@ public:
 	void FrozenEnemies();
 	void SpeedResetEnemies();
 
+public:
+	void CreateParticle(Vector3 pos);
+
 private:
 	static CRenderManager* m_instance;
 
@@ -86,4 +103,7 @@ private:
 	std::vector<std::shared_ptr<CObject>> m_obj;
 	std::shared_ptr<CPlayer> m_player;
 	bool m_showCollisionArea;
+	Text m_text;
+	int m_enemyCnt;
+	DWORD m_stageTime;
 };

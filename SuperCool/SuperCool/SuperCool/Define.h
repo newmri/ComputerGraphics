@@ -48,7 +48,7 @@ static const double PI = 3.141592654;
 static const double TWOPI = 6.283185308;
 static const double PID2 = 1.570796326794897;
 
-static const float BULLET_RAD = 0.5f;
+static const float BULLET_RAD = 0.1f;
 static const float BULLET_SPEED = 100.0f;
 
 static const float ITEM_RAD = 1.0f;
@@ -59,6 +59,12 @@ static const int SPEED_DOWN_TIME = 2000;
 static const int FROZEN_TIME = 1500;
 
 static int FPS_RATE = 60;
+
+static const int STAGE1_TIME = 60000;
+
+static const int PARTICLE_NUM = 100;
+static const float PARTICLE_SPEED = 100.0f;
+static const int PARTICLE_TIME = 1500;
 
 #define CAMERAMANAGER CCameraManager::GetInstance()
 #define RENDERMANAGER CRenderManager::GetInstance()

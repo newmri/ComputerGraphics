@@ -34,6 +34,8 @@ public:
 	Vector3& GetPos() { return m_pos; }
 	Vector3 GetAngle();
 	Vector3& GetZ() { return m_z; }
+	bool GetOnItem(int idx) { return m_onItem[idx]; }
+	float GetItemRemainTime(int idx) { return (m_itemTime[idx] + m_itemDurationTime[idx] - GetTickCount()) / 1000.0f; }
 
 public:
 	Vector3 OnKeys(BYTE Keys, float frameTime);

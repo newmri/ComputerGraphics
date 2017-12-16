@@ -57,9 +57,6 @@ void CPlayer::Render()
 	}
 	glPopMatrix();
 
-	
-	for (auto& d : m_bullet) if(!d->GetIsOnShoot()) d->Render();
-	
 	glPopMatrix();
 
 	for (auto& d : m_bullet) if (d->GetIsOnShoot()) d->Render();

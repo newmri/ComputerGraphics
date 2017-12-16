@@ -63,6 +63,9 @@
     <ClInclude Include="CItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CParticle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraManager.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,8 +3,7 @@
 
 void CEnemy::Init()
 {
-	m_speed = ENEMY_SPEED;
-
+	m_speed = rand() / (float)RAND_MAX * ENEMY_SPEED;
 }
 
 void CEnemy::LookPlayer()
@@ -54,7 +53,9 @@ void CEnemy::Render()
 {
 
 	glPushMatrix();
+
 	glTranslatef(m_objInfo.pos.x, m_objInfo.pos.y, m_objInfo.pos.z);
+
 	glRotatef(m_objInfo.rotation.w, m_objInfo.rotation.x, m_objInfo.rotation.y, m_objInfo.rotation.z);
 	if (RENDERMANAGER->ShowCollisionArea()) {
 		glColor3f(1.0f, 0.0f, 0.0f);
@@ -63,7 +64,7 @@ void CEnemy::Render()
 	glScalef(0.5, 0.5, 0.4);
 	glPushMatrix(); // ¸öÅë
 	{
-		//glRotatef(-90, 1.0f, 0.0f, 0.0f);
+	
 		glPushMatrix(); // ¸öÅë
 		{
 			glColor3f(1.0, 0.0, 1.0);
@@ -84,11 +85,6 @@ void CEnemy::Render()
 			}
 			glPopMatrix();
 
-			/*glTranslatef(0.0, m_objInfo.size / 10, m_objInfo.size / 10);
-			glColor3f(0.0, 1.0, 1.0);
-			glScalef(0.1, 0.1, 1.0);
-			glutSolidCube(m_objInfo.size);
-			*/
 		}
 		glPopMatrix();
 

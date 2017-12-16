@@ -26,6 +26,8 @@ public:
 	virtual void Render();
 
 public:
+	int GetBulletNum() { return m_bullet.size(); }
+public:
 	void SetPos(const float x, const float y, const float z) { m_objInfo.pos.x = x; m_objInfo.pos.y = y - (m_playerInfo.handSize + m_playerInfo.armSize); m_objInfo.pos.z = z; }
 	void CreateBullet(ObjectInfo info);
 	void DeleteBullet();

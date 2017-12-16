@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CCharacter.h"
+#include "CParticle.h"
 
 class CEnemy : public CCharacter
 {
@@ -17,6 +18,7 @@ public:
 	float GetSpeed() { return m_speed; }
 public:
 	void LookPlayer();
+
 private:
 	float m_speed;
 };
