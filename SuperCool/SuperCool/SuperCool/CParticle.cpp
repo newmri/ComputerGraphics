@@ -29,7 +29,7 @@ void CParticle::Render()
 			glTranslatef(m_objInfo.pos.x, m_objInfo.pos.y, m_objInfo.pos.z);
 
 			glColor3f(rand() / (float)RAND_MAX * 1.0f, rand() / (float)RAND_MAX * 1.0f, rand() / (float)RAND_MAX * 1.0f);
-			glutSolidCube(0.1f);
+			glutSolidCube(0.2f);
 
 	}
 	glPopMatrix();

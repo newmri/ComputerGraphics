@@ -1,7 +1,7 @@
 #include "Define.h"
 #include "CWnd.h"
 
-#pragma comment(linker , "/entry:WinMainCRTStartup /subsystem:console")
+//#pragma comment(linker , "/entry:WinMainCRTStartup /subsystem:console")
 
 CWnd Wnd;
 
@@ -9,6 +9,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uiMsg)
 	{
+
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		break;
@@ -50,9 +51,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine, int iShow)
 {
-	if (Wnd.Create(hInstance, "Spuer Cool", WINDOW_WIDTH, WINDOW_HEIGHT))
+	if (Wnd.Create(hInstance, "", WINDOW_WIDTH, WINDOW_HEIGHT))
 	{
-		Wnd.Show();
+		Wnd.Show(true);
 		Wnd.MessageLoop();
 	}
 	else cout << "Error" << endl;

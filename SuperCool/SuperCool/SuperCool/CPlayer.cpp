@@ -5,6 +5,10 @@ void CPlayer::Init()
 {
 	m_objInfo.size = 5.0f;
 }
+void CPlayer::ReSet()
+{
+	m_bullet.clear();
+}
 
 void CPlayer::Move(float frameTime)
 {

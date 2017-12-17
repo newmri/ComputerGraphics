@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <atlstr.h>
+#include <time.h>
 
 #include "CCameraManager.h"
 #include "CRenderManager.h"
@@ -15,10 +16,10 @@
 #include "CTextureManager.h"
 #include "CSoundManager.h"
 
-#include "Matrix.h"
+#include "./DLL/Matrix.h"
 
-#pragma comment(lib, "DLL.lib")
-#pragma comment(lib, "glew32.lib")
+#pragma comment(lib, "./lib/DLL.lib")
+#pragma comment(lib, "./lib/glew32.lib")
 
 using namespace std;
 

@@ -4,6 +4,8 @@ CRenderManager* CRenderManager::m_instance = nullptr;
 
 void CRenderManager::Init()
 {
+
+	srand((unsigned int)time(NULL));
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glFrontFace(GL_CCW);
 	glEnable(GL_DEPTH_TEST);
@@ -20,6 +22,7 @@ void CRenderManager::Init()
 	m_player->Init();
 	m_stageTime = GetTickCount();
 	m_stage = 1;
+	m_stageClear = false;
 	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
 	
 	for (int i = 0; i < m_stage; ++i) {
@@ -30,14 +33,14 @@ void CRenderManager::Init()
 		m_enemyCnt++;
 	}
 
-	for (int i = 0; i < m_stage + 2; ++i) {
+	for (int i = 0; i < m_stage + 5; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, 50 - ITEM_RAD, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
 		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ITEM, Color(), pos, Vector4(), Vector3(), ITEM_RAD)));
 	}
 
-	for (int i = 0; i < m_stage + 2; ++i) {
+	for (int i = 0; i < m_stage + 10; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, BULLET_RAD, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
@@ -47,8 +50,11 @@ void CRenderManager::Init()
 
 void CRenderManager::ReSet()
 {
+	srand((unsigned int)time(NULL));
+	m_stageClear = false;
 	CAMERAMANAGER->Reset();
 	m_player->Init();
+	m_player->ReSet();
 	this->SetPlayerPos(CAMERAMANAGER->GetPos().x, CAMERAMANAGER->GetPos().y, CAMERAMANAGER->GetPos().z - 1.0f);
 	m_stageTime = GetTickCount();
 
@@ -68,14 +74,14 @@ void CRenderManager::ReSet()
 		m_enemyCnt++;
 	}
 
-	for (int i = 0; i < m_stage + 2; ++i) {
+	for (int i = 0; i < m_stage + 5; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, 50 - ITEM_RAD, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
 		m_obj.emplace_back(FACTORYMANAGER->CreateObj(ObjectInfo(ITEM, Color(), pos, Vector4(), Vector3(), ITEM_RAD)));
 	}
 
-	for (int i = 0; i < m_stage + 2; ++i) {
+	for (int i = 0; i < m_stage + 10; ++i) {
 		Vector3 pos(rand() % 50 - ITEM_RAD, BULLET_RAD, rand() % 50 - ITEM_RAD);
 		if (rand() % 2) pos.x = -pos.x;
 		if (rand() % 2) pos.z = -pos.z;
@@ -153,11 +159,12 @@ void CRenderManager::SelectObject(int x, int y)
 
 void CRenderManager::Update(float frameTime)
 {
+	if (m_stageTime + STAGE1_TIME < GetTickCount()) this->ReSet();
 
 	m_player->Update(frameTime);
 	for (auto& d : m_obj) {
 		if (d != nullptr) {
-		d->Update(frameTime);
+			d->Update(frameTime);
 			if (d->GetObjInfo().objType == BULLET)
 				if (!m_player->CheckCollision(d->GetObjInfo())) {
 					m_player->CreateBullet(d->GetObjInfo());
@@ -166,22 +173,25 @@ void CRenderManager::Update(float frameTime)
 
 			if (d->GetObjInfo().objType == ENEMY)
 				if (!m_player->CheckCollision(d->GetObjInfo())) {
-					this->ReSet();
 					SOUNDMANAGER->effplaysound(DEATH);
+					this->ReSet();
 				}
-		}
-		if (d->GetObjInfo().objType == ITEM && !m_player->CheckCollision(d->GetObjInfo())) {
-			SOUNDMANAGER->effplaysound(ITEM_DROP);
-			CItem* p = dynamic_cast<CItem*>(d.get());
-			CAMERAMANAGER->SetItem(p->GetItemType());
-			d->SetDelete();
+
+			if (d->GetObjInfo().objType == ITEM && !m_player->CheckCollision(d->GetObjInfo())) {
+				SOUNDMANAGER->effplaysound(ITEM_DROP);
+				CItem* p = dynamic_cast<CItem*>(d.get());
+				CAMERAMANAGER->SetItem(p->GetItemType());
+				d->SetDelete();
+			}
 		}
 	}
 
 	this->DeleteObject();
-	if (m_enemyCnt == 0) {
+	if (m_enemyCnt == 0 && !m_stageClear) {
+		m_stageTime = GetTickCount() - (STAGE1_TIME - 2000);
 		m_stage++;
-		this->ReSet();
+		m_stageClear = true;
+
 	}
 }
 
@@ -336,6 +346,7 @@ void CRenderManager::AddObject(ObjectInfo obj)
 
 void CRenderManager::DeleteObject()
 {
+
 	vector<shared_ptr<CObject>>::iterator itor = m_obj.begin();
 	while (itor != m_obj.end()) {
 		if ((*itor)->GetDelete()) {

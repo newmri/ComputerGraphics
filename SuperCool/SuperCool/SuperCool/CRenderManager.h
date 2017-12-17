@@ -108,4 +108,5 @@ private:
 	int m_enemyCnt;
 	DWORD m_stageTime;
 	int m_stage;
+	bool m_stageClear;
 };
